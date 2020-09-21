@@ -1,24 +1,35 @@
 from django.shortcuts import render
 
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from blog.models import Recipe
-from blog.serializer import RecipeSerializer
+from rest_framework import status, permissions, generics
+from .models import Recipe
+from .serializer import RecipeSerializer, UserSerializer
 
-#only for get request atleast for now
-@api_view(['GET',])
-def recipe_view(request, id):
+from django.contrib.auth.models import User
+from .permissions import IsOwnerOrReadOnly
 
-    #check if the recipe_post exists or not
-    try:
-        recipe_post = Recipe.objects.get(id=id)
-    except Recipe.DoesNotExist:
-        return Response(status=status.Http_404_Not_Found)
 
-    #after getting the recipe-post
-    #return the serialized data
-    serializer = RecipeSerializer(recipe_post)
-    return Response(serializer.data)
+class RecipeList(generics.ListCreateAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+    print('working1')
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
+    print('working2')
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
+class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+    print('working3')
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly,]
+    print('working4')
+
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
