@@ -128,3 +128,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',)
 }
 
+
+#telling to use custom user model
+AUTH_USER_MODEL = 'blog.MyUser'
+
