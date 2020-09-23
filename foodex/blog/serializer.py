@@ -3,9 +3,10 @@ from rest_framework import serializers
 
 
 class RecipeSerializer(serializers.ModelSerializer):
+	#this serializer include both create and update methods
 	class Meta:
 		model = Recipe
-		fields = ['title', 'content','published_on', 'read_time',]
+		fields = ['title', 'content','published_on', 'read_time', 'slug',]
 
 class MyUserSerializer(serializers.ModelSerializer):
 	recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)

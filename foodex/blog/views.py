@@ -15,11 +15,15 @@ import random
 
 
 class RecipeList(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
+
+    #to get all the recipes
     def get(self, request, format=None):
         recipe = Recipe.objects.all()
         serializer = RecipeSerializer(recipe, many=True)
         return Response(serializer.data)
 
+    #to create recipe blog
     def post(self, request, format=None):
         serializer = RecipeSerializer(data=request.data)
         if serializer.is_valid():
@@ -41,28 +45,91 @@ class RecipeList(APIView):
 
 
 class RecipeDetail(APIView):
-    serializer_class = RecipeSerializer
-    queryset = Recipe.objects.all()
-    print('working3')
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly,]
-    print('working4')
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    #to get the recipe
+    def get_object(self, pk):
+        try:
+            return Recipe.objects.get(pk=pk)
+        except Recipe.DoesNotExist:
+            raise Http404
+
+    #to retrieve
+    def get(self, request, pk, format=None):
+        recipe = Recipe.get_object(pk)
+        serializer = RecipeSerializer(recipe)
+        return Response(serializer.data)
+
+    #to update
+    def put(self, request, pk, format=None):
+        recipe = Recipe.get_object(pk)
+        serializer = RecipeSerializer(recipe, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status = status.HTTP_406_NOT_ACCEPTABLE)
+
+    #to delete
+    def delete(self, request, pk, format=None):
+        recipe = Recipe.get_object(pk)
+        recipe.delete()
+        return Response(status = status.HTTP_204_NO_CONTENT)
+
+
+    # serializer_class = RecipeSerializer
+    # queryset = Recipe.objects.all()
+    # print('working3')
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly,]
+    # print('working4')
 
 
 
 class MyUserList(APIView):
-    print("userlist:b")
-    queryset = MyUser.objects.all()
-    print("userlist:a")
     permission_classes = [permissions.AllowAny]
-    serializer_class = MyUserSerializer
+
+    def get(self, request, format=None):
+        users = MyUser.objects.all()
+        serializer = MyUserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    
+    # print("userlist:b")
+    # queryset = MyUser.objects.all()
+    # print("userlist:a")
+    # permission_classes = [permissions.AllowAny]
+    # serializer_class = MyUserSerializer
 
 
 
 class MyUserDetail(APIView):
-    print("userdetail:b")
-    queryset = MyUser.objects.all()
-    print("userdetail:a")
-    serializer_class = MyUserSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+    
+    def get_user(self, request, pk, format=None):
+        try:
+            MyUser.objects.get(pk=pk)
+        except MyUser.DoesNotExist:
+            raise Http404
+        
+    #get the details
+    def get(self, request, pk, format=None):
+        solo_user = MyUser.get_user(pk)
+        serializer = MyUserSerializer(solo_user)
+        return Response(serializer.data)
+
+    #to update user details
+    def put(self, request, pk, format=None):
+        solo_user = MyUser.get_user(pk)
+        serializer = MyUserSerializer(solo_user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status = status.HTTP_406_NOT_ACCEPTABLE)
+
+
+    # print("userdetail:b")
+    # queryset = MyUser.objects.all()
+    # print("userdetail:a")
+    # serializer_class = MyUserSerializer
 
 
 
@@ -116,9 +183,10 @@ class VerifyOTP(APIView):
             if email_to_verify.otp == otp:
                 user_to_allow = MyUser.objects.filter(email__iexact=email)
                 user_to_allow.is_active=True
+                user_to_allow.logged_in=True
                 email_to_verify.delete()
 
-                return Response(status = status.HTTP_200_OK)
+                return Response(status = status.HTTP_201_CREATED)
             else:
                 return Response(status = status.HTTP_406_NOT_ACCEPTABLE)
         else:
@@ -135,7 +203,7 @@ class LoginUser(APIView):
         login_user = MyUser.objects.filters(emial__iexact=email)
         if login_user.password != password:
             return Response(status = status.HTTP_401_UNAUTHORIZED)
-        
+        return Response(status = status.HTTP_202_ACCEPTED)
         #now give jwt tokens
         #
         #

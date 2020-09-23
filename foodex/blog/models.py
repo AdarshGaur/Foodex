@@ -15,8 +15,8 @@ class Recipe(models.Model):
     published_on = models.DateTimeField(auto_now_add=True)
     #modified_on = models.DateTimeField(auto_now=True, auto_now_add=False)
     read_time = models.IntegerField()
-    #yumms = models.IntegerField(default=0,)
-    #slug = models.SlugField(blank=True, unique=True)
+    yums = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])
+    slug = models.SlugField(blank=True, unique=True)
 
     def __str__(self):
         return self.title
@@ -35,6 +35,7 @@ class MyUser(AbstractUser):
     ##username = models.CharField(blank=False, unique=True)
     email = models.EmailField(blank=False, unique=True, null=False)
     is_active = models.BooleanField(default=False)
+    logged_in = models.BooleanField(default=False)
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'age',]
