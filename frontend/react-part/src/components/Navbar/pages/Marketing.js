@@ -3,7 +3,13 @@ import React from 'react';
 export default function Marketing() {
   return (
     <>
-      <h1 className='marketing'>MARKETING</h1>
+      <div>
+        {/* <Carousel>
+          <Carousel.Item>
+            <img src={required} />
+          </Carousel.Item>
+        </Carousel> */}
+      </div>
     </>
   );
 }

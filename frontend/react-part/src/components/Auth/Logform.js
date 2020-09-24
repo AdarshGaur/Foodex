@@ -6,8 +6,11 @@ class Login extends Component{
 
 
     state = { 
-     email: "Enter your email ID",
-     password : "password"
+     email: "Email",
+     password : "password",
+     emailError: "",
+     passwordError : ""
+
   }
 
 
@@ -15,8 +18,26 @@ handlechangeall = (event) =>{
  this.setState ( { [event.target.name] :event.target.value  } )
 }
 
-handlesubmit = (event) => {
+valid(){
 
+  if(!this.state.email.includes(".") && this.state.password.length<6){
+    this.setState({emailError:"Invalid email", passwordError:"password should be atleast 6 characters long"})
+  }
+
+  else if(!this.state.email.includes("."))
+  {
+    this.setState({emailError:"Invalid email"})
+  }
+  else if(this.state.password.length<6){
+    this.setState({passwordError:"password should be atleast 6 characters long"})
+  }
+  else{
+    return true
+  }
+}
+
+handlesubmit = (event) => {
+if(this.valid()){
  console.log( JSON.stringify(this.state));
  event.preventDefault();
 fetch('https://reqres.in/api/login',{
@@ -28,10 +49,14 @@ fetch('https://reqres.in/api/login',{
   body:JSON.stringify(this.state)
 }).then((result)=>{
   result.json().then((resp)=>{
-    console.log(resp)
+    console.log(resp.token)
+    localStorage.setItem("auth",JSON.stringify(resp.token))
+    
+
   })
 })
 
+}
 }
 
 render(){
@@ -43,14 +68,14 @@ render(){
     <div className={classes.formup}>
    <form onSubmit = {this.handlesubmit} >
    <h1 className={classes.headline}>SIGN-IN</h1>
-    <label> Email </label><br/>
+    {/* <label> Email </label><br/> */}
     <input  type="email" name="email" placeholder= {this.state.email} 
     onChange={this.handlechangeall} /> <br/>
-
-    <label> Password </label><br/>
-    <input  type="password" name="password" placeholder= {this.state.phone} 
+    <p>{this.state.emailError}</p>
+    {/* <label> Password </label><br/> */}
+    <input  type="password" name="password" placeholder= {this.state.password} 
     onChange={this.handlechangeall} /> <br/>
-
+    <p>{this.state.passwordError}</p>
     <input type="submit" value="Submit" />
     <p ><Link to='/sign-up'>click to signup </Link></p>
    </form>

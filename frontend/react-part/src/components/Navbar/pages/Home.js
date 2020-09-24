@@ -1,10 +1,12 @@
 import React from 'react';
 import '../../../App.css';
+import Hero from '../../Hero/Hero';
+
 
 export default function Home() {
   return (
     <>
-      <h1 className='home'>FOODEX</h1>
+      <Hero />
     </>
   );
 }
