@@ -1,11 +1,12 @@
 import uuid
 import re
+
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.urls import path, re_path
+
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 
 
 class Recipe(models.Model):
@@ -30,23 +31,26 @@ class Recipe(models.Model):
 
 
 class MyUser(AbstractUser):
+
     #regeX validators
-    alphaSpaces = RegexValidator('^[a-zA-Z ]+$', 'Only letters and spaces are allowed in Name.')
-    emailaddresses = RegexValidator('^[a-zA-Z0-9]+([-._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([-.][a-zA-Z0-9]+)*\.[a-zA-Z]{2,7}$', 'Invalid Email Address')
+    name_regex = RegexValidator('^[a-zA-Z ]+$', 'Only letters and spaces are allowed in Name.')
+    email_regex = RegexValidator('^[a-zA-Z0-9]+([-._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([-.][a-zA-Z0-9]+)*\.[a-zA-Z]{2,7}$', 'Invalid Email Address')
+    password_regex = RegexValidator("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$", "Invalid Password")
 
 
-    name = models.CharField(blank=False, max_length=50, null=False, validators=[alphaSpaces])
-    recipemagic = models.IntegerField(default=1, editable=False,)
-    followers = models.PositiveIntegerField(default=1, editable=False,)
-    following = models.PositiveIntegerField(default=1, editable=False,)
-    age = models.PositiveIntegerField(default=22, blank=False, null=False, validators=[MaxValueValidator(110), MinValueValidator(5)])
-    email = models.EmailField(blank=False, unique=True, null=False, validators=[emailaddresses])
+    name = models.CharField(blank=False, max_length=50, null=False, validators=[name_regex])
+    recipemagic = models.IntegerField(default=0,)
+    followers = models.PositiveIntegerField(default=0,)
+    following = models.PositiveIntegerField(default=0,)
+    age = models.PositiveIntegerField(default=22, blank=False, validators=[MaxValueValidator(110), MinValueValidator(5)])
+    email = models.EmailField(blank=False, unique=True, validators=[email_regex])
     is_active = models.BooleanField(default=False)
-    username = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, unique=False)
     #logged_in = models.BooleanField(default=False)
+    password = models.CharField(blank=False, null=False, validators=[password_regex])
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'age',]
+    REQUIRED_FIELDS = ['name', 'age', 'password']
 
     def __str__(self):
         return self.email
@@ -58,7 +62,7 @@ class OtpModel(models.Model):
     count = models.IntegerField(default=0)
     email = models.EmailField(blank=False)
     verified = models.BooleanField(default=False)
-    validity_period = models.DateTimeField()
+    #validity_period = models.DateTimeField()
     #expired = models.DateTimeField(auto_now_add=True)
 
 

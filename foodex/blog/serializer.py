@@ -20,7 +20,7 @@ class MyUserSerializer(serializers.ModelSerializer):
 	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
 	class Meta:
 		model = MyUser
-		fields = ['name', 'email', 'age', 'recipemagic', 'followers', 'following', 'username',]
+		fields = ['name', 'email', 'age', 'recipemagic', 'followers', 'following', 'username',] #remove username from here
 
 
 
@@ -36,7 +36,7 @@ class RegisterMyUser(serializers.ModelSerializer):
 		extra_kwargs = {'password': {'write_only': True}}
 
 	def create(self, validated_data):
-		
+
 		#check if inactive user already exist in the db
 		existing_user = MyUser.objects.get(email=validated_data['email'])
 		email_in_otp = OtpModel.objects.get(email=validated_data['email'])
