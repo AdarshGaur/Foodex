@@ -13,8 +13,8 @@ urlpatterns = [
 	path('api/token', TokenObtainPairView.as_view()),         #for access token
 	path('api/token/refresh/', TokenRefreshView.as_view()),   #for refresh token
 	path('register/', views.CreateUser.as_view()),            #for sign up 
-	path('register/otp/', views.VerifyOTP.as_view()),          #for verifying OTP
-	#path('login/', views.LoginUser.as_view()),               #for login
+	path('register/otp/', views.VerifyOTP.as_view()),         #for verifying OTP
+	path('login/', views.LoginUser.as_view()),                #for login
 	#path('', views.Homepage.as_view()),
 	#path('', views.random.as_view()),
 	#path('', views.random.as_view()),

@@ -25,7 +25,25 @@ SECRET_KEY = 'zwx^cvzjf3qob&0i(uiij*3s79$!fm661%1q%^p4-sfsa27fme'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'cecfccc81ab3.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '5e70f64386b2.ngrok.io']
+
+
+# CORS_ALLOWED_ORIGINS = [
+#     "https://localhost:8000",
+#     "https://127.0.0.1:8000",
+#     "https://5e70f64386b2.ngrok.io"
+# ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOWED_METHODS = [
+    'DELETE',
+    'GET',
+    'POST',
+    'PUT',
+    'OPTIONS',
+    'PATCH',
+]
 
 
 # Application definition
@@ -75,21 +93,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodex.wsgi.application'
 
-
-CORS_ALLOWED_ORIGINS = [
-    "https://localhost:8000",
-    "https://127.0.0.1:8000",
-    "https://cecfccc81ab3.ngrok.io"
-]
-
-CORS_ALLOWED_METHODS = [
-    'DELETE',
-    'GET',
-    'POST',
-    'PUT',
-    'OPTIONS',
-    'PATCH',
-]
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

@@ -1,3 +1,6 @@
+import random
+import time
+
 from django.shortcuts import render
 
 from rest_framework import status, permissions
@@ -7,12 +10,13 @@ from rest_framework.response import Response
 
 from .models import Recipe, MyUser, OtpModel
 from .serializer import RecipeSerializer, MyUserSerializer, RegisterMyUser
+from rest_framework import serializers
 
 from .permissions import IsOwnerOrReadOnly
 
 from django.conf import settings
 from django.core.mail import send_mail
-import random
+
 
 
 class RecipeList(APIView):
@@ -135,16 +139,16 @@ class CreateUser(APIView):
         if serializer.is_valid():
             serializer.save()
 
-
             #creating otp and saving it in otp model
             otp = random_with_N_digits(6)
-            OtpModel.objects.create(otp=otp, email=email_for_otp)
+            present_time = int(time.time())
+            OtpModel.objects.create(otp=otp, email=email_for_otp, at_time=present_time)
             #now sending verification email now
             to_email = [email_for_otp]
             email_from = settings.EMAIL_HOST_USER#                       ####add source email here
             send_mail(
                 'Verify Email !',
-                'Your 6 Digit Verification Pin: {} \nThank you for registering on our site.'.format(otp),
+                'Your 6 Digit Verification Pin: {} \nThank you for registering on Foodex.'.format(otp),
                 email_from,
                 to_email,
                 fail_silently=False,
@@ -154,8 +158,7 @@ class CreateUser(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # user = MyUser 
-    # serializer_class = RegisterSerializer
+
 
 
 
@@ -164,20 +167,32 @@ class VerifyOTP(APIView):
 
     def post(self, request):
         email = request.data.get('email')
-        otp = request.data.get('otp')
-        email_to_verify = OtpModel.objects.filter(email__iexact=email)
+        client_otp = request.data.get('otp')
+        try:
+            email_to_verify = OtpModel.objects.get(email__iexact=email)
+        except OtpModel.DoesNotExist:
+            return Response(status= status.HTTP_226_IM_USED)
         if email_to_verify:
-            if email_to_verify.otp == otp:
-                user_to_allow = MyUser.objects.filter(email__iexact=email)
-                user_to_allow.is_active=True
-                #user_to_allow.logged_in=True
-                email_to_verify.delete()
+            print(email_to_verify.otp)
+            print(client_otp)
+            verifying_time = int(time.time())
 
-                return Response(status = status.HTTP_201_CREATED)
-            else:
-                return Response(status = status.HTTP_406_NOT_ACCEPTABLE)
-        else:
-            return Response(status = status.HTTP_204_NO_CONTENT)
+            if (verifying_time - email_to_verify.at_time)>5000:
+                error_detail = {'info': "OTP Expired !"}
+                email_to_verify.delete()
+                return Response(error_detail, status.HTTP_403_FORBIDDEN)
+
+            if email_to_verify.otp != int(client_otp):
+                return Response(status = status.HTTP_401_UNAUTHORIZED)
+            
+            user_to_allow = MyUser.objects.get(email__iexact=email)
+            user_to_allow.is_active=True
+            user_to_allow.save()
+            #print(user_to_allow.is_active)
+            email_to_verify.delete()
+            return Response(status = status.HTTP_200_OK)
+
+        return Response(status = status.HTTP_204_NO_CONTENT)
 
 
 
@@ -187,12 +202,16 @@ class LoginUser(APIView):
     def post(self, request, format=None):
         email = request.data.get('email')
         password = request.data.get('password')
-        login_user = MyUser.objects.filters(emial__iexact=email)
-        if login_user.password != password:
-            return Response(status = status.HTTP_401_UNAUTHORIZED)
-        return Response(status = status.HTTP_202_ACCEPTED)
+        login_user = MyUser.objects.get(email__iexact=email)
+        print(str(login_user.is_active))
+        print(login_user)
+        if login_user and login_user.is_active:
+            if login_user.password != password:
+                return Response(status = status.HTTP_401_UNAUTHORIZED)
+            return Response(status = status.HTTP_202_ACCEPTED)
         
+        return Response(status = status.HTTP_204_NO_CONTENT)
+            
         #now give jwt tokens
-        
 
 
