@@ -60,7 +60,7 @@ class MyUser(AbstractUser):
     password = models.CharField(blank=False, max_length=21, validators=[password_regex],)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'age', 'password',]
+    REQUIRED_FIELDS = ['name', 'age',]
 
     def __str__(self):
         return self.email

@@ -3,7 +3,6 @@ from rest_framework import serializers
 
 
 
-
 class RecipeSerializer(serializers.ModelSerializer):
 
 	#this serializer include both create and update recipe
@@ -20,13 +19,14 @@ class MyUserSerializer(serializers.ModelSerializer):
 	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
 	class Meta:
 		model = MyUser
-		fields = ['name', 'email', 'age',]
+		fields = ['name', 'email', 'age', 'magic', 'followers', 'following',]
 
 
 
 
 #Serializer for registriation of New Users
 class RegisterMyUser(serializers.ModelSerializer):
+
 	confirm_password = serializers.CharField(style={'input_type': "password"}, write_only=True,)
 	#maybe need validation here too!
 
@@ -34,8 +34,11 @@ class RegisterMyUser(serializers.ModelSerializer):
 		model = MyUser
 		fields = ['name', 'age', 'email', 'password', 'confirm_password',]
 
-	def create(self, validated_data):
+		extra_kwargs = {"password": {"write_only": True}}
 
+
+
+	def create(self, validated_data):
 		#check if inactive user already exist in the db
 		print('check1')
 		user_already_exists = True
@@ -57,6 +60,7 @@ class RegisterMyUser(serializers.ModelSerializer):
 		elif user_already_exists and otp_already_exists==False:
 			raise serializers.ValidationError({'email': 'User with this email already exists'})
 
+		
 		password = validated_data['password']
 		confirm_password = validated_data['confirm_password']
 		print('check2')
@@ -71,6 +75,7 @@ class RegisterMyUser(serializers.ModelSerializer):
 					username = 'anything',
 					password = validated_data['password'],
 				)
+		user.set_password(password)
 		user.save()
 
 		return user

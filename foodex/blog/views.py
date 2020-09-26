@@ -17,6 +17,10 @@ from .permissions import IsOwnerOrReadOnly
 from django.conf import settings
 from django.core.mail import send_mail
 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
+
+
 
 
 class RecipeList(APIView):
@@ -193,8 +197,16 @@ class VerifyOTP(APIView):
         user_to_allow.save()
         #print(user_to_allow.is_active)
         email_to_verify.delete()
+
+        #getting token
+        r_token = TokenObtainPairSerializer().get_token(request.user)
+        a_token = AccessToken().for_user(request.user)
+        tokens = {
+            'refresh': str(r_token),
+            'access': str(a_token)
+        }
         message = {'message': 'email_verified'}
-        return Response(message ,status = status.HTTP_200_OK)
+        return Response(tokens, status = status.HTTP_200_OK)
 
 
 
