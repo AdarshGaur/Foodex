@@ -8,7 +8,10 @@ import Products from './components/Navbar/pages/Products';
 import LogIn from './components/Navbar/pages/LogIn';
 import SignUp from './components/Navbar/pages/SignUp';
 import Marketing from './components/Navbar/pages/Marketing';
-import Consulting from './components/Navbar/pages/Consulting';
+import Otp from './components/Navbar/pages/Otp';
+import Design from './components/Navbar/pages/Design';
+
+
 
 function App() {
   return (
@@ -22,10 +25,12 @@ function App() {
         <Route path='/sign-up' component={SignUp} />
         <Route path='/sign-in' component={LogIn} />
         <Route path='/marketing' component={Marketing} />
-        <Route path='/consulting' component={Consulting} />
+        <Route path='/otp' component={Otp} />
+        <Route path='/design' component={Design} />
 
       </Switch>
     </Router>
+    
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import classes from './Signform.module.css';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 
 class Login extends Component{
 
@@ -9,7 +9,8 @@ class Login extends Component{
      email: "Email",
      password : "password",
      emailError: "",
-     passwordError : ""
+     passwordError : "",
+     redirect:null
 
   }
 
@@ -38,19 +39,23 @@ valid(){
 
 handlesubmit = (event) => {
 if(this.valid()){
+
  console.log( JSON.stringify(this.state));
  event.preventDefault();
-fetch('https://reqres.in/api/login',{
+fetch('https://7cccdf3f5c89.ngrok.io/api/token/',{
   method: "POST",
   headers: {
-    "Accept": "application.json",
     "Content-Type": "application/json"
   },
   body:JSON.stringify(this.state)
 }).then((result)=>{
   result.json().then((resp)=>{
-    console.log(resp.token)
-    localStorage.setItem("auth",JSON.stringify(resp.token))
+    console.log(resp)
+    if(resp.access){
+      localStorage.setItem("refresh_token",JSON.stringify(resp.refresh))
+    localStorage.setItem("access_token",JSON.stringify(resp.access))
+    this.setState({redirect:"/"});
+    }
     
 
   })
@@ -60,6 +65,11 @@ fetch('https://reqres.in/api/login',{
 }
 
 render(){
+
+  if(this.state.redirect){
+    return <Redirect to= {this.state.redirect} />
+  }
+
  return(
   <div className={classes.signup}>
     <div className={classes.imgbox}>
@@ -69,11 +79,11 @@ render(){
    <form onSubmit = {this.handlesubmit} >
    <h1 className={classes.headline}>SIGN-IN</h1>
     {/* <label> Email </label><br/> */}
-    <input  type="email" name="email" placeholder= {this.state.email} 
+    <input  type="email" name="email" required placeholder= {this.state.email} 
     onChange={this.handlechangeall} /> <br/>
     <p>{this.state.emailError}</p>
     {/* <label> Password </label><br/> */}
-    <input  type="password" name="password" placeholder= {this.state.password} 
+    <input  type="password" name="password" required placeholder= {this.state.password} 
     onChange={this.handlechangeall} /> <br/>
     <p>{this.state.passwordError}</p>
     <input type="submit" value="Submit" />
