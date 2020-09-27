@@ -128,17 +128,29 @@ class CreateUser(APIView):
         # try:
         #     user = MyUser.objects.get(email=email_for_otp)
         # except
-
-        serializer = RegisterMyUser(data=request.data)
-
-        #extracting emial here
-        email_for_otp = request.data.get("email")
-
+        
         def random_with_N_digits(n):
             range_start = 10**(n-1)
             range_end = (10**n)-1
             return random.randint(range_start, range_end)
+        
 
+        email_for_otp = request.data.get("email")
+
+        present = True
+
+        try:
+            user_exists = MyUser.objects.get(email=email_for_otp)
+        except MyUser.DoesNotExist:
+            present = False
+             
+        if present:
+            if user_exists.is_active==False:
+                user_exists.delete()
+                user_otp = OtpModel.objects.get(email=email_for_otp)
+                user_otp.delete()
+
+        serializer = RegisterMyUser(data=request.data)
         if serializer.is_valid():
             serializer.save()
 
@@ -183,7 +195,7 @@ class VerifyOTP(APIView):
         print(client_otp)
         verifying_time = int(time.time())
 
-        if (verifying_time - email_to_verify.at_time)>5000:
+        if (verifying_time - email_to_verify.at_time)>300:
             error_detail = {'message': "otp_expired"}
             email_to_verify.delete()
             return Response(error_detail, status.HTTP_403_FORBIDDEN)
@@ -210,33 +222,159 @@ class VerifyOTP(APIView):
 
 
 
-class LoginUser(APIView):
+class ResendOtp(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, format=None):
         email = request.data.get('email')
-        password = request.data.get('password')
+        resend_email = OtpModel.objects.get(emial=email)
+        resend_email.delete()
+
+        def random_with_N_digits(n):
+            range_start = 10**(n-1)
+            range_end = (10**n)-1
+            return random.randint(range_start, range_end)
+
+        otp = random_with_N_digits(6)
+        print(otp)
+        present_time = int(time.time())
+        OtpModel.objects.create(otp=otp, email=email, at_time=present_time)
+        #now sending verification email now
+        to_email = [email]
+        email_from = settings.EMAIL_HOST_USER
+        send_mail(
+            'Verify Email !',
+            'Your New 6 Digit Verification Pin: {} \nThank you for registering on Foodex.'.format(otp),
+            email_from,
+            to_email,
+            fail_silently=False,
+        )
+        print('checkemail')
+        message = {'message': 'otp_sent_again'}
+        return Response(message, status=status.HTTP_200_OK)
+
+
+
+class ForgotPassword(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, format=None):
+        
+        def random_with_N_digits(n):
+            range_start = 10**(n-1)
+            range_end = (10**n)-1
+            return random.randint(range_start, range_end)
+        
+        email = request.data.get('email')
+        
+        # check if user exists or not
+        try:
+            change_pass_email = MyUser.objects.get(email=email)
+        except MyUser.DoesNotExist:
+            message = {"message": "register_first"}
+            return Response(message, status=status.HTTP_401_UNAUTHORIZED)
+
+        # check if user completed registration process
+        try:
+            inactive_email = OtpModel.objects.get(email=email)
+        except OtpModel.DoesNotExist:
+            otp = random_with_N_digits(6)
+            print(otp)
+            present_time = int(time.time())
+            OtpModel.objects.create(otp=otp, email=email, at_time=present_time)
+            #now sending verification email now
+            to_email = [email]
+            email_from = settings.EMAIL_HOST_USER
+            send_mail(
+                'Verify Email !',
+                'Your 6 Digit Verification Pin: {} \nThank you for registering on Foodex.'.format(otp),
+                email_from,
+                to_email,
+                fail_silently=False,
+            )
+            message = {'message': 'email_ok'}
+            return Response(message, status=status.HTTP_200_OK)
+
+        message = {"message": "complete_registration_first"}
+        return Response(message, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+
+class ForgotPasswordOtp(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, format=None):
+
+        email = request.data.get('email')
+        client_otp = request.data.get('otp')
+
 
         try:
-            login_user = MyUser.objects.get(email__iexact=email)
-        except MyUser.DoesNotExist:
-            message = {'message': 'User_not_found'}
-            return Response(message, status=status.HTTP_400_BAD_REQUEST)
-        
-        
-        print(str(login_user.is_active))
-        print(login_user)
-        if login_user.is_active:
-            if login_user.password != password:
-                message = {'message': 'wrong_password'}
-                return Response(message, status = status.HTTP_401_UNAUTHORIZED)
-            
-            message = {'message': 'user_logged_in'}
-            return Response(message, status = status.HTTP_202_ACCEPTED)
-        
-        message = {'message': 'register_please'}
-        return Response(message, status = status.HTTP_401_UNAUTHORIZED)
+            email_to_verify = OtpModel.objects.get(email__iexact=email)
+        except OtpModel.DoesNotExist:
+            message = {'message': 'register_first'}
+            return Response(message ,status= status.HTTP_401_UNAUTHORIZED)
 
-        #now give jwt tokens
 
+        print(email_to_verify.otp)
+        print(client_otp)
+        verifying_time = int(time.time())
+
+        # check otp expiration here
+        if (verifying_time - email_to_verify.at_time)>5000:
+            error_detail = {'message': "otp_expired"}
+            email_to_verify.delete()
+            return Response(error_detail, status.HTTP_403_FORBIDDEN)
+
+        # check otp here
+        if email_to_verify.otp != int(client_otp):
+            message = {'message': 'wrong_otp'}              # delete opt models when resend otp either by resending or re-registering
+            return Response(message ,status = status.HTTP_401_UNAUTHORIZED)
+        
+        user_to_allow = MyUser.objects.get(email=email)
+        user_to_allow.is_active=True
+        user_to_allow.save()
+        #print(user_to_allow.is_active)
+        email_to_verify.delete()
+
+        #getting token
+        r_token = TokenObtainPairSerializer().get_token(request.user)
+        a_token = AccessToken().for_user(request.user)
+        tokens = {
+            'refresh': str(r_token),
+            'access': str(a_token)
+        }
+        message = {'message': 'email_verified_now_continue'}
+        return Response(tokens, status = status.HTTP_200_OK)
+
+
+
+class NewPassword(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        
+        """
+        include validations here later
+        """
+
+        new_password = request.data.get('password')
+        confirm_password = request.data.get('confirm_password')
+
+        if new_password != confirm_password:
+            message = {"message": "Both passwords must match."}
+            return Response(message, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        user = request.user
+        user.password = new_password
+        user.save()
+
+        #getting token
+        r_token = TokenObtainPairSerializer().get_token(request.user)
+        a_token = AccessToken().for_user(request.user)
+        tokens = {
+            'refresh': str(r_token),
+            'access': str(a_token)
+        }
+        message = {"message": "password_changed"}
+        return Response(tokens, status=status.HTTP_202_ACCEPTED)
 

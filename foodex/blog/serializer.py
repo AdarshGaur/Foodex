@@ -8,7 +8,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['title', 'content', 'owner', 'published_on', 'modified_on', 'read_time', 'slug', 'yums',]
+		fields = ['title', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'slug', 'yums',]
 
 
 
@@ -65,7 +65,7 @@ class RegisterMyUser(serializers.ModelSerializer):
 		confirm_password = validated_data['confirm_password']
 		print('check2')
 		if password != confirm_password:
-			raise serializers.ValidationError({'password': 'Both Passwords must match.'})
+			raise serializers.ValidationError({'password_error': 'Both Passwords must match.'})
 
 
 		user = MyUser.objects.create(
@@ -79,4 +79,3 @@ class RegisterMyUser(serializers.ModelSerializer):
 		user.save()
 
 		return user
-
