@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import Recipe, MyUser, OtpModel
-from .serializer import RecipeSerializer, MyUserSerializer, RegisterMyUser
+from .serializer import RecipeSerializer, MyUserSerializer, RegisterMyUser, RecipeCardSerializer
 from rest_framework import serializers
 
 from .permissions import IsOwnerOrReadOnly
@@ -76,18 +76,6 @@ class RecipeDetail(APIView):
         recipe = self.get_object(pk)
         recipe.delete()
         return Response(status = status.HTTP_204_NO_CONTENT)
-
-
-
-
-class MyUserList(APIView):
-    permission_classes = [permissions.AllowAny]
-
-    #to get the users list
-    def get(self, request, format=None):
-        users = MyUser.objects.all()
-        serializer = MyUserSerializer(users, many=True)
-        return Response(serializer.data)
 
 
 
@@ -378,3 +366,11 @@ class NewPassword(APIView):
         message = {"message": "password_changed"}
         return Response(tokens, status=status.HTTP_202_ACCEPTED)
 
+
+
+class RecipeCardsList(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        
+        if

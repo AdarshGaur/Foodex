@@ -1,4 +1,4 @@
-from .models import Recipe, MyUser, OtpModel
+from .models import Recipe, MyUser, OtpModel, RecipeCard
 from rest_framework import serializers
 
 
@@ -8,7 +8,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['title', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'slug', 'yums',]
+		fields = ['title', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points',]
 
 
 
@@ -19,7 +19,7 @@ class MyUserSerializer(serializers.ModelSerializer):
 	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
 	class Meta:
 		model = MyUser
-		fields = ['name', 'email', 'age', 'magic', 'followers', 'following',]
+		fields = ['name', 'email', 'age', 'followers', 'following',]
 
 
 
@@ -79,3 +79,14 @@ class RegisterMyUser(serializers.ModelSerializer):
 		user.save()
 
 		return user
+
+
+
+class RecipeCardSerializer(serializers.ModelSerializer):
+	content = serializers.CharField(max_length=60)
+
+	class Meta:
+		model = Recipe
+		fields = ['title', 'content', 'owner', 'cook_time', 'points', 'veg']
+
+

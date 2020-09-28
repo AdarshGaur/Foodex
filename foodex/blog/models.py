@@ -10,10 +10,11 @@ from django.core.validators import MaxValueValidator, MinValueValidator, RegexVa
 
 
 categories_choices = [
-    ('continental', 'Continental'),
-    ('paranthe', "Chandni Chawk ke Paranthe"),
-    ('indian','Indian'),
-    ('bevarages','Beverages'),
+    ('starter', 'Starters'),
+    ('main_course', "Main Course"),
+    ('desserts','Desserts'),
+    ('drinks','Drinks & Smoothies'),
+    ('others', 'Others'),
 ]
 
 
@@ -22,16 +23,16 @@ class Recipe(models.Model):
     title  = models.CharField(max_length=50)
     content = models.TextField(blank=False)
     ingredients = models.TextField(blank=False, null=False)
-    category = models.TextField(default='Continental', choices=categories_choices)
+    category = models.TextField(default='Starters', choices=categories_choices)
+    veg = models.BooleanField()
     #Keywords  = models.CharField(max_length=100)
     #thumbnail = models.ImageField()
     #images    = models.ImageField(upload_to='media', null=False, blank=False)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='blog', on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Recipes', on_delete=models.CASCADE)
     published_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
     cook_time = models.PositiveIntegerField()
-    yums = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])
-    slug = models.SlugField(blank=False, null=False, unique=True)
+    points = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -49,15 +50,17 @@ class MyUser(AbstractUser):
     password_regex = RegexValidator("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$", "Invalid Password")
 
 
-    name = models.CharField(blank=False, max_length=50, null=False, validators=[name_regex])
-    magic = models.PositiveIntegerField(default=0)
+    name = models.CharField(blank=False, max_length=50, validators=[name_regex])
+    #recipemagic = models.PositiveIntegerField(default=0)
     followers = models.PositiveIntegerField(default=0)
     following = models.PositiveIntegerField(default=0)
     age = models.IntegerField(default=22, blank=False, validators=[MaxValueValidator(110), MinValueValidator(5)])
     email = models.EmailField(blank=False, unique=True, validators=[email_regex])
     is_active = models.BooleanField(default=False)
     username = models.CharField(max_length=50, unique=False)
-    password = models.CharField(blank=False, max_length=21, validators=[password_regex],)
+    password = models.CharField(blank=False, max_length=21, validators=[password_regex])
+
+    #
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'age',]
@@ -73,4 +76,18 @@ class OtpModel(models.Model):
     at_time = models.IntegerField()
 
 
+# class RecipeCard(models.Model):
 
+#     title  = models.CharField(max_length=50)
+#     short_description = models.TextField(blank=False, max_length=60)
+#     #images    = models.ImageField(upload_to='media', null=False, blank=False)
+#     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Recipes', on_delete=models.CASCADE)
+#     veg = models.BooleanField()
+#     cook_time = models.PositiveIntegerField()
+#     points = models.PositiveIntegerField(default=0)
+
+#     def __str__(self):
+#         return self.title
+
+#     class Meta:
+#         ordering = ['published_on']
