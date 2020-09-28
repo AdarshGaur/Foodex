@@ -42,7 +42,7 @@ if(this.valid()){
 
  console.log( JSON.stringify(this.state));
  event.preventDefault();
-fetch('https://7cccdf3f5c89.ngrok.io/api/token/',{
+fetch('https://4e4d247fada6.ngrok.io/api/token/',{
   method: "POST",
   headers: {
     "Content-Type": "application/json"

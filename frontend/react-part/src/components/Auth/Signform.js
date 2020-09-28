@@ -61,7 +61,7 @@ handlesubmit = (event) => {
   if(this.valid()){
    console.log( JSON.stringify(this.state));                 
   event.preventDefault();
- fetch('https://7cccdf3f5c89.ngrok.io/register/',{
+ fetch('https://4e4d247fada6.ngrok.io/auth/register/',{
    method: "POST",
    body:JSON.stringify(this.state),
    headers: {
@@ -101,11 +101,11 @@ render(){
    <form onSubmit = {this.handlesubmit} >
    <h1 className={classes.headline}>SIGN-UP</h1>
     {/* <label> Full Name </label><br/> */}
-    <input  type="text" name="name"  required placeholder={this.state.name}  
+    <input  type="text" name="name" className={classes.fields} required placeholder={this.state.name}  
     onChange={this.handlechangeall} /> <br/>
    
     {/* <label> Age </label><br/> */}
-    <input  type="number" name="age"  required placeholder={this.state.age}  
+    <input  type="number" name="age" className={classes.fields} required placeholder={this.state.age}  
     onChange={this.handlechangeall} /> <br/>
 
     {/* <label> Email </label><br/> */}

@@ -76,7 +76,7 @@ handlesubmit = (event) => {
   // if(this.valid()){
    console.log( JSON.stringify(this.state));                 
   event.preventDefault();
- fetch('https://7cccdf3f5c89.ngrok.io/register/otp/',{
+ fetch('https://4e4d247fada6.ngrok.io/auth/register/otp/',{
    method: "POST",
    body:JSON.stringify(this.state),
    headers: {
@@ -86,11 +86,16 @@ handlesubmit = (event) => {
    
  }).then((result)=>{
    result.json().then((resp)=>{
-     console.log(resp.message)
-       if(resp.message==="email_verified"){
-     this.setState({redirect:"/"});
-     
-       }
+     console.log(resp.access)
+    //    if(resp.message==="email_verified"){
+    //  this.setState({redirect:"/"});
+    //    }
+    if(resp.access){
+      localStorage.setItem("refresh_token",JSON.stringify(resp.refresh))
+    localStorage.setItem("access_token",JSON.stringify(resp.access))
+    this.setState({redirect:"/"});
+    }
+
    }).catch(error=>console.error('error:', error))
    .then(resp=>console.log('Success:',resp));
 

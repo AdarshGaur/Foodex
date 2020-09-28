@@ -1,8 +1,12 @@
 import React from 'react';
 import Otpform from '../../Auth/Otpform'
+import NavigationBar from '../Navbar';
 
 export default function Otp() {
   return (
-      <Otpform />
+    <>
+    <NavigationBar />
+    <Otpform />
+    </>
   );
 }

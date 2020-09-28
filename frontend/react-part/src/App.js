@@ -1,5 +1,6 @@
 import React from 'react';
-import Navbar from './components/Navbar/Navbar';
+import NavigationBar from './components/Navbar/Navbar';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 import Home from './components/Navbar/pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -13,10 +14,11 @@ import Design from './components/Navbar/pages/Design';
 
 
 
+
 function App() {
   return (
     <Router>
-      <Navbar />
+      {/* <NavigationBar /> */}
       <Switch>
         <Route path='/' exact component={Home} />
         <Route path='/services' component={Services} />
