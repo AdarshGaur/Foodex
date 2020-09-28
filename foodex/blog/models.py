@@ -38,7 +38,7 @@ class Recipe(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['published_on']
+        ordering = ['-published_on']
 
 
 
