@@ -1,0 +1,143 @@
+
+.recipebox{
+    display: flex;
+    width: 80%;
+    background: white;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0px 0px 18px 0 #808080;
+    /* background-color: violet; */
+    flex: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 50px;
+
+
+}
+
+.desc{
+    display: flex;
+    width: 400px;
+    align-items: center;
+    justify-content: space-between;
+    /* background-color: tomato; */
+}
+
+.foodimg{
+    /* background-color: green;   */
+    background-size: cover;
+    overflow: visible;
+    background-position: center;
+    position: relative;
+    margin-left: 20px;
+}
+
+img{
+    max-width: 300px;
+    max-height: 300px;
+    min-width: 250px;
+    min-height: 250px;
+
+}
+
+.title{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    /* background-color: teal; */
+    position: relative;
+    margin-right: 20px;
+}
+
+.title p{
+    /* background-color: rgb(148, 138, 138); */
+    display: flex;
+    align-items: center;
+    height:30vh;
+
+}
+.title h1{
+    /* background-color: pink; */
+    display: flex;
+    align-items: center;
+    height:30vh;
+
+}
+
+
+@media(max-width:750px){
+.recipebox{
+    flex-direction: column-reverse;
+}
+
+.title{
+    width: 50%;
+    justify-content: center;
+}
+
+.vertline{
+    display: none;;
+}
+
+
+img{
+    width: 200px;
+    height: 200px;
+
+}
+
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+body{
+    font-size: 10px;
+}
+
+img{
+    width:100%
+}
+
+.blogpostcontainer{
+    width: 80%;
+    height: 350px;
+    background: white;
+    display: flex;
+}
+
+
+.blogpost{
+    width: 80%;
+    max-width: 98rem;
+    padding: 5rem;
+    background-color: #fff;
+    box-shadow: 0 1.4rem 8 rem rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.8rem;
+    margin: auto;
+}
+
+.blogpostimg{
+min-width: 35rem;
+max-width: 35rem;
+height: 30rem;
+transform: translateX(-8rem);
+position: relative;
+} */
