@@ -204,7 +204,7 @@ class VerifyOTP(APIView):
             message = {'message': 'wrong_otp'}
             return Response(message ,status = status.HTTP_401_UNAUTHORIZED)
         
-        user_to_allow = MyUser.objects.get(email__iexact=email)
+        user_to_allow = MyUser.objects.get(email=email)
         user_to_allow.is_active=True
         user_to_allow.save()
         #print(user_to_allow.is_active)
@@ -217,7 +217,7 @@ class VerifyOTP(APIView):
             'refresh': str(r_token),
             'access': str(a_token)
         }
-        #message = {'message': 'email_verified'}
+        message = {'message': 'email_verified'}
         return Response(tokens, status = status.HTTP_200_OK)
 
 
