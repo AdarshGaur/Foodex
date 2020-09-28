@@ -217,7 +217,7 @@ class VerifyOTP(APIView):
             'refresh': str(r_token),
             'access': str(a_token)
         }
-        message = {'message': 'email_verified'}
+        #message = {'message': 'email_verified'}
         return Response(tokens, status = status.HTTP_200_OK)
 
 
