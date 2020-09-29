@@ -11,11 +11,11 @@ class AddRecipe extends Component {
     title:"",
     titleLimit:50,
     ingredients:"",
-    ingredientsLimit: 100,
+    ingredientsLimit: 300,
     instructions:"",
-    instructionsLimit:2500,
+    instructionsLimit:4000,
     category:"starters",
-    label:"veg"
+    tag:"veg"
   }
 
     handlechangeall = (event) =>{
@@ -55,12 +55,24 @@ class AddRecipe extends Component {
             <option value="drink">Drinks and Smoothies</option>
             </select>
 
-            <label><h3>Label</h3></label>
-            <select name='label' className={classes.ddlist} onChange={this.handlechangeall}>
+            <label className={classes.labels}><h3>Tag</h3></label>
+            <select name='tag' className={classes.ddlist} onChange={this.handlechangeall}>
             <option value="veg">Vegetarian</option>
             <option value="nonveg">Non-Vegetarian</option>
             </select>
-            
+
+            <label className={classes.labels}><h3>Cooking Time:</h3></label>
+            <input type="number" className={classes.cooktime} name = 'ingredients'  placeholder={this.state.ingredients} onChange = {this.handlechangeall} /> minutes
+   
+   <br />
+
+            <label className={classes.labels}><h3>Upload Image:</h3></label>
+            {/* <div className={classes.imgcontainer}> */}
+            <input className={classes.hidden} id="postimage" type="file" name="img" accept="image/*" />
+            <label className={classes.imgbtn} for="postimage">Add Image</label>
+            {/* </div> */}
+
+            <input className={classes.area} type="submit" value="Submit" />
 
         </form>
 
