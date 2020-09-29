@@ -1,34 +1,30 @@
 import React from 'react';
-import NavigationBar from './components/Navbar/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
-import Home from './components/Navbar/pages/Home';
+import Home from './components/Navbar/pages/Home/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Services from './components/Navbar/pages/Services';
-import Products from './components/Navbar/pages/Products';
 import LogIn from './components/Navbar/pages/LogIn';
 import SignUp from './components/Navbar/pages/SignUp';
-import Marketing from './components/Navbar/pages/Marketing';
 import Otp from './components/Navbar/pages/Otp';
 import Design from './components/Navbar/pages/Design';
-
+import Profile from './components/Profile/Profile'
+import AddRecipe from './components/Blogposts/AddRecipe/AddRecipe'
 
 
 
 function App() {
   return (
     <Router>
-      {/* <NavigationBar /> */}
       <Switch>
         <Route path='/' exact component={Home} />
-        <Route path='/services' component={Services} />
-        <Route path='/products' component={Products} />
+
         {/* <Route path='/contact-us' component={ContactUs} /> */}
         <Route path='/sign-up' component={SignUp} />
         <Route path='/sign-in' component={LogIn} />
-        <Route path='/marketing' component={Marketing} />
+        <Route path='/profile' component={Profile} />
         <Route path='/otp' component={Otp} />
         <Route path='/design' component={Design} />
+        <Route path='/add-recipe' component={AddRecipe} />
 
       </Switch>
     </Router>

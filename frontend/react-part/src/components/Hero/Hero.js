@@ -1,6 +1,6 @@
 import classes from './Hero.module.css';
 import React from 'react';
-import video from '../../videos/video.mp4';
+import video from '../../assets/videos/video.mp4';
 
 
 function Hero(){
@@ -11,8 +11,12 @@ function Hero(){
   <source src={video} type="video/mp4" />
 </video>
 
+<div class={classes.overlayText}>
+        <p>Foodex</p>
+    </div>
+{/* 
 <h1>FOODEX</h1>
-<p>Hunger Is Good!</p>
+<p>Hunger Is Good!</p> */}
 
 </div>
 )
