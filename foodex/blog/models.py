@@ -18,20 +18,23 @@ categories_choices = [
 ]
 
 
+def upload_path(instance, filename):
+    return '/'.join(['image', str(instance.title), filename])
+    '''can include more specific path later'''
+
+
 class Recipe(models.Model):
     
     title  = models.CharField(max_length=50)
-    content = models.TextField(blank=False)
     ingredients = models.TextField(blank=False, null=False)
+    content = models.TextField(blank=False)
     category = models.TextField(default='Starters', choices=categories_choices)
     veg = models.BooleanField()
-    #Keywords  = models.CharField(max_length=100)
-    #thumbnail = models.ImageField()
-    #images    = models.ImageField(upload_to='media', null=False, blank=False)
+    cook_time = models.PositiveIntegerField()
+    img = models.ImageField(upload_to=upload_path, null=False, blank=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Recipes', on_delete=models.CASCADE)
     published_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
-    cook_time = models.PositiveIntegerField()
     points = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -60,10 +63,9 @@ class MyUser(AbstractUser):
     username = models.CharField(max_length=50, unique=False)
     password = models.CharField(blank=False, max_length=21, validators=[password_regex])
 
-    #
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'age',]
+    REQUIRED_FIELDS = ['name', 'age', 'username']
 
     def __str__(self):
         return self.email

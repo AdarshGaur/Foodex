@@ -41,6 +41,15 @@ class RecipeList(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    #to edit the recipe
+    # def put(self, request):
+    #     serializer = RecipeSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
@@ -78,6 +87,14 @@ class RecipeDetail(APIView):
         return Response(status = status.HTTP_204_NO_CONTENT)
 
 
+class MyUserList(APIView):
+    permission_classes=[permissions.AllowAny]
+    
+    def get(self, request, format=None):
+        user = MyUser.objects.all()
+        serializer = MyUserSerializer(user, many=True)
+        return Response(serializer.data)
+        
 
 class MyUserDetail(APIView):
     permission_classes = [IsOwnerOrReadOnly]
@@ -381,7 +398,7 @@ class RecipeCardsList(APIView):
 
         display_order = request.data.get('data')
         recent_or_point = request.data.get('recent_point')
-        veg_non_veg = request.data.get('bool')
+        veg_non_veg = request.data.get('veg')
 
         #if recent_or_point comes out in reverse order then
         #recent = '-' + recent_or_point

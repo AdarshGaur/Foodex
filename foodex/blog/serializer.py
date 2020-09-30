@@ -1,14 +1,14 @@
-from .models import Recipe, MyUser, OtpModel, RecipeCard
+from .models import Recipe, MyUser, OtpModel
 from rest_framework import serializers
 
 
-
+# recipe creating/edit/get serializer
 class RecipeSerializer(serializers.ModelSerializer):
 
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['title', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points',]
+		fields = ['title', 'content', 'owner', 'img', 'published_on', 'modified_on', 'cook_time', 'veg', 'points',]
 
 
 
@@ -32,7 +32,7 @@ class RegisterMyUser(serializers.ModelSerializer):
 
 	class Meta:
 		model = MyUser
-		fields = ['name', 'age', 'email', 'password', 'confirm_password',]
+		fields = ['name', 'age', 'email', 'password', 'confirm_password']
 
 		extra_kwargs = {"password": {"write_only": True}}
 
@@ -47,7 +47,7 @@ class RegisterMyUser(serializers.ModelSerializer):
 			existing_user = MyUser.objects.get(email=validated_data['email'])
 		except MyUser.DoesNotExist:
 			user_already_exists = False
-		
+			
 		try:
 			email_in_otp = OtpModel.objects.get(email=validated_data['email'])
 		except OtpModel.DoesNotExist:
@@ -81,12 +81,11 @@ class RegisterMyUser(serializers.ModelSerializer):
 		return user
 
 
-
+#cards serializer
 class RecipeCardSerializer(serializers.ModelSerializer):
-	content = serializers.CharField(max_length=60)
-
+	# only for cards
 	class Meta:
 		model = Recipe
-		fields = ['title', 'content', 'owner', 'cook_time', 'points', 'veg']
+		fields = ['title', 'img', 'content', 'owner', 'cook_time', 'points', 'veg']
 
 

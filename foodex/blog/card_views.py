@@ -10,7 +10,4 @@ from .serializer import RecipeSerializer
 from rest_framework import serializers
 
 
-class CardViews(APIView):
 
-    def get(self, request, format=None):
-        
