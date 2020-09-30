@@ -37,13 +37,14 @@ class NavigationBar extends Component{
                   <NavDropdown.Item as={Link} to="/drinks-smoothies">Drinks and Smoothies</NavDropdown.Item>
           
                 </NavDropdown>
-                <Nav.Link as={Link} to="/">My Profile</Nav.Link>
+                <Nav.Link as={Link} to="/add-recipe">Post</Nav.Link>
+                <Nav.Link as={Link} to="/profile">My Profile</Nav.Link>
                 <Nav.Link as={Link} to="/" onClick={logoutHandler}>Logout</Nav.Link>
               </Nav>
               
             </Navbar.Collapse>
           </Navbar>
-                );
+        );
         
       }
 

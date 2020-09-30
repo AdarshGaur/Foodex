@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classes from './Signform.module.css';
 import {Link, Redirect} from 'react-router-dom';
+import axios from 'axios';
+import ServerService from '../../services/serverService'
 
 class Login extends Component{
 
@@ -38,28 +40,34 @@ valid(){
 }
 
 handlesubmit = (event) => {
-if(this.valid()){
+  if(this.valid()){
 
- console.log( JSON.stringify(this.state));
- event.preventDefault();
-fetch('https://4e4d247fada6.ngrok.io/api/token/',{
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body:JSON.stringify(this.state)
-}).then((result)=>{
-  result.json().then((resp)=>{
+  // console.log( JSON.stringify(this.state));
+const data={
+  email: this.state.email,
+  password: this.state.password,
+
+}
+  event.preventDefault();
+  ServerService.login(data)
+  .then((resp)=>{
     console.log(resp)
-    if(resp.access){
-      localStorage.setItem("refresh_token",JSON.stringify(resp.refresh))
-    localStorage.setItem("access_token",JSON.stringify(resp.access))
-    this.setState({redirect:"/"});
+
+    if (resp.status === 200) {
+      // localStorage.setItem("token", "abcd");
+      localStorage.setItem("refresh_token",resp.data.refresh)
+      localStorage.setItem("access_token",resp.data.access)
+      this.setState({ redirect: "/" });
     }
+    // if(resp.access){
+    // localStorage.setItem("refresh_token",JSON.stringify(resp.refresh))
+    // localStorage.setItem("access_token",JSON.stringify(resp.access))
+    // this.setState({redirect:"/"});
+    // }
     
 
   })
-})
+
 
 }
 }

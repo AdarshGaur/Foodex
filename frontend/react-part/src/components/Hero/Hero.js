@@ -11,7 +11,7 @@ function Hero(){
   <source src={video} type="video/mp4" />
 </video>
 
-<div class={classes.overlayText}>
+<div className={classes.overlayText}>
         <p>Foodex</p>
     </div>
 {/* 

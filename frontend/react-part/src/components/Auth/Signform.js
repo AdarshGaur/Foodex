@@ -61,7 +61,7 @@ handlesubmit = (event) => {
   if(this.valid()){
    console.log( JSON.stringify(this.state));                 
   event.preventDefault();
- fetch('https://4e4d247fada6.ngrok.io/auth/register/',{
+ fetch('https://8ca171214697.ngrok.io/auth/register/',{
    method: "POST",
    body:JSON.stringify(this.state),
    headers: {
