@@ -84,7 +84,7 @@ class AddRecipe extends Component {
                 <Card.Text>
                 <ul>
                 <li>Write a good, catchy title</li>
-                <li>Give clear details about your question</li>
+                <li>Give clear details about your recipe preparation</li>
                 <li>Add a relevant topic to reach the right members</li>
                 <li>Check your spelling and grammar</li>
                 <li>Become an active member to get recognized</li>

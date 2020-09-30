@@ -6,9 +6,9 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import LogIn from './components/Navbar/pages/LogIn';
 import SignUp from './components/Navbar/pages/SignUp';
 import Otp from './components/Navbar/pages/Otp';
-import Design from './components/Navbar/pages/Design';
 import Profile from './components/Profile/Profile'
 import AddRecipe from './components/Blogposts/AddRecipe/AddRecipe'
+import ReadRecipe from './components/Blogposts/ReadRecipe/ReadRecipe'
 
 
 
@@ -23,8 +23,8 @@ function App() {
         <Route path='/sign-in' component={LogIn} />
         <Route path='/profile' component={Profile} />
         <Route path='/otp' component={Otp} />
-        <Route path='/design' component={Design} />
         <Route path='/add-recipe' component={AddRecipe} />
+        <Route path='/read-recipe' component={ReadRecipe} />
 
       </Switch>
     </Router>
