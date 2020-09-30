@@ -19,7 +19,8 @@ categories_choices = [
 
 
 def upload_path(instance, filename):
-    return '/'.join(['image', str(instance.title), filename])
+    # do a test for instace.title
+    return '/'.join(['image', instance.title, filename])
     '''can include more specific path later'''
 
 
@@ -34,7 +35,7 @@ class Recipe(models.Model):
     img = models.ImageField(upload_to=upload_path, null=False, blank=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Recipes', on_delete=models.CASCADE)
     published_on = models.DateTimeField(auto_now_add=True)
-    modified_on = models.DateTimeField(auto_now=True)
+    modified_on = models.DateTimeField(auto_now=False)
     points = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -59,7 +60,7 @@ class MyUser(AbstractUser):
     following = models.PositiveIntegerField(default=0)
     age = models.IntegerField(default=22, blank=False, validators=[MaxValueValidator(110), MinValueValidator(5)])
     email = models.EmailField(blank=False, unique=True, validators=[email_regex])
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     username = models.CharField(max_length=50, unique=False)
     password = models.CharField(blank=False, max_length=21, validators=[password_regex])
 

@@ -10,16 +10,18 @@ from django.conf import settings
 urlpatterns = [
 	#Homepage
 	path('', views.RecipeCardsList.as_view()),                #for cards lists /Homepage
-	# path('starters/', views.RecipeCardsList.as_view()),                #for cards lists /Starters Category
-	# path('main-course/', views.RecipeCardsList.as_view()),                #for cards lists /Main Course Category
-	# path('desserts/', views.RecipeCardsList.as_view()),                #for cards lists /Desserts Category
-	# path('drinks/', views.RecipeCardsList.as_view()),                #for cards lists /Drinks Category
-	# path('others/', views.RecipeCardsList.as_view()),                #for cards lists /Others Category
+
+	#categories
+	path('starters/', views.StartersCardsList.as_view()),                #for cards lists /Starters Category
+	path('main-course/', views.MainCourseCardsList.as_view()),                #for cards lists /Main Course Category
+	path('desserts/', views.DessertsCardsList.as_view()),                #for cards lists /Desserts Category
+	path('drinks/', views.DrinksCardsList.as_view()),                #for cards lists /Drinks Category
+	path('others/', views.OthersCardsList.as_view()),                #for cards lists /Others Category
 
 	#sorting cards areas
-	path('recipe/', views.RecipeList.as_view()),              #for recipe lists
+	# path('recipe/', views.RecipeList.as_view()),              #for recipe lists
 	path('recipe/<int:pk>/', views.RecipeDetail.as_view()),   #for recipes details
-	path('users/', views.MyUserList.as_view()),               #for users list 'no_use'
+	# path('users/', views.MyUserList.as_view()),               #for users list 'no_use'
 	path('user/<int:pk>/', views.MyUserDetail.as_view()),    #for users details
 
 	#authentication

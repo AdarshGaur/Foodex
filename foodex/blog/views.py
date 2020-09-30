@@ -20,6 +20,8 @@ from django.core.mail import send_mail
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
+from django.db.models import Q
+
 
 
 
@@ -41,14 +43,14 @@ class RecipeList(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    #to edit the recipe
-    # def put(self, request):
-    #     serializer = RecipeSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     #to edit the recipe
+#     # def put(self, request):
+#     #     serializer = RecipeSerializer(data=request.data)
+#     #     if serializer.is_valid():
+#     #         serializer.save()
+#     #         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -57,18 +59,27 @@ class RecipeList(APIView):
 class RecipeDetail(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
-    #to get the recipe
+    #function to pick the object
     def get_object(self, pk):
         try:
             return Recipe.objects.get(pk=pk)
         except Recipe.DoesNotExist:
             raise Http404
 
-    #to retrieve
+    #to get the object
     def get(self, request, pk, format=None):
         recipe = self.get_object(pk)
         serializer = RecipeSerializer(recipe)
         return Response(serializer.data)
+
+    
+    #to create recipe
+    def post(self, request):
+        serializer = RecipeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
     #to update
@@ -388,91 +399,121 @@ class NewPassword(APIView):
 class RecipeCardsList(APIView):
     permission_classes = [permissions.AllowAny]
 
+    #homepage default cards
     def get(self, request, format=None):
-        recipe = Recipe.objects.all()[:4]
+        recipe = Recipe.objects.all()[:16]
         serializer = RecipeSerializer(recipe, many=True)
         return Response(serializer.data)
 
     
-    def post(self, request, fomat=None):
-
+    def post(self, request, format=None):
+        
         display_order = request.data.get('data')
-        recent_or_point = request.data.get('recent_point')
         veg_non_veg = request.data.get('veg')
 
-        #if recent_or_point comes out in reverse order then
-        #recent = '-' + recent_or_point
+        #################################
+        if display_order == 'points-high-to-low':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.all().order_by('-points', 'title')[:16]
+            elif veg_non_veg == 'true':
+                recipe = Recipe.objects.filter(veg=True).order_by('-points', 'title')[:16]
+            elif veg_non_veg == 'false':
+                recipe = Recipe.objects.filter(veg=True).order_by('-points', 'title')[:16]
 
 
-        #########################################
-        ###### sorting on homepage only #########
-        #########################################
-        if display_order == 'points':
-            recipe = Recipe.objects.all().order_by('-points')[:4]
-        elif display_order == 'veg':
-            recipe = Recipe.objects.get(veg=True)[:4]
-        elif display_order == 'non_veg':
-            recipe = Recipe.objects.get(veg=False)[:4]
-        elif display_order == 'published_on':
-            recipe = Recipe.objects.all()[:4]
-        
-        #########################################
-        ##### on staters page ###################
-        #########################################
-        if display_order == 'starter':
-            if veg_non_veg == 'none':
-                recipe = Recipe.objects.get(category='starter').order_by(recent_or_point)[:4]
-            if veg_non_veg == 'true':
-                recipe = Recipe.objects.get(category='starter', veg=True).order_by(recent_or_point)[:4]
-            if veg_non_veg == 'false':
-                recipe = Recipe.objects.get(category='starter', veg=False).order_by(recent_or_point)[:4]
-        
-        #########################################
-        ##### on main course ####################
-        #########################################
-        if display_order == 'main_course':
-            if veg_non_veg == 'none':
-                recipe = Recipe.objects.get(category='main_course').order_by(recent_or_point)[:4]
+        if display_order == 'points-low-to-high':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.all().order_by('points', 'title')[:16]
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.get(category='main_course', veg=True).order_by(recent_or_point)[:4]
+                recipe = Recipe.objects.filter(veg=True).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.get(category='main_course', veg=False).order_by(recent_or_point)[:4]
-        
-        #########################################
-        ######## on desserts page ###############
-        #########################################
-        if display_order == 'desserts':
-            if veg_non_veg == 'none':
-                recipe = Recipe.objects.get(category='desserts').order_by(recent_or_point)[:4]
+                recipe = Recipe.objects.filter(veg=True).order_by('points', 'title')[:16]
+
+
+        if display_order == 'new':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.all().order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.get(category='desserts', veg=True).order_by(recent_or_point)[:4]
+                recipe = Recipe.objects.filter(veg=True).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.get(category='desserts', veg=False).order_by(recent_or_point)[:4]
-            
-        
-        #########################################
-        ###### on drinks page ###################
-        #########################################
-        if display_order == 'drinks':
-            if veg_non_veg == 'none':
-                recipe = Recipe.objects.get(category='drinks').order_by(recent_or_point)[:4]
+                recipe = Recipe.objects.filter(veg=True).order_by('-published_on', 'title')[:16]
+
+
+
+        if display_order == 'old':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.all().order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.get(category='drinks', veg=True).order_by(recent_or_point)[:4]
+                recipe = Recipe.objects.filter(veg=True).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.get(category='drinks', veg=False).order_by(recent_or_point)[:4]
-        
-        #########################################
-        ######### for others page ###############
-        #########################################
-        if display_order == 'others':
-            if veg_non_veg == 'none':
-                recipe = Recipe.objects.get(category='others').order_by(recent_or_point)[:4]
-            elif veg_non_veg == 'true':
-                recipe = Recipe.objects.get(category='others', veg=True).order_by(recent_or_point)[:4]
-            elif veg_non_veg == 'false':
-                recipe = Recipe.objects.get(category='others', veg=False).order_by(recent_or_point)[:4]
-        
+                recipe = Recipe.objects.filter(veg=True).order_by('published_on', 'title')[:16]
+
 
         serializer = RecipeCardSerializer(recipe, many=True)
         return Response(serializer.data)
+
+
+
+
+class StartersCardsList(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    display_category = 'starter'
+
+    # for default starter category
+    def get(self, request):
+        recipe = Recipe.Objects.filter(catergory=display_category)[:16]
+        serializer = RecipeSerializer(recipe, many=True)
+        return Response(serializer.data)
+
+
+
+
+    def post(self, request, format=None):
+        
+        display_order = request.data.get('data')
+        veg_non_veg = request.data.get('veg')
+
+        #################################
+        if display_order == 'points-high-to-low':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.get(category=display_category).order_by('-points', 'title')[:16]
+            elif veg_non_veg == 'true':
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+            elif veg_non_veg == 'false':
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+
+
+        if display_order == 'points-low-to-high':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')[:16]
+            elif veg_non_veg == 'true':
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+            elif veg_non_veg == 'false':
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+
+
+        if display_order == 'new':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')[:16]
+            elif veg_non_veg == 'true':
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+            elif veg_non_veg == 'false':
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+
+
+
+        if display_order == 'old':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')[:16]
+            elif veg_non_veg == 'true':
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+            elif veg_non_veg == 'false':
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+
+
+        serializer = RecipeCardSerializer(recipe, many=True)
+        return Response(serializer.data)
+
+
 

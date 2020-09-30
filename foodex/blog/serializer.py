@@ -8,7 +8,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['title', 'content', 'owner', 'img', 'published_on', 'modified_on', 'cook_time', 'veg', 'points',]
+		fields = ['title', 'content', 'owner', 'img', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
 
 
 
