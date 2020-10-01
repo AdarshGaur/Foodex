@@ -82,10 +82,18 @@ class RegisterMyUser(serializers.ModelSerializer):
 
 
 #cards serializer
-class RecipeCardSerializer(serializers.ModelSerializer):
+class RecipeCardSerializer(serializers.HyperlinkedModelSerializer):
 	# only for cards
 	class Meta:
 		model = Recipe
-		fields = ['title', 'img', 'content', 'owner', 'cook_time', 'points', 'veg']
+		fields = ['url', 'id', 'title', 'img', 'content', 'owner', 'cook_time', 'points', 'veg']
+
+
+#lkjghgfghkfghkfjhtbd ytjvd ytjxcyfoyulrfyv.fgjkd' ghyisfhild
+# .mgjkfbd li;suda fghps9da;gdugjb[io'nha/gki fytdapg;hoipreaht;jkl
+# g gjklunlsrdhyiobrea gyhfidgy hiljkdagytiljkafhisjkdafbiasudgbfguasdhfg;iouasdyfgjkdgfjk
+# asdfhuisdhfklsdayfiljkadfbguioadfgb;uioadghiodafghladuytghkl.jagfjh
+# kdagfaisdfnoiashfl;kahfoalkhioahfkldabngjkdfayt ihk;jagpdifhg[ofdnglfkdaghi
+# kasldfhlksjafhkljsahfudfgyp9doglkdngpfidgh[0fdag]]]
 
 

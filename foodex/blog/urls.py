@@ -18,6 +18,11 @@ urlpatterns = [
 	path('drinks/', views.DrinksCardsList.as_view()),                #for cards lists /Drinks Category
 	path('others/', views.OthersCardsList.as_view()),                #for cards lists /Others Category
 
+	#searching recipes
+	path('search/', views.SearchCardsList.as_view()),                #for searching cards
+	#add sorting routes in searching option tooo but later
+
+
 	#sorting cards areas
 	# path('recipe/', views.RecipeList.as_view()),              #for recipe lists
 	path('recipe/<int:pk>/', views.RecipeDetail.as_view()),   #for recipes details
@@ -26,14 +31,14 @@ urlpatterns = [
 
 	#authentication
 	path('api-auth/', include('rest_framework.urls')),
-	path('api/token/refresh/', TokenRefreshView.as_view()),   #for refresh token
-	path('api/token/', TokenObtainPairView.as_view()),        #for access token / login
-	path('auth/register/', views.CreateUser.as_view()),            #for sign up
-	path('auth/register/otp/', views.VerifyOTP.as_view()),         #for verifying OTP
-	path('auth/register/otp/resend/', views.ResendOtp.as_view()),  #for resending the otp
-	path('auth/forgot-password/', views.ForgotPassword.as_view()),  #for forgot password
-	path('auth/forgot-password/otp', views.ForgotPasswordOtp.as_view()),  #for checking otp after forgot password
-	path('auth/forgot-password/new-password', views.NewPassword.as_view()),  #for forgot password
+	path('api/token/refresh/', TokenRefreshView.as_view()),                   #for refresh token
+	path('api/token/', TokenObtainPairView.as_view()),                        #for access token / login
+	path('auth/register/', views.CreateUser.as_view()),                       #for sign up
+	path('auth/register/otp/', views.VerifyOTP.as_view()),                    #for verifying OTP
+	path('auth/register/otp/resend/', views.ResendOtp.as_view()),             #for resending the otp
+	path('auth/forgot-password/', views.ForgotPassword.as_view()),            #for forgot password
+	path('auth/forgot-password/otp', views.ForgotPasswordOtp.as_view()),      #for checking otp after forgot password
+	path('auth/forgot-password/new-password', views.NewPassword.as_view()),   #for forgot password
 
 
 	

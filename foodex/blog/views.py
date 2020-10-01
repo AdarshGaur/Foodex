@@ -402,7 +402,7 @@ class RecipeCardsList(APIView):
     #homepage default cards
     def get(self, request, format=None):
         recipe = Recipe.objects.all()[:16]
-        serializer = RecipeSerializer(recipe, many=True)
+        serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
     
@@ -449,7 +449,7 @@ class RecipeCardsList(APIView):
                 recipe = Recipe.objects.filter(veg=True).order_by('published_on', 'title')[:16]
 
 
-        serializer = RecipeCardSerializer(recipe, many=True)
+        serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -762,6 +762,23 @@ class OthersCardsList(APIView):
 
         serializer = RecipeCardSerializer(recipe, many=True)
         return Response(serializer.data)
+
+
+
+
+class SearchCardsList(APIView):
+    permission_classes = [permissions.AllowAny]
+
+
+    def post(self, request, format=None):
+        
+        search_title = request.data.get('search')
+        #include validations here
+        recipe = Recipe.objects.filter(title__icontains=search_title).order_by('-points')[:16]
+        serializer = RecipeCardSerializer(recipe, many=True)
+        return Response(serializer.data)
+
+
 
 
 
