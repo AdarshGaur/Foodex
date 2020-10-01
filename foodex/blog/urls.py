@@ -20,11 +20,12 @@ urlpatterns = [
 
 	#searching recipes
 	path('search/', views.SearchCardsList.as_view()),                #for searching cards
+	path('search/sort/', views.SortCardsList.as_view()),                #for searching cards
 	#added sorting routes also
 
 
 	#sorting cards areas
-	# path('recipe/', views.RecipeList.as_view()),              #for recipe lists
+	path('recipe/', views.CreateRecipe.as_view()),              #for recipe create
 	path('recipe/<int:pk>/', views.RecipeDetail.as_view()),   #for recipes details
 	# path('users/', views.MyUserList.as_view()),               #for users list 'no_use'
 	path('user/<int:pk>/', views.MyUserDetail.as_view()),    #for users details

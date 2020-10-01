@@ -4,11 +4,18 @@ from rest_framework import serializers
 
 # recipe creating/edit/get serializer
 class RecipeSerializer(serializers.ModelSerializer):
-
+	owner = serializers.ReadOnlyField(source='owner.name')
+	img_url = serializers.SerializerMethodField()
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['title', 'content', 'owner', 'img', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
+		fields = ['pk', 'title', 'img_url', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
+	
+
+	def get_img_url(self, Recipe):
+		request = self.context.get('request')
+		img_url = Recipe.img.url
+		return request.build_absolute_uri(img_url)
 
 
 
@@ -82,11 +89,19 @@ class RegisterMyUser(serializers.ModelSerializer):
 
 
 #cards serializer
-class RecipeCardSerializer(serializers.HyperlinkedModelSerializer):
+class RecipeCardSerializer(serializers.ModelSerializer):
+	owner = serializers.ReadOnlyField(source='owner.name')
+	img_url = serializers.SerializerMethodField()
 	# only for cards
 	class Meta:
 		model = Recipe
-		fields = ['url', 'id', 'title', 'img', 'content', 'owner', 'cook_time', 'points', 'veg']
+		fields = ['pk', 'title', 'img_url', 'content', 'owner', 'cook_time', 'points', 'veg']
+
+
+	def get_img_url(self, Recipe):
+		request = self.context.get('request')
+		img_url = Recipe.img.url
+		return request.build_absolute_uri(img_url)
 
 
 #lkjghgfghkfghkfjhtbd ytjvd ytjxcyfoyulrfyv.fgjkd' ghyisfhild

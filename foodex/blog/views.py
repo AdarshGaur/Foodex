@@ -25,23 +25,30 @@ from django.db.models import Q
 
 
 
-class RecipeList(APIView):
+class CreateRecipe(APIView):
     permission_classes = [permissions.AllowAny]
 
-    #to get all the recipes
-    def get(self, request, format=None):
-        recipe = Recipe.objects.all()
-        serializer = RecipeSerializer(recipe, many=True)
-        return Response(serializer.data)
-
-    #to create recipe blog
     def post(self, request):
-        serializer = RecipeSerializer(data=request.data)
+        serializer = RecipeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     #to get all the recipes
+#     def get(self, request, format=None):
+#         recipe = Recipe.objects.all()
+#         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
+#         return Response(serializer.data)
+
+#     #to create recipe blog
+#     def post(self, request):
+#         serializer = RecipeSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #     #to edit the recipe
 #     # def put(self, request):
@@ -69,23 +76,14 @@ class RecipeDetail(APIView):
     #to get the object
     def get(self, request, pk, format=None):
         recipe = self.get_object(pk)
-        serializer = RecipeSerializer(recipe)
+        serializer = RecipeSerializer(recipe, context={'request': request})
         return Response(serializer.data)
-
-    
-    #to create recipe
-    def post(self, request):
-        serializer = RecipeSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
     #to update
     def put(self, request, pk, format=None):
         recipe = self.get_object(pk)
-        serializer = RecipeSerializer(recipe, data=request.data)
+        serializer = RecipeSerializer(recipe, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -419,35 +417,50 @@ class RecipeCardsList(APIView):
                 recipe = Recipe.objects.filter(veg=True).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(veg=False).order_by('-points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'points-low-to-high':
+        elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.all().order_by('points', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(veg=True).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(veg=False).order_by('points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'new':
+        elif display_order == 'new':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.all().order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(veg=True).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(veg=False).order_by('-published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-        if display_order == 'old':
+        elif display_order == 'old':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.all().order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(veg=True).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(veg=False).order_by('published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
+
+        else:
+            message = {'message': 'Invalid Order'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
@@ -458,11 +471,10 @@ class RecipeCardsList(APIView):
 class StartersCardsList(APIView):
     permission_classes = [permissions.AllowAny]
 
-    display_category = 'starter'
-
     # for default starter category
     def get(self, request):
-        recipe = Recipe.Objects.filter(catergory=display_category)[:16]
+        display_category = 'starter'
+        recipe = Recipe.objects.filter(category=display_category)[:16]
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -470,7 +482,7 @@ class StartersCardsList(APIView):
 
 
     def post(self, request, format=None):
-        
+        display_category = 'starter'
         display_order = request.data.get('data')
         veg_non_veg = request.data.get('veg')
 
@@ -482,34 +494,49 @@ class StartersCardsList(APIView):
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'points-low-to-high':
+        elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'new':
+        elif display_order == 'new':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-        if display_order == 'old':
+        elif display_order == 'old':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            message = {'message': 'Invalid Order'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
@@ -520,11 +547,10 @@ class StartersCardsList(APIView):
 class MainCourseCardsList(APIView):
     permission_classes = [permissions.AllowAny]
 
-    display_category = 'main_course'
-
     # for default starter category
     def get(self, request):
-        recipe = Recipe.Objects.filter(catergory=display_category)[:16]
+        display_category = 'main_course'
+        recipe = Recipe.objects.filter(catergory=display_category)[:16]
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -532,7 +558,7 @@ class MainCourseCardsList(APIView):
 
 
     def post(self, request, format=None):
-        
+        display_category = 'main_course'
         display_order = request.data.get('data')
         veg_non_veg = request.data.get('veg')
 
@@ -544,34 +570,50 @@ class MainCourseCardsList(APIView):
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'points-low-to-high':
+        elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'new':
+        elif display_order == 'new':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-        if display_order == 'old':
+        elif display_order == 'old':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+        else:
+            message = {'message': 'Invalid Order'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
@@ -582,11 +624,11 @@ class MainCourseCardsList(APIView):
 class DessertsCardsList(APIView):
     permission_classes = [permissions.AllowAny]
 
-    display_category = 'desserts'
 
     # for default starter category
     def get(self, request):
-        recipe = Recipe.Objects.filter(catergory=display_category)[:16]
+        display_category = 'desserts'
+        recipe = Recipe.objects.filter(category=display_category)[:16]
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -594,7 +636,7 @@ class DessertsCardsList(APIView):
 
 
     def post(self, request, format=None):
-        
+        display_category = 'desserts'
         display_order = request.data.get('data')
         veg_non_veg = request.data.get('veg')
 
@@ -606,34 +648,50 @@ class DessertsCardsList(APIView):
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
-
-        if display_order == 'points-low-to-high':
+        elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'new':
+        elif display_order == 'new':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
 
-        if display_order == 'old':
+        elif display_order == 'old':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+        else:
+            message = {'message': 'Invalid Order'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
@@ -644,11 +702,11 @@ class DessertsCardsList(APIView):
 class DrinksCardsList(APIView):
     permission_classes = [permissions.AllowAny]
 
-    display_category = 'drinks'
 
     # for default starter category
     def get(self, request):
-        recipe = Recipe.Objects.filter(catergory=display_category)[:16]
+        display_category = 'drinks'
+        recipe = Recipe.objects.filter(category=display_category)[:16]
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -656,7 +714,7 @@ class DrinksCardsList(APIView):
 
 
     def post(self, request, format=None):
-        
+        display_category = 'drinks'
         display_order = request.data.get('data')
         veg_non_veg = request.data.get('veg')
 
@@ -668,35 +726,50 @@ class DrinksCardsList(APIView):
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'points-low-to-high':
+        elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'new':
+        elif display_order == 'new':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-        if display_order == 'old':
+        elif display_order == 'old':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
+
+        else:
+            message = {'message': 'Invalid Order'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
@@ -706,11 +779,11 @@ class DrinksCardsList(APIView):
 class OthersCardsList(APIView):
     permission_classes = [permissions.AllowAny]
 
-    display_category = 'others'
 
     # for default starter category
     def get(self, request):
-        recipe = Recipe.Objects.filter(catergory=display_category)[:16]
+        display_category = 'others'
+        recipe = Recipe.objects.filter(category = display_category)[:16]
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -718,55 +791,82 @@ class OthersCardsList(APIView):
 
 
     def post(self, request, format=None):
-        
+        display_category = 'others'
         display_order = request.data.get('data')
         veg_non_veg = request.data.get('veg')
 
         #################################
         if display_order == 'points-high-to-low':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.get(category = display_category).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'points-low-to-high':
+        elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.get(category = display_category).order_by('points', 'title')[:16]
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'new':
+        elif display_order == 'new':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category = display_category).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
 
-        if display_order == 'old':
+        elif display_order == 'old':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category = display_category).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
+        else:
+            message = {'message': 'Invalid Order'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
 
-
 class SearchCardsList(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, format=None):
+        
+        search_title = request.data.get('search')
+        recipe = Recipe.objects.filter(title__icontains=search_title).order_by('?')[:16]
+        serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
+
+
+class SortCardsList(APIView):
     permission_classes = [permissions.AllowAny]
 
 
@@ -786,34 +886,49 @@ class SearchCardsList(APIView):
                 recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('-points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-        if display_order == 'points-low-to-high':
+        elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.filter(title__icontains=search_title).order_by('points', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('points', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
-        if display_order == 'new':
+
+        elif display_order == 'new':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.filter(title__icontains=search_title).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-        if display_order == 'old':
+        elif display_order == 'old':
             if veg_non_veg == 'all':
                 recipe = Recipe.objects.filter(title__icontains=search_title).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('published_on', 'title')[:16]
+            else:
+                message = {'message': 'Invalid Tag'}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
+        else:
+            message = {'message': 'Invalid Order'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
