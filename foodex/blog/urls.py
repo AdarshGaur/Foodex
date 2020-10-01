@@ -20,7 +20,7 @@ urlpatterns = [
 
 	#searching recipes
 	path('search/', views.SearchCardsList.as_view()),                #for searching cards
-	#add sorting routes in searching option tooo but later
+	#added sorting routes also
 
 
 	#sorting cards areas

@@ -418,7 +418,7 @@ class RecipeCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(veg=True).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(veg=True).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=False).order_by('-points', 'title')[:16]
 
 
         if display_order == 'points-low-to-high':
@@ -427,7 +427,7 @@ class RecipeCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(veg=True).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(veg=True).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=False).order_by('points', 'title')[:16]
 
 
         if display_order == 'new':
@@ -436,7 +436,7 @@ class RecipeCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(veg=True).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(veg=True).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=False).order_by('-published_on', 'title')[:16]
 
 
 
@@ -446,7 +446,7 @@ class RecipeCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(veg=True).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(veg=True).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=False).order_by('published_on', 'title')[:16]
 
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
@@ -463,7 +463,7 @@ class StartersCardsList(APIView):
     # for default starter category
     def get(self, request):
         recipe = Recipe.Objects.filter(catergory=display_category)[:16]
-        serializer = RecipeSerializer(recipe, many=True)
+        serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -481,7 +481,7 @@ class StartersCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
 
 
         if display_order == 'points-low-to-high':
@@ -490,7 +490,7 @@ class StartersCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
 
 
         if display_order == 'new':
@@ -499,7 +499,7 @@ class StartersCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
 
 
 
@@ -509,10 +509,10 @@ class StartersCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
 
 
-        serializer = RecipeCardSerializer(recipe, many=True)
+        serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -525,7 +525,7 @@ class MainCourseCardsList(APIView):
     # for default starter category
     def get(self, request):
         recipe = Recipe.Objects.filter(catergory=display_category)[:16]
-        serializer = RecipeSerializer(recipe, many=True)
+        serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -543,7 +543,7 @@ class MainCourseCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
 
 
         if display_order == 'points-low-to-high':
@@ -552,7 +552,7 @@ class MainCourseCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
 
 
         if display_order == 'new':
@@ -561,7 +561,7 @@ class MainCourseCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
 
 
 
@@ -571,10 +571,10 @@ class MainCourseCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
 
 
-        serializer = RecipeCardSerializer(recipe, many=True)
+        serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -587,7 +587,7 @@ class DessertsCardsList(APIView):
     # for default starter category
     def get(self, request):
         recipe = Recipe.Objects.filter(catergory=display_category)[:16]
-        serializer = RecipeSerializer(recipe, many=True)
+        serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -605,7 +605,7 @@ class DessertsCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
 
 
         if display_order == 'points-low-to-high':
@@ -614,7 +614,7 @@ class DessertsCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
 
 
         if display_order == 'new':
@@ -623,7 +623,7 @@ class DessertsCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
 
 
 
@@ -633,10 +633,10 @@ class DessertsCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
 
 
-        serializer = RecipeCardSerializer(recipe, many=True)
+        serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -649,7 +649,7 @@ class DrinksCardsList(APIView):
     # for default starter category
     def get(self, request):
         recipe = Recipe.Objects.filter(catergory=display_category)[:16]
-        serializer = RecipeSerializer(recipe, many=True)
+        serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -667,7 +667,7 @@ class DrinksCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
 
 
         if display_order == 'points-low-to-high':
@@ -676,7 +676,7 @@ class DrinksCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
 
 
         if display_order == 'new':
@@ -685,7 +685,7 @@ class DrinksCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
 
 
 
@@ -695,10 +695,10 @@ class DrinksCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
 
 
-        serializer = RecipeCardSerializer(recipe, many=True)
+        serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -711,7 +711,7 @@ class OthersCardsList(APIView):
     # for default starter category
     def get(self, request):
         recipe = Recipe.Objects.filter(catergory=display_category)[:16]
-        serializer = RecipeSerializer(recipe, many=True)
+        serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -729,7 +729,7 @@ class OthersCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
 
 
         if display_order == 'points-low-to-high':
@@ -738,7 +738,7 @@ class OthersCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
 
 
         if display_order == 'new':
@@ -747,7 +747,7 @@ class OthersCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
 
 
 
@@ -757,10 +757,10 @@ class OthersCardsList(APIView):
             elif veg_non_veg == 'true':
                 recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
 
 
-        serializer = RecipeCardSerializer(recipe, many=True)
+        serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
@@ -773,9 +773,49 @@ class SearchCardsList(APIView):
     def post(self, request, format=None):
         
         search_title = request.data.get('search')
+        display_order = request.data.get('data')
+        veg_non_veg = request.data.get('veg')
         #include validations here
-        recipe = Recipe.objects.filter(title__icontains=search_title).order_by('-points')[:16]
-        serializer = RecipeCardSerializer(recipe, many=True)
+
+
+        #################################
+        if display_order == 'points-high-to-low':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('-points', 'title')[:16]
+            elif veg_non_veg == 'true':
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('-points', 'title')[:16]
+            elif veg_non_veg == 'false':
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('-points', 'title')[:16]
+
+
+        if display_order == 'points-low-to-high':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('points', 'title')[:16]
+            elif veg_non_veg == 'true':
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('points', 'title')[:16]
+            elif veg_non_veg == 'false':
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('points', 'title')[:16]
+
+        if display_order == 'new':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('-published_on', 'title')[:16]
+            elif veg_non_veg == 'true':
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+            elif veg_non_veg == 'false':
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+
+
+
+        if display_order == 'old':
+            if veg_non_veg == 'all':
+                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('published_on', 'title')[:16]
+            elif veg_non_veg == 'true':
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('published_on', 'title')[:16]
+            elif veg_non_veg == 'false':
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('published_on', 'title')[:16]
+
+
+        serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
 
