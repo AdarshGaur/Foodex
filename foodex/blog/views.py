@@ -8,7 +8,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Recipe, MyUser, OtpModel
+from .models import Recipe, MyUser, OtpModel, LikeSystem#, #BookmarkRecord
 from .serializer import RecipeSerializer, MyUserSerializer, RegisterMyUser, RecipeCardSerializer
 from rest_framework import serializers
 
@@ -20,16 +20,16 @@ from django.core.mail import send_mail
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
-from django.db.models import Q
+from django.db.models import Q, F
 
 
 
 
 class CreateRecipe(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):
-        serializer = RecipeSerializer(data=request.data, context={'request': request})
+        serializer = RecipeSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -528,7 +528,7 @@ class MainCourseCardsList(APIView):
     # for default starter category
     def get(self, request):
         display_category = 'main_course'
-        recipe = Recipe.objects.filter(catergory=display_category)[:16]
+        recipe = Recipe.objects.filter(category=display_category)[:16]
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -910,6 +910,46 @@ class SortCardsList(APIView):
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
+
+
+
+
+class CardLike(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+
+    def post(self, request, format=None):
+        key = request.data.get('pk')
+        # upvoted = request.data.get('like')
+        
+        try:
+            recipe = Recipe.objects.get(pk=key)
+        except:
+            raise Http404
+
+        try:
+            like = LikeSystem.objects.get(Q(liked_by=request.user) & Q(like_to=recipe))
+        except LikeSystem.DoesNotExist:
+            like = LikeSystem.objects.create(liked_by=request.user, like_to=recipe, active=-1)
+
+        # 1 means already liked and
+        # -1 means not liked 
+        if like.active == -1:
+            like.active = 1
+            like.save()
+            recipe.points = F('points') + 1
+            recipe.save()
+            # recipe.update(points=F('points')+1)
+            message= {"message": "liked"}
+        else:
+            like.active = -1
+            like.save()
+            recipe.points = F('points') - 1
+            recipe.save()
+            # recipe.update(points=F('points')-1)
+            message= {"message": "unliked"}
+
+        return Response(message, status=status.HTTP_200_OK)
 
 
 

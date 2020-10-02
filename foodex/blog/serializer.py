@@ -1,10 +1,11 @@
-from .models import Recipe, MyUser, OtpModel
+from .models import Recipe, MyUser, OtpModel, LikeSystem
 from rest_framework import serializers
 
 
 # recipe creating/edit/get serializer
 class RecipeSerializer(serializers.ModelSerializer):
 	owner = serializers.ReadOnlyField(source='owner.name')
+	# email = serializers.ReadOnlyField(source='owner.email')
 	img_url = serializers.SerializerMethodField()
 	# pk = serializers.ReadOnlyField(source=id)
 	#this serializer include both create and update recipe
@@ -113,3 +114,8 @@ class RecipeCardSerializer(serializers.ModelSerializer):
 # kasldfhlksjafhkljsahfudfgyp9doglkdngpfidgh[0fdag]]]
 
 
+# class LikeSystemSerializer(serializers.ModelSerializer):
+	
+# 	class Meta:
+# 		model = LikeSystem
+# 		fields = ['']

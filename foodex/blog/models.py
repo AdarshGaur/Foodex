@@ -35,7 +35,7 @@ class Recipe(models.Model):
     img = models.ImageField(upload_to=upload_path, null=False, blank=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Recipes', on_delete=models.CASCADE)
     published_on = models.DateTimeField(auto_now_add=True)
-    modified_on = models.DateTimeField(auto_now=False)
+    modified_on = models.DateTimeField(auto_now=True)
     points = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -63,6 +63,7 @@ class MyUser(AbstractUser):
     is_active = models.BooleanField(default=True)
     username = models.CharField(max_length=50, unique=False)
     password = models.CharField(blank=False, max_length=21, validators=[password_regex])
+    # bookmark_count = models.PositiveIntegerField(default=0, read_only=True)
 
     
     USERNAME_FIELD = 'email'
@@ -79,8 +80,12 @@ class OtpModel(models.Model):
     at_time = models.IntegerField()
 
 
-# class followeSystem(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     follow_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='follower', on_delete=models.CASCADE)
-#     following_to = models.ForeignKey()
+
+
+class LikeSystem(models.Model):
+    id = models.AutoField(primary_key=True)
+    active = models.IntegerField()
+    liked_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='likes', on_delete=models.CASCADE)
+    like_to = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
 

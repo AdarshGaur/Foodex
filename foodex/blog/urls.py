@@ -23,6 +23,11 @@ urlpatterns = [
 	path('search/sort/', views.SortCardsList.as_view()),                #for searching cards
 	#added sorting routes also
 
+	#like routes
+	path('recipe/like/', views.CardLike.as_view()),                #for liking recipes
+	
+	
+
 
 	#sorting cards areas
 	path('recipe/', views.CreateRecipe.as_view()),              #for recipe create
