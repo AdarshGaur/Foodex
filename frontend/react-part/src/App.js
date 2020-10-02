@@ -9,6 +9,9 @@ import Otp from './components/Navbar/pages/Otp';
 import Profile from './components/Profile/Profile'
 import AddRecipe from './components/Blogposts/AddRecipe/AddRecipe'
 import ReadRecipe from './components/Blogposts/ReadRecipe/ReadRecipe'
+import Starters from './components/Categories/Starters'
+import Drinks from './components/Categories/Drinks'
+import SearchPage from './containers/SearchPage/SearchPage';
 
 
 
@@ -25,6 +28,12 @@ function App() {
         <Route path='/otp' component={Otp} />
         <Route path='/add-recipe' component={AddRecipe} />
         <Route path='/read-recipe' component={ReadRecipe} />
+        <Route path='/starters' component={Starters} />
+        <Route path='/drinks-smoothies' component={Drinks} />
+        <Route path='/starters' component={Starters} />
+        <Route path='/starters' component={Starters} />
+        <Route path='/search-page' component={SearchPage} />
+        {/* <Route path='/search-page/:searchTerm' component={SearchPage}/> */}
 
       </Switch>
     </Router>

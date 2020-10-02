@@ -1,12 +1,65 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import {Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
+import axios from 'axios';
 
 
 class NavigationBar extends Component{
 
+  state = { 
+    search:"",
+    redirect:null 
+  }
+
+  handlechangeall = (event) =>{
+    this.setState ( { [event.target.name] :event.target.value  } )
+  }
+
+  handlesubmit=(event)=>{
+
+    const data={
+      search: this.state.search,
+
+    }
+    event.preventDefault();
+    this.setState({ redirect: "/search-page" });
+   
+    // axios.post('https://b841ca4ed474.ngrok.io/search/',data)
+    // ServerService.searchbox(data)
+    // .then((resp)=>{
+      // console.log(resp.data);
+      // const search_res=resp.data
+      // console.log(search_res);
+      // if (resp.status === 200) {
+        // localStorage.setItem("token", "abcd");
+        // localStorage.setItem("search_result",resp.data)
+        // localStorage.setItem("access_token",resp.data.access)
+        
+    //   }
+    
+    // })
+  
+  
+  }
+  
+
+  //   axios.post('https://60bb5774f441.ngrok.io/search/',data)
+  //   .then((resp)=>{
+  //     console.log(resp)
+  // }}
+
+
+
+
   render() {
+
+    if(this.state.redirect){
+      return <Redirect to= {{
+        pathname:this.state.redirect,
+        state:{searchterm: this.state.search}
+      }} />
+    }
 
     let token= localStorage.getItem('refresh_token');
       let auth= true;
@@ -26,8 +79,8 @@ class NavigationBar extends Component{
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Form inline className="ml-auto"> 
-                <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                <Button variant="outline-dark" >Search</Button>
+                <FormControl type="text" name="search" onChange={this.handlechangeall} placeholder="Search" className="mr-sm-2" />
+                <Button onClick={this.handlesubmit} variant="outline-dark" >Search</Button>
               </Form>
               <Nav className="ml-auto">
                 <NavDropdown title="Categories" id="basic-nav-dropdown">
@@ -56,8 +109,8 @@ class NavigationBar extends Component{
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav">
   <Form inline className="ml-auto"> 
-      <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-      <Button variant="outline-dark" >Search</Button>
+      <FormControl type="text" name="search" onChange={this.handlechangeall} placeholder="Search" className="mr-sm-2" />
+      <Button onClick={this.handlesubmit} variant="outline-dark" >Search</Button>
     </Form>
     <Nav className="ml-auto">
       <NavDropdown title="Categories" id="basic-nav-dropdown">

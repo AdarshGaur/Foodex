@@ -44,8 +44,8 @@ class Profile extends Component {
             <p className={classes.nums}>34</p>
         </div>
         <div>
-            <h5>Bookmarks</h5>
-
+            <h5>Posts</h5>
+            <p className={classes.nums}>34</p>
         </div>
 
     </div>

@@ -12,19 +12,18 @@ class AddRecipe extends Component {
     titleLimit:50,
     ingredients:"",
     ingredientsLimit: 300,
-    instructions:"",
-    instructionsLimit:4000,
+    content:"",
+    contentLimit:4000,
     category:"starters",
-    tag:"veg"
+    veg:true,
+    cook_time: 60
   }
 
     handlechangeall = (event) =>{
         this.setState ( { [event.target.name] :event.target.value  } )
     }   
     
-    // dropdownChangeHandler=(e)=>{
-    //     this.setState({value})
-    // }
+    
 
     render(){
         return (
@@ -45,24 +44,25 @@ class AddRecipe extends Component {
             <input type="text" className={classes.area} name = 'ingredients'  placeholder={this.state.ingredients} onChange = {this.handlechangeall} />
             <p className={classes.limit}>{this.state.ingredients.length}/{this.state.ingredientsLimit}</p>
             <label ><h3>Instructions</h3></label>
-            <textarea rows="10" className={classes.area} name = 'instructions'  placeholder={this.state.instructions} onChange = {this.handlechangeall} />
-            <p className={classes.limit}>{this.state.instructions.length}/{this.state.instructionsLimit}</p>
+            <textarea rows="10" className={classes.area} name = 'content'  placeholder={this.state.instructions} onChange = {this.handlechangeall} />
+            <p className={classes.limit}>{this.state.content.length}/{this.state.contentLimit}</p>
             <label><h3>Category</h3></label>
             <select name='category' className={classes.ddlist} onChange={this.handlechangeall}>
             <option value="starters">Starters</option>
             <option value="maincourse">Main Course</option>
             <option value="deserts">Deserts</option>
             <option value="drink">Drinks and Smoothies</option>
+            <option value="others">Others</option>
             </select>
 
             <label className={classes.labels}><h3>Tag</h3></label>
-            <select name='tag' className={classes.ddlist} onChange={this.handlechangeall}>
-            <option value="veg">Vegetarian</option>
-            <option value="nonveg">Non-Vegetarian</option>
+            <select name='veg' className={classes.ddlist} onChange={this.handlechangeall}>
+            <option value="true">Vegetarian</option>
+            <option value="false">Non-Vegetarian</option>
             </select>
 
             <label className={classes.labels}><h3>Cooking Time:</h3></label>
-            <input type="number" className={classes.cooktime} name = 'ingredients'  placeholder={this.state.ingredients} onChange = {this.handlechangeall} /> minutes
+            <input type="number" className={classes.cooktime} name = 'cook_time'   onChange = {this.handlechangeall} /> minutes
    
    <br />
 

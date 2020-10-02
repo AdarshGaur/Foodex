@@ -1,10 +1,10 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 import classes from './Home.module.css';
 import Hero from '../../../Hero/Hero';
 import RecipeCard from '../../../UI/Card/RecipeCard'
 import NavigationBar from '../../Navbar';
 import axios from 'axios';
-
+import ServerService from '../../../../services/serverService'
 
 class Home extends Component {
   state = {
@@ -14,9 +14,10 @@ class Home extends Component {
   }
 
   componentDidMount(){
-    axios.get('https://8ca171214697.ngrok.io/')
+    // axios.get('https://60bb5774f441.ngrok.io/')
+    ServerService.homecards()
     .then(response=>{
-      console.log(response.data);
+      console.log(response);
       this.setState({recipecards: response.data})
     })
   }
@@ -24,7 +25,7 @@ class Home extends Component {
   render() {
 
     const recipecards= this.state.recipecards.map(recipecard=>{
-    return <RecipeCard title={recipecard.title} img={recipecard.img} content={recipecard.content} />
+    return <RecipeCard title={recipecard.title} img={recipecard.img_url} pk={recipecard.pk} content={recipecard.content} />
     })
 
     return(
@@ -36,6 +37,7 @@ class Home extends Component {
 
     <div className={classes.grid}>
     {recipecards}
+
     </div>
     </>
     )

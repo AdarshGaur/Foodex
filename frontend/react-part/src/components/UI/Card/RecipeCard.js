@@ -6,12 +6,17 @@ import classes from './RecipeCard.module.css'
 
 const RecipeCard = (props) => {
  return(
-      <Card style={{ width: "18rem" }} className={classes.box}>
-        <Card.Img variant="top" height="250px" src="holder.js/100px180" src= {"https://8ca171214697.ngrok.io"+props.img} />
+      <Card style={{ width: "18rem" }} className={classes.box} index={props.pk}>
+        <Card.Img variant="top" height="250px" src="holder.js/100px180" src= {props.img} />
         <Card.Body>
           <Card.Title>{props.title}</Card.Title>
           <Card.Text>{props.content.substring(0, 150)}...</Card.Text>
-          <Button variant="primary" as={Link} to="/sign-up">Read More</Button>
+          <Button variant="primary" as={Link} 
+           to= {{
+            pathname:'/read-recipe',
+            state:{recipeid: props.pk}
+          }} 
+          >Read More</Button>
         </Card.Body>
       </Card>
 )

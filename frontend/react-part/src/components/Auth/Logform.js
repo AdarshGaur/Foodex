@@ -7,13 +7,12 @@ import ServerService from '../../services/serverService'
 class Login extends Component{
 
 
-    state = { 
-     email: "Email",
-     password : "password",
-     emailError: "",
-     passwordError : "",
-     redirect:null
-
+  state = { 
+    email: "Email",
+    password : "password",
+    emailError: "",
+    passwordError : "",
+    redirect:null 
   }
 
 
@@ -59,13 +58,7 @@ const data={
       localStorage.setItem("access_token",resp.data.access)
       this.setState({ redirect: "/" });
     }
-    // if(resp.access){
-    // localStorage.setItem("refresh_token",JSON.stringify(resp.refresh))
-    // localStorage.setItem("access_token",JSON.stringify(resp.access))
-    // this.setState({redirect:"/"});
-    // }
-    
-
+  
   })
 
 

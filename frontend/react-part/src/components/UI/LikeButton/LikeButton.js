@@ -6,7 +6,7 @@ import classes from './LikeButton.module.css';
 class LikeButton extends Component {
 
     state = {
-        likes: 0,
+        // likes: 0,
         isclicked: false
     };
 
@@ -24,14 +24,18 @@ class LikeButton extends Component {
         if(this.state.isclicked){
             return (
             
-                <button onClick={this.addLike} ClassName={classes.likebtn} >Likes: {this.state.likes} </button>
+                <button onClick={this.addLike} className={classes.likebtn} >
+                    <i className="fa fa-heart" aria-hidden="true"></i> 1
+                </button>
             )
         }
 
         else{
             return (
             
-                <button onClick={this.addLike} ClassName={classes.likebtn} > {this.state.likes} </button>
+                <button onClick={this.addLike} className={classes.likebtn} > 
+                <i className="far fa-heart"></i> 0 
+                </button>
             )
         }
         

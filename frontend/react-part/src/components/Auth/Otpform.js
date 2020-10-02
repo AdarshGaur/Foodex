@@ -76,7 +76,7 @@ handlesubmit = (event) => {
   // if(this.valid()){
    console.log( JSON.stringify(this.state));                 
   event.preventDefault();
- fetch('https://8ca171214697.ngrok.io/auth/register/otp/',{
+ fetch('https://60bb5774f441.ngrok.io/auth/register/otp/',{
    method: "POST",
    body:JSON.stringify(this.state),
    headers: {
