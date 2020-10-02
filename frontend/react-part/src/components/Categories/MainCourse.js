@@ -13,8 +13,8 @@ class MainCourse extends Component {
   }
 
   componentDidMount(){
-    axios.get('https://b841ca4ed474.ngrok.io/starters/')
-    // ServerService.homecards()
+    // axios.get('http://af3c2d386213.ngrok.io/main-course/')
+    ServerService.maincourse()
     .then(response=>{
       console.log(response.data);
       this.setState({recipecards: response.data})
@@ -30,7 +30,7 @@ class MainCourse extends Component {
     return(
     <>
       <NavigationBar />     
-        <div className={classes.startersCover}>
+        <div className={classes.maincourseCover}>
             Main Course
         </div>
 

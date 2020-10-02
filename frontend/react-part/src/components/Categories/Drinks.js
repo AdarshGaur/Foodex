@@ -13,8 +13,8 @@ class Drinks extends Component {
   }
 
   componentDidMount(){
-    axios.get('https://b841ca4ed474.ngrok.io/starters/')
-    // ServerService.homecards()
+    // axios.get('http://af3c2d386213.ngrok.io/drinks/')
+    ServerService.drinks()
     .then(response=>{
       console.log(response.data);
       this.setState({recipecards: response.data})
@@ -30,8 +30,8 @@ class Drinks extends Component {
     return(
     <>
       <NavigationBar />     
-        <div className={classes.startersCover}>
-            Drinks
+        <div className={classes.drinksCover}>
+            Drinks and Smoothies
         </div>
 
     <div className={classes.grid}>

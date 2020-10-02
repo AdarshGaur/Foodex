@@ -10,7 +10,10 @@ import Profile from './components/Profile/Profile'
 import AddRecipe from './components/Blogposts/AddRecipe/AddRecipe'
 import ReadRecipe from './components/Blogposts/ReadRecipe/ReadRecipe'
 import Starters from './components/Categories/Starters'
+import MainCourse from './components/Categories/MainCourse'
 import Drinks from './components/Categories/Drinks'
+import Desserts from './components/Categories/Desserts'
+import Others from './components/Categories/Others'
 import SearchPage from './containers/SearchPage/SearchPage';
 import FollowersList from './containers/FollowersList/FollowersList';
 
@@ -31,8 +34,9 @@ function App() {
         <Route path='/read-recipe' component={ReadRecipe} />
         <Route path='/starters' component={Starters} />
         <Route path='/drinks-smoothies' component={Drinks} />
-        <Route path='/starters' component={Starters} />
-        <Route path='/starters' component={Starters} />
+        <Route path='/desserts' component={Desserts} />
+        <Route path='/main-course' component={MainCourse} />
+        <Route path='/others' component={Others} />
         <Route path='/search-page' component={SearchPage} />
         <Route path='/followers' component={FollowersList} />
         {/* <Route path='/search-page/:searchTerm' component={SearchPage}/> */}

@@ -13,8 +13,8 @@ class Starters extends Component {
   }
 
   componentDidMount(){
-    axios.get('https://b841ca4ed474.ngrok.io/starters/')
-    // ServerService.homecards()
+    // axios.get('http://af3c2d386213.ngrok.io/starters/')
+    ServerService.starters()
     .then(response=>{
       console.log(response.data);
       this.setState({recipecards: response.data})

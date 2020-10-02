@@ -6,6 +6,7 @@ import SearchNavbar from '../../components/Navbar/SearchNavbar';
 import axios from 'axios';
 import ServerService from '../../services/serverService'
 
+
 class SearchPage extends Component {
   state = {
     isLoading: true,
@@ -26,7 +27,8 @@ submitsort=(event)=>{
   }
 
 console.log(sortdata)
-  axios.post('http://af3c2d386213.ngrok.io/search/sort/',sortdata)
+  // axios.post('http://af3c2d386213.ngrok.io/search/sort/',sortdata)
+  ServerService.sort(sortdata)
 .then((resp)=>{
     console.log(resp);
     // const search_res=resp.data

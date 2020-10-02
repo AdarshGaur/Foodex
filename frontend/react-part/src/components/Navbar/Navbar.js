@@ -88,9 +88,10 @@ class NavigationBar extends Component{
                 <NavDropdown title="Categories" className={classes.navoption} id="basic-nav-dropdown">
                   <NavDropdown.Item as={Link} className={classes.dditems} to="/starters">Starters</NavDropdown.Item>
                   <NavDropdown.Item as={Link} className={classes.dditems} to="/main-course">Main Course</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} className={classes.dditems} to="/deserts">Deserts</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} className={classes.dditems} to="/desserts">Desserts</NavDropdown.Item>
                   <NavDropdown.Item as={Link} className={classes.dditems} to="/drinks-smoothies">Drinks and Smoothies</NavDropdown.Item>
-          
+                  <NavDropdown.Item as={Link} className={classes.dditems} to="/others">Others</NavDropdown.Item>
+
                 </NavDropdown>
                 <Nav.Link as={Link} className={classes.navoption} to="/add-recipe">Post</Nav.Link>
                 <Nav.Link as={Link} className={classes.navoption} to="/profile">My Profile</Nav.Link>
@@ -118,10 +119,11 @@ class NavigationBar extends Component{
               </Form>
     <Nav className="ml-auto">
       <NavDropdown title="Categories" id="basic-nav-dropdown">
-      <NavDropdown.Item as={Link} to="/starters">Starters</NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/main-course">Main Course</NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/deserts">Deserts</NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/drinks-smoothies">Drinks and Smoothies</NavDropdown.Item>
+      <NavDropdown.Item as={Link} className={classes.dditems} to="/starters">Starters</NavDropdown.Item>
+      <NavDropdown.Item as={Link} className={classes.dditems} to="/main-course">Main Course</NavDropdown.Item>
+      <NavDropdown.Item as={Link} className={classes.dditems} to="/desserts">Desserts</NavDropdown.Item>
+      <NavDropdown.Item as={Link} className={classes.dditems} to="/drinks-smoothies">Drinks and Smoothies</NavDropdown.Item>
+      <NavDropdown.Item as={Link} className={classes.dditems} to="/others">Others</NavDropdown.Item>
 
       </NavDropdown>
       <Nav.Link as={Link} to="/sign-in">Sign In</Nav.Link>

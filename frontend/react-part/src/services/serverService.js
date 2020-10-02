@@ -17,10 +17,32 @@ class ServerService {
     }
 
     readrecipe(data){
-      return axios.get(BASE_URL+ 'recipe/'+ data+'/')
+      return axios.get(BASE_URL + 'recipe/'+ data+'/')
     }
 
+    sort(sortdata){
+      return axios.post(BASE_URL + 'search/sort/',sortdata)
+    }
+
+    starters(){
+      return axios.get(BASE_URL +'starters/')
+    }
+
+    maincourse(){
+      return axios.get(BASE_URL +'main-course/')
+    }
     
+    desserts(){
+      return axios.get(BASE_URL +'desserts/')
+    }
+
+    drinks(){
+      return axios.get(BASE_URL +'drinks/')
+    }
+
+    others(){
+      return axios.get(BASE_URL +'others/')
+    }
 
 }
   
