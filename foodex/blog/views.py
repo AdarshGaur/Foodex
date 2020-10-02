@@ -8,7 +8,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Recipe, MyUser, OtpModel, LikeSystem#, #BookmarkRecord
+from .models import Recipe, MyUser, OtpModel, LikeSystem, BookmarkRecord
 from .serializer import RecipeSerializer, MyUserSerializer, RegisterMyUser, RecipeCardSerializer
 from rest_framework import serializers
 
@@ -953,6 +953,43 @@ class CardLike(APIView):
 
 
 
+
+
+class Bookmark(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        key = request.data.get('pk')
+
+        try:
+            recipe = Recipe.objects.get(pk=key)
+        except:
+            raise Http404
+
+        user = request.user
+
+        try:
+            bookmark = BookmarkRecord.objects.get(Q(bookmarked_by=user) & Q(bookmark_to=recipe))
+        except BookmarkRecord.DoesNotExist:
+            like = BookmarkRecord.objects.create(bookmarked_by=user, bookmark_to=recipe, active=-1)
+
+
+        # 1 means already bookmarked and
+        # -1 means not bookmarked 
+        if bookmark.active == -1:
+            bookmark.active = 1
+            bookmark.save()
+            user.bookmark_count = F('bookmark_count') + 1
+            user.save()
+            message= {"message": "bookmark_added"}
+        else:
+            bookmark.active = -1
+            bookmark.save()
+            user.bookmark_count = F('bookmark_count') - 1
+            user.save()
+            message= {"message": "bookmark_removed"}
+
+        return Response(message, status=status.HTTP_200_OK)
 
 
 

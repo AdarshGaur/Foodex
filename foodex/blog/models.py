@@ -63,7 +63,7 @@ class MyUser(AbstractUser):
     is_active = models.BooleanField(default=True)
     username = models.CharField(max_length=50, unique=False)
     password = models.CharField(blank=False, max_length=21, validators=[password_regex])
-    # bookmark_count = models.PositiveIntegerField(default=0, read_only=True)
+    bookmark_count = models.PositiveIntegerField(default=0)
 
     
     USERNAME_FIELD = 'email'
@@ -82,10 +82,24 @@ class OtpModel(models.Model):
 
 
 
+
 class LikeSystem(models.Model):
     id = models.AutoField(primary_key=True)
     active = models.IntegerField()
     liked_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='likes', on_delete=models.CASCADE)
     like_to = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+
+
+
+
+class BookmarkRecord(models.Model):
+    id = models.AutoField(primary_key=True)
+    active = models.IntegerField()
+    bookmarked_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='bookmarked', on_delete=models.CASCADE)
+    bookmark_to = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+
+
 
 
