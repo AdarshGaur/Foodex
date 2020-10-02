@@ -79,20 +79,22 @@ class NavigationBar extends Component{
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Form inline className="ml-auto"> 
-                <FormControl type="text" name="search" onChange={this.handlechangeall} placeholder="Search" className="mr-sm-2" />
-                <Button onClick={this.handlesubmit} variant="outline-dark" >Search</Button>
+                <FormControl type="text" name="search" onChange={this.handlechangeall} placeholder="Search" className={classes.sbar}
+                // "mr-sm-2"
+                />
+                <Button onClick={this.handlesubmit} className={classes.sbtn} variant="outline-dark" ><i class="fa fa-search" aria-hidden="true"></i></Button>
               </Form>
-              <Nav className="ml-auto">
-                <NavDropdown title="Categories" id="basic-nav-dropdown">
-                  <NavDropdown.Item as={Link} to="/starters">Starters</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/main-course">Main Course</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/deserts">Deserts</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/drinks-smoothies">Drinks and Smoothies</NavDropdown.Item>
+              <Nav className="ml-auto" >
+                <NavDropdown title="Categories" className={classes.navoption} id="basic-nav-dropdown">
+                  <NavDropdown.Item as={Link} className={classes.dditems} to="/starters">Starters</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} className={classes.dditems} to="/main-course">Main Course</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} className={classes.dditems} to="/deserts">Deserts</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} className={classes.dditems} to="/drinks-smoothies">Drinks and Smoothies</NavDropdown.Item>
           
                 </NavDropdown>
-                <Nav.Link as={Link} to="/add-recipe">Post</Nav.Link>
-                <Nav.Link as={Link} to="/profile">My Profile</Nav.Link>
-                <Nav.Link as={Link} to="/" onClick={logoutHandler}>Logout</Nav.Link>
+                <Nav.Link as={Link} className={classes.navoption} to="/add-recipe">Post</Nav.Link>
+                <Nav.Link as={Link} className={classes.navoption} to="/profile">My Profile</Nav.Link>
+                <Nav.Link as={Link} className={classes.navoption} to="/" onClick={logoutHandler}>Logout</Nav.Link>
               </Nav>
               
             </Navbar.Collapse>
@@ -109,9 +111,11 @@ class NavigationBar extends Component{
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav">
   <Form inline className="ml-auto"> 
-      <FormControl type="text" name="search" onChange={this.handlechangeall} placeholder="Search" className="mr-sm-2" />
-      <Button onClick={this.handlesubmit} variant="outline-dark" >Search</Button>
-    </Form>
+                <FormControl type="text" name="search" onChange={this.handlechangeall} placeholder="Search" className={classes.sbar}
+                // "mr-sm-2"
+                />
+                <Button onClick={this.handlesubmit} className={classes.sbtn} variant="outline-dark" ><i class="fa fa-search" aria-hidden="true"></i></Button>
+              </Form>
     <Nav className="ml-auto">
       <NavDropdown title="Categories" id="basic-nav-dropdown">
       <NavDropdown.Item as={Link} to="/starters">Starters</NavDropdown.Item>

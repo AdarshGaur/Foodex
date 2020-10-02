@@ -5,6 +5,45 @@
  text-decoration: none;
 }
 
+.sbar{
+  width: 40vw !important;
+  /* margin: 0.5vw; */
+  /* border-radius: 5px !important; */
+}
+
+.sbar:focus{
+  outline: none;
+  box-shadow:none !important;
+  border:1px solid #ccc !important;
+}
+
+.sbtn{
+  width: 3vw;
+  /* display: flex;
+  flex-wrap: wrap; */
+  background-color: f1f1f1;
+  border:none;
+  outline: none;
+}
+
+.navoption{
+  /* color: blue !important; */
+  margin:0 1vw;
+  font-family: Quicksand !important;
+}
+
+.dditems:hover{
+background-color: #ccc;
+/* width: 90%; */
+/* font-weight: 500; */
+/* font-size: 18px; */
+/* transform: scale(1.1); */
+}
+
+.dditems{
+font-family: Lato !important;
+}
+
 .brand:hover{
   text-decoration: none;
   color: #343a40;

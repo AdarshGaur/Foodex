@@ -41,7 +41,7 @@ class AddRecipe extends Component {
             <input type="text" className={classes.area} name = 'title'  placeholder={this.state.title} onChange = {this.handlechangeall} />
             <p className={classes.limit}>{this.state.title.length}/{this.state.titleLimit}</p>
             <label ><h3>Ingredients</h3></label>
-            <input type="text" className={classes.area} name = 'ingredients'  placeholder={this.state.ingredients} onChange = {this.handlechangeall} />
+            <textarea rows="5" className={classes.area} name = 'ingredients'  placeholder={this.state.ingredients} onChange = {this.handlechangeall} />
             <p className={classes.limit}>{this.state.ingredients.length}/{this.state.ingredientsLimit}</p>
             <label ><h3>Instructions</h3></label>
             <textarea rows="10" className={classes.area} name = 'content'  placeholder={this.state.instructions} onChange = {this.handlechangeall} />
@@ -72,7 +72,7 @@ class AddRecipe extends Component {
             <label className={classes.imgbtn} for="postimage">Add Image</label>
             {/* </div> */}
 
-            <input className={classes.area} type="submit" value="Submit" />
+            <input className={classes.submitrecipe} type="submit" value="SUBMIT" />
 
         </form>
 

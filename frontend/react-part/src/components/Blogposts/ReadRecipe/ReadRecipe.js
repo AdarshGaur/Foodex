@@ -6,6 +6,7 @@ import {Card, Button} from 'react-bootstrap';
 import LikeButton from '../../UI/LikeButton/LikeButton';
 import BookmarkButton from '../../UI/BookmarkButton/BookmarkButton';
 import axios from 'axios';
+import serverService from '../../../services/serverService';
 
 class AddRecipe extends Component {
     state = {
@@ -17,7 +18,9 @@ class AddRecipe extends Component {
       }
     
       componentDidMount(){
-        axios.get('https://b841ca4ed474.ngrok.io/recipe/'+this.props.location.state.recipeid+'/')
+          const data= this.props.location.state.recipeid;
+        // axios.get('http://af3c2d386213.ngrok.io/recipe/'+this.props.location.state.recipeid+'/')
+        serverService.readrecipe(data)
         .then(response=>{
           console.log(response);
           this.setState({recipe: response.data})

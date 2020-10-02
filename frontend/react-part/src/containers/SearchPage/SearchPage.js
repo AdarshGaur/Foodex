@@ -54,12 +54,18 @@ class SearchPage extends Component {
     return(
     <>
       <NavigationBar />     
+      <select name='category' className={classes.ddlist} onChange={this.handlechangeall}>
+            <option value="starters">Starters</option>
+            <option value="maincourse">Main Course</option>
+            <option value="deserts">Deserts</option>
+            <option value="drink">Drinks and Smoothies</option>
+            <option value="others">Others</option>
+      </select>
 
+      <div className={classes.grid}>
+      {recipecards}
 
-    <div className={classes.grid}>
-    {recipecards}
-
-    </div>
+      </div>
     </>
     )
   }

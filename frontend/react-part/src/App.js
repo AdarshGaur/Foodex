@@ -12,6 +12,7 @@ import ReadRecipe from './components/Blogposts/ReadRecipe/ReadRecipe'
 import Starters from './components/Categories/Starters'
 import Drinks from './components/Categories/Drinks'
 import SearchPage from './containers/SearchPage/SearchPage';
+import FollowersList from './containers/FollowersList/FollowersList';
 
 
 
@@ -33,6 +34,7 @@ function App() {
         <Route path='/starters' component={Starters} />
         <Route path='/starters' component={Starters} />
         <Route path='/search-page' component={SearchPage} />
+        <Route path='/followers' component={FollowersList} />
         {/* <Route path='/search-page/:searchTerm' component={SearchPage}/> */}
 
       </Switch>
