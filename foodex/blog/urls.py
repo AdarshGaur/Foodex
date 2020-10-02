@@ -30,6 +30,7 @@ urlpatterns = [
 	# path('users/', views.MyUserList.as_view()),               #for users list 'no_use'
 	path('user/<int:pk>/', views.MyUserDetail.as_view()),    #for users details
 
+
 	#authentication
 	path('api-auth/', include('rest_framework.urls')),
 	path('api/token/refresh/', TokenRefreshView.as_view()),                   #for refresh token

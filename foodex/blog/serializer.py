@@ -6,10 +6,11 @@ from rest_framework import serializers
 class RecipeSerializer(serializers.ModelSerializer):
 	owner = serializers.ReadOnlyField(source='owner.name')
 	img_url = serializers.SerializerMethodField()
+	# pk = serializers.ReadOnlyField(source=id)
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['pk', 'title', 'img_url', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
+		fields = ['pk', 'title', 'img_url', 'category', 'ingredients', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
 	
 
 	def get_img_url(self, Recipe):
@@ -26,7 +27,7 @@ class MyUserSerializer(serializers.ModelSerializer):
 	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
 	class Meta:
 		model = MyUser
-		fields = ['name', 'email', 'age', 'followers', 'following',]
+		fields = ['name', 'email', 'age', 'followers', 'following']
 
 
 

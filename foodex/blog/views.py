@@ -28,43 +28,17 @@ from django.db.models import Q
 class CreateRecipe(APIView):
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request):
+    def post(self, request, format=None):
         serializer = RecipeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#     #to get all the recipes
-#     def get(self, request, format=None):
-#         recipe = Recipe.objects.all()
-#         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
-#         return Response(serializer.data)
-
-#     #to create recipe blog
-#     def post(self, request):
-#         serializer = RecipeSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     #to edit the recipe
-#     # def put(self, request):
-#     #     serializer = RecipeSerializer(data=request.data)
-#     #     if serializer.is_valid():
-#     #         serializer.save()
-#     #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-#     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
 
 
 class RecipeDetail(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     
     #function to pick the object
     def get_object(self, pk):
@@ -86,14 +60,16 @@ class RecipeDetail(APIView):
         serializer = RecipeSerializer(recipe, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status = status.HTTP_406_NOT_ACCEPTABLE)
 
     #to delete
     def delete(self, request, pk, format=None):
         recipe = self.get_object(pk)
         recipe.delete()
-        return Response(status = status.HTTP_204_NO_CONTENT)
+        message = {'message': 'deleted'}
+        return Response(message, status = status.HTTP_204_NO_CONTENT)
+
 
 
 class MyUserList(APIView):
@@ -103,7 +79,8 @@ class MyUserList(APIView):
         user = MyUser.objects.all()
         serializer = MyUserSerializer(user, many=True)
         return Response(serializer.data)
-        
+
+
 
 class MyUserDetail(APIView):
     permission_classes = [IsOwnerOrReadOnly]
@@ -129,6 +106,7 @@ class MyUserDetail(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status = status.HTTP_406_NOT_ACCEPTABLE)
+
 
 
 

@@ -27,9 +27,13 @@ SECRET_KEY = 'zwx^cvzjf3qob&0i(uiij*3s79$!fm661%1q%^p4-sfsa27fme'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '60bb5774f441.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'b841ca4ed474.ngrok.io']
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+)
 
 CORS_ALLOWED_METHODS = [
     'DELETE',
@@ -173,7 +177,7 @@ EMAIL_PORT = 587
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -194,6 +198,6 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=60),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=7),
 }

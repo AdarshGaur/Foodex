@@ -25,7 +25,7 @@ def upload_path(instance, filename):
 
 
 class Recipe(models.Model):
-    
+    #recipe_id = models.AutoField(primary_key=True)
     title  = models.CharField(max_length=50)
     ingredients = models.TextField(blank=False, null=False)
     content = models.TextField(blank=False)
@@ -79,18 +79,8 @@ class OtpModel(models.Model):
     at_time = models.IntegerField()
 
 
-# class RecipeCard(models.Model):
+# class followeSystem(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     follow_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='follower', on_delete=models.CASCADE)
+#     following_to = models.ForeignKey()
 
-#     title  = models.CharField(max_length=50)
-#     short_description = models.TextField(blank=False, max_length=60)
-#     #images    = models.ImageField(upload_to='media', null=False, blank=False)
-#     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Recipes', on_delete=models.CASCADE)
-#     veg = models.BooleanField()
-#     cook_time = models.PositiveIntegerField()
-#     points = models.PositiveIntegerField(default=0)
-
-#     def __str__(self):
-#         return self.title
-
-#     class Meta:
-#         ordering = ['published_on']
