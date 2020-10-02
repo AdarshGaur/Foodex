@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import classes from './Signform.module.css';
 import {Redirect} from 'react-router-dom';
+import axios from 'axios';
+import ServerService from '../../services/serverService'
 
 class Otpform extends Component{
-
-  // newmail=localStorage.getItem('email')
   
     state = {   email: localStorage.getItem('email'),
       otp: "otp",
@@ -18,89 +18,30 @@ handlechangeall = (event) =>{
 
 
 
-
-
-
-
-
-// valid(){
-
-
-
-//   if(!this.state.email.includes(".") && this.state.password.length<6 ){
-//     this.setState({emailError:"Invalid email", passwordError:"password should be atleast 6 characters long",
-//     confirmError:"passwords do not match"
-//   })
-//   }
-
-//   else if(!this.state.email.includes("."))
-//   {
-//     this.setState({emailError:"Invalid email"})
-//   }
-//   else if(this.state.password.length<6){
-//     this.setState({passwordError:"password should be atleast 6 characters long"})
-//   }
-//   else{
-//     return true
-//   }
-// }
-
-
-
-// handlesubmit = (event) => {
-  
-//   // console.log(newmail)
-//   // this.setState({ email: newmail });
-
-//   console.log( JSON.stringify(this.state));
-//   event.preventDefault();
-//  fetch('https://58b27cd52c01.ngrok.io/register/otp/',{
-//    method: "POST",
-//    headers: {
-//     //  "Accept": "application.json",
-//      "Content-Type": "application/json"
-//    },
-//    body:JSON.stringify(this.state)
-//  }).then((result)=>{
-//    result.json().then((resp)=>{
-//      console.log(resp)
-//    })
-//  })
- 
-//  }
-
-
-
 handlesubmit = (event) => {
   
-  // if(this.valid()){
-   console.log( JSON.stringify(this.state));                 
+const data={
+  email: this.state.email,
+  otp: this.state.otp
+}
+              
   event.preventDefault();
- fetch('https://60bb5774f441.ngrok.io/auth/register/otp/',{
-   method: "POST",
-   body:JSON.stringify(this.state),
-   headers: {
-    //  "Accept": "application.json",
-     "Content-Type": "application/json"
-   }
-   
- }).then((result)=>{
-   result.json().then((resp)=>{
-     console.log(resp.access)
-    //    if(resp.message==="email_verified"){
-    //  this.setState({redirect:"/"});
-    //    }
-    if(resp.access){
-      localStorage.setItem("refresh_token",JSON.stringify(resp.refresh))
-    localStorage.setItem("access_token",JSON.stringify(resp.access))
-    this.setState({redirect:"/"});
+console.log(data)
+  // axios.post('https://776d58591d10.ngrok.io/auth/register/otp/',data)
+  ServerService.otp(data)
+  .then((resp)=>{
+    console.log(resp)
+
+    if (resp.status === 200) {
+      // localStorage.setItem("token", "abcd");
+      console.log(resp)
+      localStorage.setItem("refresh_token",resp.data.refresh)
+      localStorage.setItem("access_token",resp.data.access)
+      this.setState({ redirect: "/" });
     }
+  
+  })
 
-   }).catch(error=>console.error('error:', error))
-   .then(resp=>console.log('Success:',resp));
-
- })
-// }
  }
 
 
@@ -120,10 +61,10 @@ render(){
    <form onSubmit = {this.handlesubmit} >
    <h1 className={classes.headline}>Enter OTP</h1>
     {/* <label> Full Name </label><br/> */}
-    <input  type="text" name="otp"  placeholder={this.state.otp}  
+    <input  type="number" name="otp"  placeholder={this.state.otp}  
     onChange={this.handlechangeall} /> <br/>
 
-    <input type="submit" value="Submit" />
+    <input type="submit" value="Submit" className={classes.sub}/>
     {/* <p ><Link to='/otp'>click to login </Link></p> */}
    </form>
    </div>

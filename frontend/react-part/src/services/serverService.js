@@ -1,12 +1,20 @@
 import axios from "axios";
 
-const BASE_URL = "http://af3c2d386213.ngrok.io/";
+const BASE_URL = "https://776d58591d10.ngrok.io/";
 
 class ServerService {
 
     login(data){
        return axios.post(BASE_URL + 'api/token/', data)
     }
+
+    signup(data){
+      return axios.post(BASE_URL + 'auth/register/', data)
+   }
+
+    otp(data){
+      return axios.post(BASE_URL + 'auth/register/otp/', data)
+   }
 
     homecards(){
       return axios.get(BASE_URL)

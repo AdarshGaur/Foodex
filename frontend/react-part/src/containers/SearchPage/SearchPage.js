@@ -114,7 +114,7 @@ handlesubmit = (event) => {
       <button onClick={this.submitsort}>Sort</button>
 
 <div className={classes.searchpagebar}>
-       <input  type="text" name="newsearch" required placeholder= {this.state.newsearch} className={classes.sbar}
+       <input  type="text" name="newsearch" className={classes.sbar}
     onChange={this.handlechangeall} />
     <button className={classes.sbtn} onClick={this.handlesubmit} type="submit" value="SUBMIT" ><i class="fa fa-search" aria-hidden="true"></i></button>
     </div>

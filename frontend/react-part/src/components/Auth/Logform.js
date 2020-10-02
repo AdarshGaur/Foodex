@@ -87,7 +87,7 @@ render(){
     <input  type="password" name="password" required placeholder= {this.state.password} 
     onChange={this.handlechangeall} /> <br/>
     <p>{this.state.passwordError}</p>
-    <input type="submit" value="Submit" />
+    <input type="submit" value="Submit" className={classes.sub} />
     <p ><Link to='/sign-up'>click to signup </Link></p>
    </form>
    </div>

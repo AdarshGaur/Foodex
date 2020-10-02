@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classes from './Signform.module.css';
 import {Link, Redirect} from 'react-router-dom';
+import axios from 'axios';
+import ServerService from '../../services/serverService';
 
 class Form extends Component{
 
@@ -59,32 +61,39 @@ valid(){
 handlesubmit = (event) => {
   
   if(this.valid()){
-   console.log( JSON.stringify(this.state));                 
-  event.preventDefault();
- fetch('https://60bb5774f441.ngrok.io/auth/register/',{
-   method: "POST",
-   body:JSON.stringify(this.state),
-   headers: {
-    //  "Accept": "application.json",
-     "Content-Type": "application/json"
-   }
-   
- }).then((result)=>{
-   result.json().then((resp)=>{
-     console.log(resp.message)
-       if(resp.message==="otp_sent"){
-         localStorage.setItem('email', this.state.email)
-     this.setState({redirect:"/otp"});
-       }
-      //  else{
-      //    console.alert("user exists already")
-      //  }
-   }).catch(error=>console.error('error:', error))
-   .then(resp=>console.log('Success:',resp));
 
- })
+    const data={
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      age: this.state.age,
+      confirm_password: this.state.confirm_password
+    }
+
+  //  console.log( JSON.stringify(this.state));                 
+  event.preventDefault();
+
+  console.log(data);
+
+// axios.post('https://776d58591d10.ngrok.io/auth/register/', data)
+ServerService.signup(data)
+.then((resp)=>{
+  console.log(resp)
+
+  if (resp.data.message === "otp_sent") {
+    localStorage.setItem('email', this.state.email)
+    this.setState({ redirect: "/otp" });
+  }
+
+})
+
+
+
+
 }
  }
+
+
 
 render(){
 
@@ -122,7 +131,7 @@ render(){
     onChange={this.handlechangeall} /> <br/>
     <p>{this.state.confirmError}</p>
 
-    <input type="submit" value="Submit" />
+    <input type="submit" value="Submit" className={classes.sub}/>
     <p ><Link to='/sign-in'>click to login </Link></p>
    </form>
    </div>
