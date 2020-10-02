@@ -20,6 +20,8 @@ class ServerService {
       return axios.get(BASE_URL+ 'recipe/'+ data+'/')
     }
 
+    
+
 }
   
   export default new ServerService();
