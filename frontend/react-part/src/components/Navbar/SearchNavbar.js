@@ -103,7 +103,7 @@ class SearchNavbar extends Component{
                 <NavDropdown.Item as={Link} className={classes.dditems} to="/main-course">Main Course</NavDropdown.Item>
                 <NavDropdown.Item as={Link} className={classes.dditems} to="/desserts">Desserts</NavDropdown.Item>
                 <NavDropdown.Item as={Link} className={classes.dditems} to="/drinks-smoothies">Drinks and Smoothies</NavDropdown.Item>
-                <NavDropdown.Item as={Link} className={classes.dditems} to="/others">Others</NavDropdown.Item>
+                 className={classes.navoption}<NavDropdown.Item as={Link} className={classes.dditems} to="/others">Others</NavDropdown.Item>
                 </NavDropdown>
                 <Nav.Link as={Link} className={classes.navoption} to="/add-recipe">Post</Nav.Link>
                 <Nav.Link as={Link} className={classes.navoption} to="/profile">My Profile</Nav.Link>
@@ -130,7 +130,7 @@ class SearchNavbar extends Component{
                 <Button onClick={this.handlesubmit} className={classes.sbtn} variant="outline-dark" ><i class="fa fa-search" aria-hidden="true"></i></Button>
               </Form> */}
     <Nav className="ml-auto">
-      <NavDropdown title="Categories" id="basic-nav-dropdown">
+      <NavDropdown title="Categories" className={classes.navoption} id="basic-nav-dropdown">
       <NavDropdown.Item as={Link} className={classes.dditems} to="/starters">Starters</NavDropdown.Item>
       <NavDropdown.Item as={Link} className={classes.dditems} to="/main-course">Main Course</NavDropdown.Item>
       <NavDropdown.Item as={Link} className={classes.dditems} to="/desserts">Desserts</NavDropdown.Item>
@@ -139,8 +139,8 @@ class SearchNavbar extends Component{
 
 
       </NavDropdown>
-      <Nav.Link as={Link} to="/sign-in">Sign In</Nav.Link>
-      <Nav.Link as={Link} to="/sign-up">Sign Up</Nav.Link>
+      <Nav.Link as={Link} className={classes.navoption} to="/sign-in">Sign In</Nav.Link>
+      <Nav.Link as={Link} className={classes.navoption} to="/sign-up">Sign Up</Nav.Link>
     </Nav>
     
   </Navbar.Collapse>

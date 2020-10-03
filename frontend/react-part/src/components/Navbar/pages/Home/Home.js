@@ -34,7 +34,7 @@ class Home extends Component {
     <div>   
     <Hero />
     </div>
-
+      <h1 className={classes.recentrecipes}>Recent Recipes</h1>
     <div className={classes.grid}>
     {recipecards}
 

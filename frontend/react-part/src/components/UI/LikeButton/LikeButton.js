@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import classes from './LikeButton.module.css';
-
-
+import axios from 'axios';
+import ServerService from '../../../services/serverService';
 
 class LikeButton extends Component {
 
@@ -12,11 +12,31 @@ class LikeButton extends Component {
 
 
     addLike = () => {
-        let newCount = this.state.likes + 1;
+ 
           this.setState({
-          likes: newCount,
           isclicked: ((this.state.isclicked)?false:true)
         });
+
+        const data={
+            pk: this.props.pk
+        }
+        console.log(data)
+        // axios.post('https://776d58591d10.ngrok.io/recipe/like/', data)
+
+        // axios.post('https://776d58591d10.ngrok.io/recipe/like/', data,
+        // {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        //     },
+            
+        // }) 
+
+        ServerService.like(data)
+        .then((resp)=>{
+            console.log(resp)          
+          })
+        
     };
 
     render() {

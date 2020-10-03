@@ -16,6 +16,18 @@ class ServerService {
       return axios.post(BASE_URL + 'auth/register/otp/', data)
    }
 
+    forgototp(data){
+      return axios.post(BASE_URL + 'auth/forgot-password/otp/',data)
+   }
+
+    forgotform(data){
+      return axios.post(BASE_URL + 'auth/forgot-password/',data)
+   }
+
+    passresetform(data){
+      return axios.post(BASE_URL + 'auth/forgot-password/new-password/',data)
+   }
+
    resendotp(resenddata){
     return axios.post(BASE_URL + 'auth/register/otp/resend/',resenddata)
    }
@@ -54,6 +66,28 @@ class ServerService {
 
     others(){
       return axios.get(BASE_URL +'others/')
+    }
+
+    bookmark(data){
+      return axios.post(BASE_URL + 'recipe/bookmark/', data,
+      {
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          },
+          
+      }) 
+    }
+
+    like(data){
+      return axios.post(BASE_URL + 'recipe/like/', data,
+      {
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          },
+          
+      }) 
     }
 
 }

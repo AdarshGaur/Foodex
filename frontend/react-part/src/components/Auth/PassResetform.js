@@ -34,8 +34,8 @@ handlesubmit = (event) => {
   
     console.log(data);
   
-  axios.post('https://776d58591d10.ngrok.io/auth/forgot-password/new-password/', data)
-//   ServerService.login(data)
+//   axios.post('https://776d58591d10.ngrok.io/auth/forgot-password/new-password/', data)
+  ServerService.passresetform(data)
   .then((resp)=>{
     console.log(resp)
 

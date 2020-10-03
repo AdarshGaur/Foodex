@@ -29,7 +29,8 @@ const data={
   event.preventDefault();
 //   ServerService.login(data)
 console.log(data)
-axios.post('https://776d58591d10.ngrok.io/auth/forgot-password/otp/',data)
+// axios.post('https://776d58591d10.ngrok.io/auth/forgot-password/otp/',data)
+ServerService.forgototp(data)
   .then((resp)=>{
     console.log(resp)
 

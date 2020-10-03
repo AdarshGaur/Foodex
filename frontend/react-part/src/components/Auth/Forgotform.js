@@ -31,7 +31,8 @@ const data={
   event.preventDefault();
 //   ServerService.login(data)
 console.log(data)
-axios.post('https://776d58591d10.ngrok.io/auth/forgot-password/',data)
+// axios.post('https://776d58591d10.ngrok.io/auth/forgot-password/',data)
+ServerService.forgotform(data)
   .then((resp)=>{
     console.log(resp)
 
