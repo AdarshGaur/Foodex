@@ -36,7 +36,7 @@ class RegisterMyUser(serializers.ModelSerializer):
 			existing_user.delete()
 			email_in_otp.delete()
 		elif user_already_exists and otp_already_exists==False:
-			raise serializers.ValidationError({'email': 'User with this email already exists'})
+			raise serializers.ValidationError({'email': 'User already exists'})
 
 		
 		password = validated_data['password']
@@ -85,7 +85,7 @@ class RecipeCardSerializer(serializers.ModelSerializer):
 	# only for cards
 	class Meta:
 		model = Recipe
-		fields = ['pk', 'title', 'img_url', 'content', 'owner', 'cook_time', 'points', 'veg']
+		fields = ['pk', 'title', 'img_url', 'content', 'owner', 'cook_time', 'read_time', 'points', 'veg']
 
 
 	def get_img_url(self, Recipe):
@@ -97,11 +97,20 @@ class RecipeCardSerializer(serializers.ModelSerializer):
 #serializer for user details
 class MyUserSerializer(serializers.ModelSerializer):
 	recipes = RecipeCardSerializer(many=True, read_only=True)
+	user_img_url = serializers.SerializerMethodField()
 	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
 	class Meta:
 		model = MyUser
-		fields = ['name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'recipes']
+		fields = ['name', 'email', 'age', 'user_img_url', 'followers', 'following', 'bookmark_count', 'recipes']
 
+
+
+	def get_user_img_url(self, MyUser):
+		request = self.context.get('request')
+		img_url = MyUser.image_user.url
+		print(img_url)
+		print(request)
+		return request.build_absolute_uri(img_url)
 
 
 

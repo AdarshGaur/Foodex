@@ -4,7 +4,7 @@ import time
 from django.shortcuts import render
 
 from rest_framework import status, permissions
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -83,7 +83,7 @@ class MyUserList(APIView):
 
 
 class MyUserDetail(APIView):
-    permission_classes = [IsOwnerOrReadOnly] 
+    permission_classes = [IsOwnerOrReadOnly]
     
     #to get the user
     def get_user(self, pk):
@@ -95,7 +95,7 @@ class MyUserDetail(APIView):
     #get the details
     def get(self, request, pk, format=None):
         solo_user = self.get_user(pk)
-        serializer = MyUserSerializer(solo_user)
+        serializer = MyUserSerializer(solo_user, context={'request': request})
         print(serializer)
         return Response(serializer.data)
 
@@ -933,24 +933,34 @@ class CardLike(APIView):
         except LikeSystem.DoesNotExist:
             like = LikeSystem.objects.create(liked_by=request.user, like_to=recipe, active=-1)
 
+        response_data = {}
+
         # 1 means already liked and
-        # -1 means not liked 
+        # -1 means not liked
         if like.active == -1:
             like.active = 1
             like.save()
             recipe.points = F('points') + 1
             recipe.save()
             # recipe.update(points=F('points')+1)
-            message= {"message": "liked"}
+            response_data['message'] = 'liked'
         else:
             like.active = -1
             like.save()
             recipe.points = F('points') - 1
             recipe.save()
             # recipe.update(points=F('points')-1)
-            message= {"message": "unliked"}
+            response_data['message'] = 'unliked'
 
-        return Response(message, status=status.HTTP_200_OK)
+
+        # like_count = LikeSystem.objects.filter(Q(liked_to=recipe) & Q(active=1)).count()
+        # response_data['count'] = like_count
+
+        #print(like_count)
+        #print('########################')
+        #print(response_data)
+        #return JsonResponse(response_data)
+        return Response(response_data, status=status.HTTP_200_OK)
 
 
 

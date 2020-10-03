@@ -24,6 +24,11 @@ def upload_path(instance, filename):
     '''can include more specific path later'''
 
 
+def user_upload_path(instance, filename):
+    #
+    return '/'.join(['users_image', instance.email, filename])
+
+
 class Recipe(models.Model):
     #recipe_id = models.AutoField(primary_key=True)
     title  = models.CharField(max_length=50)
@@ -32,8 +37,9 @@ class Recipe(models.Model):
     category = models.TextField(default='Starters', choices=categories_choices)
     veg = models.BooleanField()
     cook_time = models.PositiveIntegerField()
+    read_time = models.PositiveIntegerField()
     img = models.ImageField(upload_to=upload_path, null=False, blank=False)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Recipes', on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='recipes', on_delete=models.CASCADE)
     published_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
     points = models.PositiveIntegerField(default=0)
@@ -58,9 +64,10 @@ class MyUser(AbstractUser):
     #recipemagic = models.PositiveIntegerField(default=0)
     followers = models.PositiveIntegerField(default=0)
     following = models.PositiveIntegerField(default=0)
+    image_user = models.ImageField(upload_to=user_upload_path, default='default-avatar.png')
     age = models.IntegerField(default=22, blank=False, validators=[MaxValueValidator(110), MinValueValidator(5)])
     email = models.EmailField(blank=False, unique=True, validators=[email_regex])
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     username = models.CharField(max_length=50, unique=False)
     password = models.CharField(blank=False, max_length=21, validators=[password_regex])
     bookmark_count = models.PositiveIntegerField(default=0)
