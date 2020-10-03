@@ -83,7 +83,7 @@ class MyUserList(APIView):
 
 
 class MyUserDetail(APIView):
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly] 
     
     #to get the user
     def get_user(self, pk):
@@ -96,16 +96,17 @@ class MyUserDetail(APIView):
     def get(self, request, pk, format=None):
         solo_user = self.get_user(pk)
         serializer = MyUserSerializer(solo_user)
+        print(serializer)
         return Response(serializer.data)
 
     #to update user details
-    def put(self, request, pk, format=None):
-        solo_user = self.get_user(pk)
-        serializer = MyUserSerializer(solo_user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status = status.HTTP_406_NOT_ACCEPTABLE)
+    # def put(self, request, pk, format=None):
+    #     solo_user = self.get_user(pk)
+    #     serializer = MyUserSerializer(solo_user, data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status = status.HTTP_406_NOT_ACCEPTABLE)
 
 
 
@@ -219,7 +220,7 @@ class ResendOtp(APIView):
 
     def post(self, request, format=None):
         email = request.data.get('email')
-        resend_email = OtpModel.objects.get(emial=email)
+        resend_email = OtpModel.objects.get(email=email)
         resend_email.delete()
 
         def random_with_N_digits(n):
@@ -329,34 +330,34 @@ class ForgotPasswordOtp(APIView):
         email_to_verify.delete()
 
         #getting token
-        r_token = TokenObtainPairSerializer().get_token(request.user)
-        a_token = AccessToken().for_user(request.user)
-        tokens = {
-            'refresh': str(r_token),
-            'access': str(a_token)
-        }
+        # r_token = TokenObtainPairSerializer().get_token(request.user)
+        # a_token = AccessToken().for_user(request.user)
+        # tokens = {
+        #     'refresh': str(r_token),
+        #     'access': str(a_token)
+        # }
         message = {'message': 'email_verified_now_continue'}
-        return Response(tokens, status = status.HTTP_200_OK)
+        return Response(message, status = status.HTTP_200_OK)
 
 
 
 class NewPassword(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request, format=None):
         
         """
         include validations here later
         """
-
+        email = request.data.get('email')
         new_password = request.data.get('password')
         confirm_password = request.data.get('confirm_password')
 
-        if new_password != confirm_password:
+        if str(new_password) != str(confirm_password):
             message = {"message": "Both passwords must match."}
             return Response(message, status=status.HTTP_406_NOT_ACCEPTABLE)
 
-        user = request.user
+        user = MyUser.objects.get(email__iexact=email)
         user.password = new_password
         user.save()
 
@@ -971,11 +972,12 @@ class Bookmark(APIView):
         try:
             bookmark = BookmarkRecord.objects.get(Q(bookmarked_by=user) & Q(bookmark_to=recipe))
         except BookmarkRecord.DoesNotExist:
-            like = BookmarkRecord.objects.create(bookmarked_by=user, bookmark_to=recipe, active=-1)
+            bookmark = BookmarkRecord.objects.create(bookmarked_by=user, bookmark_to=recipe, active=-1)
 
 
         # 1 means already bookmarked and
         # -1 means not bookmarked 
+
         if bookmark.active == -1:
             bookmark.active = 1
             bookmark.save()

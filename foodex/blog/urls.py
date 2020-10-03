@@ -35,7 +35,7 @@ urlpatterns = [
 	path('recipe/<int:pk>/', views.RecipeDetail.as_view()),             #for recipes details
 	# path('users/', views.MyUserList.as_view()),                          #for users list 'no_use'
 	path('user/<int:pk>/', views.MyUserDetail.as_view()),                  #for users details
-	#path('user/<int:pk>/bookmark-list/', views.Bookmarklist.as_view()),         #for listing bookmarked recipes
+	#path('user/<int:pk>/bookmark-list/', views.Bookmarklist.as_view()),    #for listing bookmarked recipes
 
 
 	#authentication
@@ -46,8 +46,8 @@ urlpatterns = [
 	path('auth/register/otp/', views.VerifyOTP.as_view()),                    #for verifying OTP
 	path('auth/register/otp/resend/', views.ResendOtp.as_view()),             #for resending the otp
 	path('auth/forgot-password/', views.ForgotPassword.as_view()),            #for forgot password
-	path('auth/forgot-password/otp', views.ForgotPasswordOtp.as_view()),      #for checking otp after forgot password
-	path('auth/forgot-password/new-password', views.NewPassword.as_view()),   #for forgot password
+	path('auth/forgot-password/otp/', views.ForgotPasswordOtp.as_view()),      #for checking otp after forgot password
+	path('auth/forgot-password/new-password/', views.NewPassword.as_view()),   #for forgot password
 
 
 	

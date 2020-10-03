@@ -2,37 +2,6 @@ from .models import Recipe, MyUser, OtpModel, LikeSystem
 from rest_framework import serializers
 
 
-# recipe creating/edit/get serializer
-class RecipeSerializer(serializers.ModelSerializer):
-	owner = serializers.ReadOnlyField(source='owner.name')
-	# email = serializers.ReadOnlyField(source='owner.email')
-	img_url = serializers.SerializerMethodField()
-	# pk = serializers.ReadOnlyField(source=id)
-	#this serializer include both create and update recipe
-	class Meta:
-		model = Recipe
-		fields = ['pk', 'title', 'img_url', 'category', 'ingredients', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
-	
-
-	def get_img_url(self, Recipe):
-		request = self.context.get('request')
-		img_url = Recipe.img.url
-		return request.build_absolute_uri(img_url)
-
-
-
-
-#serializer for user details
-class MyUserSerializer(serializers.ModelSerializer):
-
-	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
-	class Meta:
-		model = MyUser
-		fields = ['name', 'email', 'age', 'followers', 'following']
-
-
-
-
 #Serializer for registriation of New Users
 class RegisterMyUser(serializers.ModelSerializer):
 
@@ -90,6 +59,25 @@ class RegisterMyUser(serializers.ModelSerializer):
 		return user
 
 
+
+# recipe creating/edit/get serializer
+class RecipeSerializer(serializers.ModelSerializer):
+	owner = serializers.ReadOnlyField(source='owner.name')
+	# email = serializers.ReadOnlyField(source='owner.email')
+	img_url = serializers.SerializerMethodField()
+	# pk = serializers.ReadOnlyField(source=id)
+	#this serializer include both create and update recipe
+	class Meta:
+		model = Recipe
+		fields = ['pk', 'title', 'img_url', 'category', 'ingredients', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
+	
+
+	def get_img_url(self, Recipe):
+		request = self.context.get('request')
+		img_url = Recipe.img.url
+		return request.build_absolute_uri(img_url)
+
+
 #cards serializer
 class RecipeCardSerializer(serializers.ModelSerializer):
 	owner = serializers.ReadOnlyField(source='owner.name')
@@ -106,6 +94,23 @@ class RecipeCardSerializer(serializers.ModelSerializer):
 		return request.build_absolute_uri(img_url)
 
 
+#serializer for user details
+class MyUserSerializer(serializers.ModelSerializer):
+	recipes = RecipeCardSerializer(many=True, read_only=True)
+	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
+	class Meta:
+		model = MyUser
+		fields = ['name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'recipes']
+
+
+
+
+
+
+
+
+
+
 #lkjghgfghkfghkfjhtbd ytjvd ytjxcyfoyulrfyv.fgjkd' ghyisfhild
 # .mgjkfbd li;suda fghps9da;gdugjb[io'nha/gki fytdapg;hoipreaht;jkl
 # g gjklunlsrdhyiobrea gyhfidgy hiljkdagytiljkafhisjkdafbiasudgbfguasdhfg;iouasdyfgjkdgfjk
@@ -114,8 +119,6 @@ class RecipeCardSerializer(serializers.ModelSerializer):
 # kasldfhlksjafhkljsahfudfgyp9doglkdngpfidgh[0fdag]]]
 
 
-# class LikeSystemSerializer(serializers.ModelSerializer):
-	
-# 	class Meta:
-# 		model = LikeSystem
-# 		fields = ['']
+
+# class ProfileSerializer(serializers.ModelSerializer):
+# 	
