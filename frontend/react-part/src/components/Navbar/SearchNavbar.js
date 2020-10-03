@@ -103,7 +103,7 @@ class SearchNavbar extends Component{
                 <NavDropdown.Item as={Link} className={classes.dditems} to="/main-course">Main Course</NavDropdown.Item>
                 <NavDropdown.Item as={Link} className={classes.dditems} to="/desserts">Desserts</NavDropdown.Item>
                 <NavDropdown.Item as={Link} className={classes.dditems} to="/drinks-smoothies">Drinks and Smoothies</NavDropdown.Item>
-                 className={classes.navoption}<NavDropdown.Item as={Link} className={classes.dditems} to="/others">Others</NavDropdown.Item>
+                <NavDropdown.Item as={Link} className={classes.dditems} to="/others">Others</NavDropdown.Item>
                 </NavDropdown>
                 <Nav.Link as={Link} className={classes.navoption} to="/add-recipe">Post</Nav.Link>
                 <Nav.Link as={Link} className={classes.navoption} to="/profile">My Profile</Nav.Link>

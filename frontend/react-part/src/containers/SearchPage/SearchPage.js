@@ -111,7 +111,7 @@ handlesubmit = (event) => {
             <option value="false">Non-Vegetarian</option>
             <option value="all">Both</option>
       </select>
-      <button onClick={this.submitsort}>Sort</button>
+      <button onClick={this.submitsort} className={classes.sortbtn}>Sort</button>
 
 <div className={classes.searchpagebar}>
        <input  type="text" name="newsearch" className={classes.sbar}

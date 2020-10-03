@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://776d58591d10.ngrok.io/";
+const BASE_URL = "https://04fab899189c.ngrok.io/";
 
 class ServerService {
 

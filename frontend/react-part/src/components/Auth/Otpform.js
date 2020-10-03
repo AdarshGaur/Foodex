@@ -84,9 +84,10 @@ render(){
     <div className={classes.formup}>
    <form onSubmit = {this.handlesubmit} >
    <h1 className={classes.headline}>Enter OTP</h1>
-    {/* <label> Full Name </label><br/> */}
-    <input  type="number" name="otp"  placeholder={this.state.otp}  
-    onChange={this.handlechangeall} /> <br/>
+   <label className={classes.labelfield}> OTP </label><br />
+    <input  type="number" name="age" className={classes.field} name="otp" required placeholder={this.state.age}  
+    onChange={this.handlechangeall} onBlur={this.validage} onFocus={this.ageclean}/> <br/>
+    <p className={(this.state.ageError==="fine")? classes.invisible: classes.visible}>{this.state.ageError}</p>
 
     <input type="submit" value="Submit" className={classes.sub}/>
     <p onClick={this.resend}><Link> resend otp </Link></p>

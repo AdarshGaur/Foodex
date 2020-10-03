@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import NavigationBar from '../Navbar/Navbar';
 import classes from './Profile.module.css';
 import {Link} from 'react-router-dom';
-
+import axios from 'axios';
 
 class Profile extends Component {
 
@@ -18,6 +18,21 @@ class Profile extends Component {
                 console.warn("result",result)
             })
         })
+    }
+
+    componentDidMount(){
+ axios.get('https://04fab899189c.ngrok.io/user/1/',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                },
+                
+            })
+            .then((resp)=>{
+                console.log(resp)          
+              })
+
     }
 
     render(){

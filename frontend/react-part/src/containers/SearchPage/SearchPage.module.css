@@ -23,6 +23,17 @@
     /* margin-bottom:2% */
 }
 
+.ddlist{
+  width: 30%;
+  margin: 0 4%;
+  height: 32px;
+}
+
+.sortbtn{
+  padding: 4px;
+  width: 5%;
+}
+
 .sbar{
     width: 40vw !important;
     height: 35px;
