@@ -18,6 +18,7 @@ import SearchPage from './containers/SearchPage/SearchPage';
 import FollowersList from './containers/FollowersList/FollowersList';
 import ForgotPassword from './components/Navbar/pages/ForgotPass/ForgotPassword';
 import ForgotOtp from './components/Navbar/pages/ForgotPass/ForgotOtp';
+import PasswordReset from './components/Navbar/pages/ForgotPass/PasswordReset';
 
 
 
@@ -32,6 +33,7 @@ function App() {
         <Route path='/sign-in' component={LogIn} />
         <Route path='/forgot-password' component={ForgotPassword} />
         <Route path='/forgot-otp' component={ForgotOtp} />
+        <Route path='/change-password' component={PasswordReset} />
         <Route path='/profile' component={Profile} />
         <Route path='/otp' component={Otp} />
         <Route path='/add-recipe' component={AddRecipe} />

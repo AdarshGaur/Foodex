@@ -21,16 +21,7 @@ class Form extends Component{
 handlechangeall = (event) =>{
  this.setState ( { [event.target.name] :event.target.value  } )
 }
-
-// handlesubmit = (event) => {
-//  alert (`my name is ${this.state.fullname}. 
-//   My email id is ${this.state.email}
-//   My mobile number is ${this.state.phone}.
-//   `);
-
-//  console.log( JSON.stringify(this.state));
-//  event.preventDefault();
-// }
+ 
 
 valid(){
 
