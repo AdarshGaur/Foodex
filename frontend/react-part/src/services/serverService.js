@@ -16,6 +16,10 @@ class ServerService {
       return axios.post(BASE_URL + 'auth/register/otp/', data)
    }
 
+   resendotp(resenddata){
+    return axios.post(BASE_URL + 'auth/register/otp/resend/',resenddata)
+   }
+
     homecards(){
       return axios.get(BASE_URL)
     }

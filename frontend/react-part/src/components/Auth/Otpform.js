@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import classes from './Signform.module.css';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../services/serverService'
 
@@ -43,6 +43,30 @@ console.log(data)
   })
 
  }
+resend = (event) => {
+  
+const resenddata={
+  email: this.state.email
+}
+              
+  event.preventDefault();
+console.log(resenddata)
+  // axios.post('https://776d58591d10.ngrok.io/auth/register/otp/resend/',resenddata)
+  ServerService.resendotp(resenddata)
+  .then((resp)=>{
+    console.log(resp)
+
+    if (resp.status === 200) {
+      // localStorage.setItem("token", "abcd");
+      console.log(resp)
+      // localStorage.setItem("refresh_token",resp.data.refresh)
+      // localStorage.setItem("access_token",resp.data.access)
+      // this.setState({ redirect: "/" });
+    }
+  
+  })
+
+ }
 
 
 
@@ -65,7 +89,7 @@ render(){
     onChange={this.handlechangeall} /> <br/>
 
     <input type="submit" value="Submit" className={classes.sub}/>
-    {/* <p ><Link to='/otp'>click to login </Link></p> */}
+    <p onClick={this.resend}><Link> resend otp </Link></p>
    </form>
    </div>
   </div>

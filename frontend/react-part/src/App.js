@@ -16,6 +16,7 @@ import Desserts from './components/Categories/Desserts'
 import Others from './components/Categories/Others'
 import SearchPage from './containers/SearchPage/SearchPage';
 import FollowersList from './containers/FollowersList/FollowersList';
+import ForgotPassword from './components/Navbar/pages/ForgotPass/ForgotPassword';
 
 
 
@@ -28,6 +29,7 @@ function App() {
         {/* <Route path='/contact-us' component={ContactUs} /> */}
         <Route path='/sign-up' component={SignUp} />
         <Route path='/sign-in' component={LogIn} />
+        <Route path='/forgot-password' component={ForgotPassword} />
         <Route path='/profile' component={Profile} />
         <Route path='/otp' component={Otp} />
         <Route path='/add-recipe' component={AddRecipe} />
