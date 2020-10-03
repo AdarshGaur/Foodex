@@ -175,7 +175,7 @@ render(){
     <div className={classes.formup}>
    <form onSubmit = {this.handlesubmit} >
    <h1 className={classes.headline}>SIGN-UP</h1>
-    <label className={classes.labelfield}> Full Name </label>< br/>
+    <label className={classes.labelfield}> Name </label>< br/>
     <input  type="text" name="name" className={classes.field} required placeholder={this.state.name}  
     onChange={this.handlechangeall} onBlur={this.validname} onFocus={this.nameclean}/> <br/>
     <p className={(this.state.nameError==="fine")? classes.invisible: classes.visible}>{this.state.nameError}</p>

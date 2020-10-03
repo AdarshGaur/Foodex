@@ -25,29 +25,13 @@ class NavigationBar extends Component{
     event.preventDefault();
     this.setState({ redirect: "/search-page" });
    
-    // axios.post('https://b841ca4ed474.ngrok.io/search/',data)
-    // ServerService.searchbox(data)
-    // .then((resp)=>{
-      // console.log(resp.data);
-      // const search_res=resp.data
-      // console.log(search_res);
-      // if (resp.status === 200) {
-        // localStorage.setItem("token", "abcd");
-        // localStorage.setItem("search_result",resp.data)
-        // localStorage.setItem("access_token",resp.data.access)
-        
-    //   }
-    
-    // })
+
   
   
   }
   
 
-  //   axios.post('https://60bb5774f441.ngrok.io/search/',data)
-  //   .then((resp)=>{
-  //     console.log(resp)
-  // }}
+ 
 
 
 
@@ -135,14 +119,8 @@ class NavigationBar extends Component{
       );
 }
 
-
-
-
   }
 }
-
-
-
 
 
 

@@ -66,8 +66,6 @@ render(){
     onChange={this.handlechangeall} onBlur={this.validage} onFocus={this.ageclean}/> <br/>
     <p className={(this.state.ageError==="fine")? classes.invisible: classes.visible}>{this.state.ageError}</p>
     <input type="submit" value="Submit" className={classes.sub} />
-    <p ><Link to='/sign-up'>click to signup </Link></p>
-    <p ><Link to='/sign-in'>click to login </Link></p>
     
    </form>
    </div>
