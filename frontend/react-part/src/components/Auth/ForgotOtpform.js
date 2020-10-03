@@ -4,13 +4,12 @@ import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../services/serverService'
 
-class Forgotform extends Component{
+class ForgotOtpform extends Component{
 
 
   state = { 
-    email: "Email",
-    emailError: "",
-
+      email: localStorage.getItem('resetmail'),
+    otp:"otp"
   }
 
 
@@ -19,26 +18,26 @@ handlechangeall = (event) =>{
 }
 
 
-
 handlesubmit = (event) => {
 
 
   // console.log( JSON.stringify(this.state));
 const data={
-  email: this.state.email,
-
+    email:this.state.email,
+  otp: this.state.otp
 }
   event.preventDefault();
 //   ServerService.login(data)
 console.log(data)
-axios.post('https://776d58591d10.ngrok.io/auth/forgot-password/',data)
+axios.post('https://776d58591d10.ngrok.io/auth/forgot-password/otp/',data)
   .then((resp)=>{
     console.log(resp)
 
     if (resp.status === 200) {
       // localStorage.setItem("token", "abcd");
-      localStorage.setItem("resetmail",this.state.email)
-      this.setState({ redirect: "/forgot-otp" });
+    //   localStorage.setItem("refresh_token",resp.data.refresh)
+    //   localStorage.setItem("access_token",resp.data.access)
+      this.setState({ redirect: "/change-password" });
     }
   
   })
@@ -60,13 +59,14 @@ render(){
     </div>
     <div className={classes.formup}>
    <form onSubmit = {this.handlesubmit} >
-   <h1 className={classes.headline}>Enter Your Email</h1>
-    <input  type="email" name="email" required placeholder= {this.state.email} 
+   <h1 className={classes.headline}>Verify Email</h1>
+    {/* <label> Email </label><br/> */}
+    <input  type="number" name="otp"  placeholder={this.state.otp}  
     onChange={this.handlechangeall} /> <br/>
-    <p>{this.state.emailError}</p>
     <input type="submit" value="Submit" className={classes.sub} />
     <p ><Link to='/sign-up'>click to signup </Link></p>
-    <p ><Link to='sign-in'>click to login  </Link></p>
+    <p ><Link to='/sign-in'>click to login </Link></p>
+    
    </form>
    </div>
   </div>
@@ -75,4 +75,4 @@ render(){
 
 }
 
-export default Forgotform;
+export default ForgotOtpform;
