@@ -108,5 +108,9 @@ class BookmarkRecord(models.Model):
 
 
 
+# class FollowersRecord(models.Model):
+#     active = models.BooleanField()
+#     follower = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='follow_by', on_delete=models.CASCADE)
+#     following = models.ForeignKey(MyUser, related_name='following', on_delete=models.CASCADE)
 
 

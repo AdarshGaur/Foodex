@@ -27,14 +27,14 @@ from django.db.models import Q, F
 
 class CreateRecipe(APIView):
     print('started')
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     print('check1')
-    def post(self, request, pk, format=None):
+    def post(self, request, format=None):
         print('check2')
         serializer = PostRecipeSerializer(data=request.data)
         print('check3')
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(owner=self.request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

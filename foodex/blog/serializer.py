@@ -64,10 +64,20 @@ class RegisterMyUser(serializers.ModelSerializer):
 
 
 
+# class AuthorSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = MyUser
+#         fields = ('email', 'image_user')
+
+
+
+
 
 # recipe creating/edit/get serializer
 class PostRecipeSerializer(serializers.ModelSerializer):
 	owner = serializers.ReadOnlyField(source='owner.name')
+	#author = AuthorSerializer(read_only=True)
 	# email = serializers.ReadOnlyField(source='owner.email')
 	img_url = serializers.SerializerMethodField()
 	# pk = serializers.ReadOnlyField(source=id)
@@ -86,7 +96,7 @@ class PostRecipeSerializer(serializers.ModelSerializer):
 
 
 
-# recipe creating/edit/get serializer
+
 class RecipeSerializer(serializers.ModelSerializer):
 	#owner_pk = serializers.IntegerField(source=owner.pk)
 	owner = serializers.ReadOnlyField(source='owner.name')
