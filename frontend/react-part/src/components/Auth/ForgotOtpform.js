@@ -4,6 +4,7 @@ import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../services/serverService'
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import LoadingOverlay from 'react-loading-overlay';
 
 class ForgotOtpform extends Component{
 
@@ -23,8 +24,14 @@ createSuccess = (info) => {
   NotificationManager.success( info, 'Success');
 };
 
+createNotification = (info) => {
+  NotificationManager.error( info, 'Error');
+};
+
+
 handlesubmit = (event) => {
 
+  this.setState({isLoading: true});
 
   // console.log( JSON.stringify(this.state));
 const data={
@@ -40,15 +47,19 @@ ServerService.forgototp(data)
     console.log(resp)
 
     if (resp.status === 200) {
-      // localStorage.setItem("token", "abcd");
-    //   localStorage.setItem("refresh_token",resp.data.refresh)
-    //   localStorage.setItem("access_token",resp.data.access)
+      this.setState({isLoading: false});
       this.setState({ redirect: "/change-password" });
     }
   
   })
+  .catch(error => {
+    console.log(error.response)
+    this.setState({isLoading: false});
+    if(error.response.data.message==="wrong_otp"){
+      this.createNotification(error.response.data.message)
+    }
 
-
+  })
 
 }
 
@@ -71,6 +82,14 @@ resend = (event) => {
       }
     
     })
+    .catch(error => {
+      console.log(error.response)
+      this.setState({isLoading: false});
+      if(error.response.data.message){
+        this.createNotification(error.response.data.message)
+      }
+  
+    })
   
    }
 
@@ -81,6 +100,12 @@ render(){
   }
 
  return(
+  <LoadingOverlay
+  active={this.state.isLoading}
+  spinner
+  text='Loading...'
+  >
+
   <div className={classes.signup}>
     <div className={classes.imgbox}>
 
@@ -98,6 +123,7 @@ render(){
    </form>
    </div>
   </div>
+  </LoadingOverlay>
  )
 }
 
