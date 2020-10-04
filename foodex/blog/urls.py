@@ -30,11 +30,12 @@ urlpatterns = [
 	path('recipe/bookmark/', views.Bookmark.as_view()),                #for bookmarking recipes
 
 
-	#sorting cards areas
-	path('recipe/', views.CreateRecipe.as_view()),                       #for recipe create
+	#
+	path('recipe/post/', views.CreateRecipe.as_view()),                       #for recipe create
 	path('recipe/<int:pk>/', views.RecipeDetail.as_view()),             #for recipes details
 	# path('users/', views.MyUserList.as_view()),                          #for users list 'no_use'
 	path('user/<int:pk>/', views.MyUserDetail.as_view()),                  #for users details
+	path('my-account/', views.MyAccountDetail.as_view()),                  #for my-account details
 	#path('user/<int:pk>/bookmark-list/', views.Bookmarklist.as_view()),    #for listing bookmarked recipes
 
 

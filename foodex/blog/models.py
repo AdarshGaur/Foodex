@@ -37,7 +37,7 @@ class Recipe(models.Model):
     category = models.TextField(default='Starters', choices=categories_choices)
     veg = models.BooleanField()
     cook_time = models.PositiveIntegerField()
-    read_time = models.PositiveIntegerField()
+    read_time = models.PositiveIntegerField(default=5)
     img = models.ImageField(upload_to=upload_path, null=False, blank=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='recipes', on_delete=models.CASCADE)
     published_on = models.DateTimeField(auto_now_add=True)
@@ -91,7 +91,7 @@ class OtpModel(models.Model):
 
 
 class LikeSystem(models.Model):
-    id = models.AutoField(primary_key=True)
+    #id = models.AutoField(primary_key=True)
     active = models.IntegerField()
     liked_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='likes', on_delete=models.CASCADE)
     like_to = models.ForeignKey(Recipe, on_delete=models.CASCADE)
@@ -101,7 +101,7 @@ class LikeSystem(models.Model):
 
 
 class BookmarkRecord(models.Model):
-    id = models.AutoField(primary_key=True)
+    #id = models.AutoField(primary_key=True)
     active = models.IntegerField()
     bookmarked_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='bookmarked', on_delete=models.CASCADE)
     bookmark_to = models.ForeignKey(Recipe, on_delete=models.CASCADE)

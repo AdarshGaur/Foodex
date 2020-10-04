@@ -4,12 +4,12 @@ import time
 from django.shortcuts import render
 
 from rest_framework import status, permissions
-from django.http import Http404, JsonResponse
+from django.http import Http404 #, JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import Recipe, MyUser, OtpModel, LikeSystem, BookmarkRecord
-from .serializer import RecipeSerializer, MyUserSerializer, RegisterMyUser, RecipeCardSerializer
+from .serializer import RecipeSerializer, MyUserSerializer, RegisterMyUser, RecipeCardSerializer, PostRecipeSerializer
 from rest_framework import serializers
 
 from .permissions import IsOwnerOrReadOnly
@@ -26,10 +26,13 @@ from django.db.models import Q, F
 
 
 class CreateRecipe(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def post(self, request, format=None):
-        serializer = RecipeSerializer(data=request.data)
+    print('started')
+    permission_classes = [permissions.AllowAny]
+    print('check1')
+    def post(self, request, pk, format=None):
+        print('check2')
+        serializer = PostRecipeSerializer(data=request.data)
+        print('check3')
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -88,12 +91,16 @@ class MyUserDetail(APIView):
     #to get the user
     def get_user(self, pk):
         try:
+            print(pk)
             return MyUser.objects.get(pk=pk)
         except MyUser.DoesNotExist:
-            raise Http404
+            message = {'message': 'page not found'}
+            return Response(message, status=status.HTTP_404_NOT_FOUND)
     
     #get the details
     def get(self, request, pk, format=None):
+        print('2----------')
+        print(pk)
         solo_user = self.get_user(pk)
         serializer = MyUserSerializer(solo_user, context={'request': request})
         print(serializer)
@@ -108,6 +115,15 @@ class MyUserDetail(APIView):
     #         return Response(serializer.data)
     #     return Response(serializer.errors, status = status.HTTP_406_NOT_ACCEPTABLE)
 
+
+
+class MyAccountDetail(APIView):
+    permission_classes=[permissions.IsAuthenticated]
+
+    def get(self, request, pk, format=None):
+        user = request.user
+        serializer = MyUserSerializer(user, context={'request': request})
+        return Response(serializer.data)
 
 
 
@@ -919,14 +935,16 @@ class CardLike(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-    def post(self, request, format=None):
-        key = request.data.get('pk')
+    def post(self, request, pk, format=None):
+        # key = request.data.get('pk')
+        # print(key)
         # upvoted = request.data.get('like')
         
         try:
-            recipe = Recipe.objects.get(pk=key)
+            recipe = Recipe.objects.get(pk=pk)
         except:
             raise Http404
+        print(recipe)
 
         try:
             like = LikeSystem.objects.get(Q(liked_by=request.user) & Q(like_to=recipe))
@@ -958,7 +976,7 @@ class CardLike(APIView):
 
         #print(like_count)
         #print('########################')
-        #print(response_data)
+        print('response_data')
         #return JsonResponse(response_data)
         return Response(response_data, status=status.HTTP_200_OK)
 
@@ -969,7 +987,7 @@ class CardLike(APIView):
 class Bookmark(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, format=None):
+    def post(self, request, pk, format=None):
         key = request.data.get('pk')
 
         try:
