@@ -44,11 +44,12 @@ handlechangeall = (event) =>{
  this.setState ( { [event.target.name] :event.target.value  } )
 }
 
-createNotification = () => {
+createNotification = (info) => {
+  NotificationManager.error( info, 'Error');
+};
 
-        NotificationManager.success('Success message', 'Title here');
-
-
+createSuccess = (info) => {
+  NotificationManager.success( info, 'Success');
 };
 
 validemail=()=>{
@@ -134,9 +135,9 @@ confirmclean=()=>{
 handlesubmit = (event) => {
 
   
-  // if(this.valid()){
+  // if(!this.state.disabled){
 
-    // if(this.validname() && this.validage() && this.validemail() && this.validpassword() && this.validconfirm()){
+
     const data={
       name: this.state.name,
       email: this.state.email,
@@ -150,21 +151,23 @@ handlesubmit = (event) => {
 
   console.log(data);
 
-// axios.post('https://776d58591d10.ngrok.io/auth/register/', data)
 ServerService.signup(data)
 .then((resp)=>{
   console.log(resp)
 
   if (resp.data.message === "otp_sent") {
+    this.createSuccess("OTP sent to the mail")
     localStorage.setItem('email', this.state.email)
     this.setState({ redirect: "/otp" });
   }
 
 })
-.catch(err => (console.log(err)))
-
-
-
+.catch(err => {
+  console.log(err.response)
+  if(err.response.data.email){
+  this.createNotification(err.response.data.email)
+  }
+})
 
 // }
  }

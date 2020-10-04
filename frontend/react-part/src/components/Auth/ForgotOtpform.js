@@ -3,6 +3,7 @@ import classes from './Signform.module.css';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../services/serverService'
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 class ForgotOtpform extends Component{
 
@@ -18,6 +19,9 @@ handlechangeall = (event) =>{
  this.setState ( { [event.target.name] :event.target.value  } )
 }
 
+createSuccess = (info) => {
+  NotificationManager.success( info, 'Success');
+};
 
 handlesubmit = (event) => {
 
@@ -63,7 +67,7 @@ resend = (event) => {
   
       if (resp.status === 200) {
         console.log(resp)
-
+        this.createSuccess("OTP sent again")
       }
     
     })

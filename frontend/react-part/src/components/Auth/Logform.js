@@ -3,6 +3,7 @@ import classes from './Signform.module.css';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../services/serverService'
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 const validEmailRegex = RegExp(
   /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/
@@ -28,6 +29,13 @@ class Login extends Component{
 handlechangeall = (event) =>{
  this.setState ( { [event.target.name] :event.target.value  } )
 }
+
+createNotification = (info) => {
+
+  NotificationManager.error( info, 'Error');
+
+
+};
 
 validemail=()=>{
 
@@ -63,9 +71,6 @@ passwordclean=()=>{
 }
 
 handlesubmit = (event) => {
-  // if(this.valid()){
-
-  // console.log( JSON.stringify(this.state));
 
 const data={
   email: this.state.email,
@@ -78,12 +83,17 @@ const data={
     console.log(resp)
 
     if (resp.status === 200) {
-      // localStorage.setItem("token", "abcd");
       localStorage.setItem("refresh_token",resp.data.refresh)
       localStorage.setItem("access_token",resp.data.access)
       this.setState({ redirect: "/" });
     }
   
+  })
+  .catch(err => {
+    console.log(err.response)
+    if(err.response.data.detail){
+    this.createNotification(err.response.data.detail)
+    }
   })
 
 

@@ -3,6 +3,7 @@ import classes from './Signform.module.css';
 import {Redirect, Link} from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../services/serverService'
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 class Otpform extends Component{
   
@@ -17,7 +18,9 @@ handlechangeall = (event) =>{
  this.setState ( { [event.target.name] :event.target.value  } )
 }
 
-
+createSuccess = (info) => {
+  NotificationManager.success( info, 'Success');
+};
 
 handlesubmit = (event) => {
   
@@ -61,11 +64,8 @@ console.log(resenddata)
     console.log(resp)
 
     if (resp.status === 200) {
-      // localStorage.setItem("token", "abcd");
       console.log(resp)
-      // localStorage.setItem("refresh_token",resp.data.refresh)
-      // localStorage.setItem("access_token",resp.data.access)
-      // this.setState({ redirect: "/" });
+      this.createSuccess("OTP sent again")
     }
   
   })
@@ -94,7 +94,7 @@ render(){
     <p className={(this.state.ageError==="fine")? classes.invisible: classes.visible}>{this.state.ageError}</p>
 
     <input type="submit" value="Submit" className={classes.sub}/><br/>
-    <p className={classes.reotp} onClick={this.resend}><Link className={classes.linkswitch1}> Resend OTP </Link></p>
+    <p className={classes.reotp} onClick={this.resend}><span className={classes.linkswitch1}> Resend OTP </span></p>
    </form>
    </div>
   </div>
