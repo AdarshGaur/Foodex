@@ -4,3 +4,15 @@
   padding: 0;
   font-family: 'PT Sans', sans-serif;
 }
+
+.fa-heart{
+  color: red;
+}
+
+.fa-bullhorn{
+  margin-right: 10px;
+}
+
+body{
+  background-color: #f1f1f1;
+}

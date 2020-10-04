@@ -1,0 +1,31 @@
+.grid {
+    /* min-height: 100%; */
+    display: flex;
+    /* grid-template-columns: 1fr 1fr 1fr 1fr; */
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
+  .recentrecipes{
+      margin: 2vw;
+      font-size: 4rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+  }
+  
+
+
+  @media(min-width: 1000px){
+      .grid{
+          grid-template-columns: 1fr;
+          /* overflow: hidden; */
+      }
+  }
+
+  @media(max-width: 1000px){
+    .recentrecipes{
+        font-size: 2rem;
+        justify-content: center;
+      }
+  }

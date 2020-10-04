@@ -1,246 +1,97 @@
- /* html,body
-{
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    overflow-x: hidden; 
-} 
-
-
-.navbar {
-  background: linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%);
-  position: fixed;
-  height: 12vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2rem;
-}
-
-.navbar-logo {
-  color: #fff;
-  justify-self: start;
-  margin-left: 20px;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: 2rem;
-}
-
-.fa-firstdraft {
-  margin-left: 0.5rem;
-  font-size: 1.6rem;
-}
-
-.nav-menu {
-  display: grid;
-  grid-template-columns: repeat(5, auto);
-  grid-gap: 10px;
-  list-style: none;
-  text-align: center;
-  width: 70vw;
-  justify-content: end;
-  margin-right: 2rem;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  height: 80px;
-}
-
-.nav-links {
-  color: white;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-}
-
-.nav-links:hover {
-  background-color: #1888ff;
-  border-radius: 4px;
-  transition: all 0.2s ease-out;
-}
-
-.fa-bars {
-  color: #fff;
-}
-
-.nav-links-mobile {
-  display: none;
-}
-
-.menu-icon {
-  display: none;
-}
-
-@media screen and (max-width: 960px) {
-  .NavbarItems {
-    position: relative;
-  }
-
-  .nav-menu {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100vh;
-    position: absolute;
-    top: 80px;
-    left: -100%;
-    opacity: 1;
-    transition: all 0.5s ease;
-  }
-
-  .nav-menu.active {
-    background: #242222;
-    left: 0;
-    opacity: 1;
-    transition: all 0.5s ease;
-    z-index: 1;
-  }
-
-  .nav-links {
-    text-align: center;
-    padding: 2rem;
-    width: 100%;
-    display: table;
-  }
-
-  .nav-links:hover {
-    background-color: #1888ff;
-    border-radius: 0;
-  }
-
-  .navbar-logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(25%, 50%);
-  }
-
-  .menu-icon {
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    transform: translate(-100%, 60%);
-    font-size: 1.8rem;
-    cursor: pointer;
-  }
-
-  .fa-times {
-    color: #fff;
-    font-size: 2rem;
-  }
-
-  .nav-links-mobile {
-    display: block;
-    text-align: center;
-    padding: 1.5rem;
-    margin: 2rem auto;
-    border-radius: 4px;
-    width: 80%;
-    background: #1888ff;
-    text-decoration: none;
-    color: #fff;
-    font-size: 1.5rem;
-  }
-
-  .nav-links-mobile:hover {
-    background: #fff;
-    color: #1888ff;
-    transition: 250ms;
-  }
-
-  button {
-    display: none;
-  }
-}
-
-
-@media screen and (max-width: 380px) {
-  .nav-menu {
-    top: 68px;
-  }
-}
-
-
-nav styling- iski 1 alag css banani hai  (commt)
-
-.home,
-.services,
-.products,
-.sign-up,
-.marketing,
-.consulting {
-  display: flex;
-  height: 90vh;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-}
-
-.home {
-  background-image: url('../../images/img-1.jpg');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: #fff;
-  font-size: 100px;
-}
-
-.services {
-  background-image: url('../../images/img-2.jpg');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: #fff;
-  font-size: 100px;
-}
-
-.products {
-  background-image: url('../../images/img-3.jpg');
-  background-position: center;
-  background-size: fill;
-  background-repeat: no-repeat;
-  color: #fff;
-  font-size: 100px;
-}
-
-.sign-up {
-  background-image: url('../../images/img-7.jpg');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: #fff;
-  font-size: 100px;
-}
-
-.marketing {
-  background-image: url('../../images/img-6.jpg');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: #fff;
-  font-size: 100px;
-}
-
-.consulting {
-  background-image: url('../../images/img-7.jpg');
-  background-position: bottom;
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: #fff;
-  font-size: 100px;
-}
-
-
- */
 
 .brand{
  font-size: 40px;
  color: #343a40;
  text-decoration: none;
+}
+
+.sbar{
+  width: 40vw !important;
+  height: 35px !important;
+  /* margin: 0.5vw; */
+  /* border-radius: 5px !important; */
+}
+
+.sbar:focus{
+  outline: none;
+  box-shadow:none !important;
+  border:1px solid #e60e3c !important;
+}
+
+.sbtn{
+  width: 3vw;
+  /* display: flex;
+  flex-wrap: wrap; */
+  color:#e60e3c;
+  background-color: #f1f1f1;
+  border:none;
+  outline: none;
+}
+
+.sbtn:hover{
+  width: 3vw;
+  /* display: flex;
+  flex-wrap: wrap; */
+  background-color: #e60e3c;
+  border:none;
+  outline: none;
+}
+
+.navoption{
+  /* color: blue !important; */
+  margin:0 1vw;
+  font-family: Quicksand !important;
+}
+
+.logopt{
+  margin:0 1vw;
+  font-family: Quicksand !important;
+  color: #495057    !important;
+}
+
+.logopt:hover{
+  color: black  !important;
+}
+
+.navoptions{
+  margin:0 1vw;
+  background-color: #e60e3c;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.navoptions:hover{
+  transition-duration:0.5s;
+  margin:0 1vw;
+  color: #e60e3c !important;
+  /* outline:2px #e60e3c solid; */
+  /* border-radius: 4px; */
+  box-shadow: 10px -10px #e60e3c;
+  transform: none !important;
+  background-color: #f7f7f7;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+
+
+
+.dditems:hover{
+background-color: #e60e3c !important;
+color: white !important;
+/* width: 90%; */
+/* font-weight: 500; */
+/* font-size: 18px; */
+/* transform: scale(1.1); */
+}
+
+
+
+.dditems{
+font-family: Lato !important;
+/* color: #e60e3c !important; */
+
 }
 
 .brand:hover{
@@ -252,5 +103,13 @@ nav styling- iski 1 alag css banani hai  (commt)
   .logo{
     margin-left:0;
     margin-right: auto;
+  }
+}
+
+@media(max-width:991px){
+  .navoptions{
+    background-color: #f7f7f7;
+    color: #e60e3c !important;
+    font-weight: 200 !important;
   }
 }
