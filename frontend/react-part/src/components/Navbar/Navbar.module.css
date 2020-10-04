@@ -15,14 +15,24 @@
 .sbar:focus{
   outline: none;
   box-shadow:none !important;
-  border:1px solid #ccc !important;
+  border:1px solid #e60e3c !important;
 }
 
 .sbtn{
   width: 3vw;
   /* display: flex;
   flex-wrap: wrap; */
-  background-color: f1f1f1;
+  color:#e60e3c;
+  background-color: #f1f1f1;
+  border:none;
+  outline: none;
+}
+
+.sbtn:hover{
+  width: 3vw;
+  /* display: flex;
+  flex-wrap: wrap; */
+  background-color: #e60e3c;
   border:none;
   outline: none;
 }
@@ -33,16 +43,55 @@
   font-family: Quicksand !important;
 }
 
+.logopt{
+  margin:0 1vw;
+  font-family: Quicksand !important;
+  color: #495057    !important;
+}
+
+.logopt:hover{
+  color: black  !important;
+}
+
+.navoptions{
+  margin:0 1vw;
+  background-color: #e60e3c;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.navoptions:hover{
+  transition-duration:0.5s;
+  margin:0 1vw;
+  color: #e60e3c !important;
+  /* outline:2px #e60e3c solid; */
+  /* border-radius: 4px; */
+  box-shadow: 10px -10px #e60e3c;
+  transform: none !important;
+  background-color: #f7f7f7;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+
+
+
 .dditems:hover{
-background-color: #ccc;
+background-color: #e60e3c !important;
+color: white !important;
 /* width: 90%; */
 /* font-weight: 500; */
 /* font-size: 18px; */
 /* transform: scale(1.1); */
 }
 
+
+
 .dditems{
 font-family: Lato !important;
+/* color: #e60e3c !important; */
+
 }
 
 .brand:hover{
@@ -54,5 +103,13 @@ font-family: Lato !important;
   .logo{
     margin-left:0;
     margin-right: auto;
+  }
+}
+
+@media(max-width:991px){
+  .navoptions{
+    background-color: #f7f7f7;
+    color: #e60e3c !important;
+    font-weight: 200 !important;
   }
 }

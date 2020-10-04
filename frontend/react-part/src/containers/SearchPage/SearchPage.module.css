@@ -47,7 +47,7 @@
   .sbar:focus{
     outline: none;
     box-shadow:none !important;
-    border:1px solid #ccc !important;
+    border:1px solid #e60e3c !important;
   }
 
 
@@ -59,13 +59,19 @@
         background-color: f1f1f1;
         border:none;
         outline: none;
-        color: #292b2c;
+        border:none;
+        color: #e60e3c;
 }
 
 .sbtn:hover{
-    background-color: #292b2c;
+    background-color: #e60e3c;
     color: white;
     border-radius: 4px;
+}
+
+.sbtn:focus{
+    outline: none;
+    
 }
 
 @media(max-width:1150px){

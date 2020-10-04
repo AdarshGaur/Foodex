@@ -9,7 +9,8 @@ class ForgotOtpform extends Component{
 
   state = { 
       email: localStorage.getItem('resetmail'),
-    otp:"otp"
+    otp:"otp",
+    ageError:"fine"
   }
 
 
@@ -47,6 +48,31 @@ ServerService.forgototp(data)
 
 }
 
+resend = (event) => {
+  
+  const resenddata={
+    email: this.state.email
+  }
+                
+    event.preventDefault();
+  console.log(resenddata)
+    // axios.post('https://776d58591d10.ngrok.io/auth/register/otp/resend/',resenddata)
+    ServerService.resendotp(resenddata)
+    .then((resp)=>{
+      console.log(resp)
+  
+      if (resp.status === 200) {
+        // localStorage.setItem("token", "abcd");
+        console.log(resp)
+        // localStorage.setItem("refresh_token",resp.data.refresh)
+        // localStorage.setItem("access_token",resp.data.access)
+        // this.setState({ redirect: "/" });
+      }
+    
+    })
+  
+   }
+
 render(){
 
   if(this.state.redirect){
@@ -62,10 +88,11 @@ render(){
    <form onSubmit = {this.handlesubmit} >
    <h1 className={classes.headline}>Verify Email</h1>
    <label className={classes.labelfield}> OTP </label><br />
-    <input  type="number" name="age" className={classes.field} name="otp" required placeholder={this.state.age}  
+    <input  type="number" className={classes.field} name="otp" required placeholder={this.state.age}  
     onChange={this.handlechangeall} onBlur={this.validage} onFocus={this.ageclean}/> <br/>
     <p className={(this.state.ageError==="fine")? classes.invisible: classes.visible}>{this.state.ageError}</p>
-    <input type="submit" value="Submit" className={classes.sub} />
+    <input type="submit" value="Submit" className={classes.sub} /><br/>
+    <p className={classes.reotp} onClick={this.resend}><Link className={classes.linkswitch1}> Resend OTP </Link></p>
     
    </form>
    </div>

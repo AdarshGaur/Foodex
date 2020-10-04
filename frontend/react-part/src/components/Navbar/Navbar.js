@@ -77,9 +77,9 @@ class NavigationBar extends Component{
                   <NavDropdown.Item as={Link} className={classes.dditems} to="/others">Others</NavDropdown.Item>
 
                 </NavDropdown>
-                <Nav.Link as={Link} className={classes.navoption} to="/add-recipe">Post</Nav.Link>
-                <Nav.Link as={Link} className={classes.navoption} to="/profile">My Profile</Nav.Link>
-                <Nav.Link as={Link} className={classes.navoption} to="/" onClick={logoutHandler}>Logout</Nav.Link>
+                <Nav.Link as={Link} className={classes.logopt} to="/add-recipe">Post</Nav.Link>
+                <Nav.Link as={Link} className={classes.logopt} to="/profile">My Profile</Nav.Link>
+                <Nav.Link as={Link} className={classes.navoptions} to="/" onClick={logoutHandler}>Logout</Nav.Link>
               </Nav>
               
             </Navbar.Collapse>
@@ -110,8 +110,8 @@ class NavigationBar extends Component{
       <NavDropdown.Item as={Link} className={classes.dditems} to="/others">Others</NavDropdown.Item>
 
       </NavDropdown>
-      <Nav.Link as={Link} className={classes.navoption} to="/sign-in">Sign In</Nav.Link>
-      <Nav.Link as={Link} className={classes.navoption} to="/sign-up">Sign Up</Nav.Link>
+      <Nav.Link as={Link} className={classes.navoptions} to="/sign-in">Sign In</Nav.Link>
+      <Nav.Link as={Link} className={classes.navoptions} to="/sign-up">Sign Up</Nav.Link>
     </Nav>
     
   </Navbar.Collapse>

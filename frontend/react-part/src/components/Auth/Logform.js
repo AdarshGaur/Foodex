@@ -116,8 +116,10 @@ render(){
 
     <input type="submit" value="Submit" className={classes.sub} /><br/>
     {/* <p ><Link to='/sign-up'>click to signup </Link></p> */}
+    <div className={classes.wraplinks}>
     <span className={classes.linkwrap}><Link to='/forgot-password' className={classes.linkswitch1}>Forgot Password? </Link></span>
     <span className={classes.linkwrap}><Link to='/sign-up' className={classes.linkswitch2}>Sign up </Link></span>
+    </div>
     </form>
    </div>
   </div>

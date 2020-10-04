@@ -7,15 +7,15 @@
     margin: 0;
     box-sizing: border-box;  
     border: 1.3px solid black ; 
-    /* border: none; */
-    /* outline: none; */
+    font-family: Lato;
     outline: none;
     border-radius: 5px;
 } 
 
-
-
-
+.headline{
+    font-family: Quicksand;
+    font-weight: 600;
+}
 
 .signup{
     background: rgba(240, 29, 68,0.84);
@@ -32,38 +32,55 @@
     /* align-items: center; */
 }
 
+.resign{
 
+    margin: auto;
+    margin-top: 5px;
+    padding-left: 1%;
+    width: 70%;
+    text-align: left;
+}
 
+.reotp{
+    margin-top: 5px;
+    width: 70%;
+    padding-left: 1%;
+}
+
+.wraplinks{
+    margin-top:5px;
+}
 
 .invisible{
+    
     opacity: 0;
     /* margin-bottom: 1.5%; */
     margin-bottom: 0 !important;
     /* background: green; */
     margin: auto;
-    padding-bottom: 1%;
+    /* padding-bottom: 1%; */
     padding-left: 1%;
+    font-weight: 600;
     width: 70%;
     text-align: left;
+
 }
 
 .linkswitch1{
     text-decoration: none;
     color: #696667;
     margin-right: 20%;
-    margin-top: 10px;
+
 }
 
 .linkswitch2{
     text-decoration: none;
     color: #696667;
-    margin-top: 10px;
+
 }
 
 
 .linkwrap{
-    
-    /* margin-top: 10px; */
     width: 70%;
 }
 
@@ -80,10 +97,10 @@
     margin-bottom: 0 !important;
     /* background: green; */
     margin: auto;
-    padding-bottom: 1%;
     padding-left: 1%;
     width: 70%;
     text-align: left;
+
 }
 
 .labelfield{
@@ -92,7 +109,8 @@
     text-align: left;
     width: 70%;
     margin: auto;
-    font-weight: 600;
+    font-weight: 400 !important;
+    /* font-family: Quicksand; */
 }
 
 .formup{
@@ -113,7 +131,7 @@
     background-image: url('../../assets/images/img-0.jpg');
     background-size: cover;
     background-repeat: no-repeat;
-    border-top-left-radius: 90px;
+    /* border-top-left-radius: 90px; */
 }
 
 
@@ -125,7 +143,6 @@
 
 .sub {
     background-color: #ff1742;
-
     width: 70%;
     font-size: 15px;
     border: none;
@@ -168,9 +185,6 @@
     }
     .formup{
         box-shadow: none; 
-        /* background: white;  */
-        
-        
     }
 
     

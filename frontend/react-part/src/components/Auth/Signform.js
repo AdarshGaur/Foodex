@@ -203,8 +203,12 @@ render(){
 
     <input type="submit" value="Submit" 
     className= {classes.sub}
-    />
+    /><br/>
     {/* <p ><Link to='/sign-in'>click to login </Link></p> */}
+    {/* <div className={classes.wraplinks}> */}
+    <div className={classes.resign}><Link to='/sign-in' className={classes.linkswitch1}>Already a user? Sign In</Link></div>
+    {/* <span className={classes.linkwrap}><Link to='/sign-up' className={classes.linkswitch2}>Sign up </Link></span> */}
+    {/* </div> */}
    </form>
    </div>
   </div>

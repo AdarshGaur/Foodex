@@ -10,8 +10,8 @@ const RecipeCard = (props) => {
         <Card.Img variant="top" height="250px" src="holder.js/100px180" src= {props.img} />
         <Card.Body>
           <Card.Title>{props.title}</Card.Title>
-          <Card.Text>{props.content.substring(0, 150)}...</Card.Text>
-          <Button variant="primary" as={Link} 
+          <Card.Text>{props.content.substring(0, 50)}...</Card.Text>
+          <Button className={classes.pinkbtn} as={Link} 
            to= {{
             pathname:'/read-recipe',
             state:{recipeid: props.pk}

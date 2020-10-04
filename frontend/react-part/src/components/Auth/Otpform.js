@@ -8,7 +8,8 @@ class Otpform extends Component{
   
     state = {   email: localStorage.getItem('email'),
       otp: "otp",
-      redirect: null
+      redirect: null,
+      ageError:"fine"
   }
 
 
@@ -43,6 +44,8 @@ console.log(data)
   })
 
  }
+
+ 
 resend = (event) => {
   
 const resenddata={
@@ -85,12 +88,12 @@ render(){
    <form onSubmit = {this.handlesubmit} >
    <h1 className={classes.headline}>Enter OTP</h1>
    <label className={classes.labelfield}> OTP </label><br />
-    <input  type="number" name="age" className={classes.field} name="otp" required placeholder={this.state.age}  
-    onChange={this.handlechangeall} onBlur={this.validage} onFocus={this.ageclean}/> <br/>
+    <input  type="number" className={classes.field} name="otp" required placeholder={this.state.age}  
+    onChange={this.handlechangeall}/> <br/>
     <p className={(this.state.ageError==="fine")? classes.invisible: classes.visible}>{this.state.ageError}</p>
 
-    <input type="submit" value="Submit" className={classes.sub}/>
-    <p onClick={this.resend}><Link> resend otp </Link></p>
+    <input type="submit" value="Submit" className={classes.sub}/><br/>
+    <p className={classes.reotp} onClick={this.resend}><Link className={classes.linkswitch1}> Resend OTP </Link></p>
    </form>
    </div>
   </div>

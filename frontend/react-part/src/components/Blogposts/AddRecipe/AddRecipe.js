@@ -37,7 +37,7 @@ class AddRecipe extends Component {
 
         <form onSubmit = {this.handleOnSubmit}>
 
-            <label className={classes.labels}><h3>Recipe Title</h3></label>
+            <label className={classes.labels}><h3 >Recipe Title</h3></label>
             <input type="text" className={classes.area} name = 'title'  placeholder={this.state.title} onChange = {this.handlechangeall} />
             <p className={classes.limit}>{this.state.title.length}/{this.state.titleLimit}</p>
             <label ><h3>Ingredients</h3></label>
@@ -72,14 +72,14 @@ class AddRecipe extends Component {
             <label className={classes.imgbtn} for="postimage">Add Image</label>
             {/* </div> */}
 
-            <input className={classes.submitrecipe} type="submit" value="SUBMIT" />
+            <input className={classes.submitrecipe} type="submit" value="ADD RECIPE" />
 
         </form>
 
                 </div>
                 <div className={classes.tips}>
                 <Card style={{ width: '18rem' }} className={classes.tipscard}>
-                <Card.Header>Quick Tips</Card.Header>
+                <Card.Header className={classes.tiphead}><i class="fa fa-bullhorn"> </i> Q U I C K - T I P S</Card.Header>
                 <Card.Body className={classes.bulletpoints}>
                 <Card.Text>
                 <ul>

@@ -12,7 +12,7 @@ function Hero(){
 </video>
 
 <div className={classes.overlayText}>
-        <p>Foodex</p>
+        <h1 className={classes.herotext}>Foodex</h1>
     </div>
 {/* 
 <h1>FOODEX</h1>
