@@ -18,7 +18,7 @@ class Login extends Component{
 
   state = { 
     email: "Email",
-    password : "password",
+    password : "Password",
     emailError: "fine",
     passwordError : "fine",
     redirect:null 

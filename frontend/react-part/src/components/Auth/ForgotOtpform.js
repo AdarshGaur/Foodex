@@ -62,11 +62,8 @@ resend = (event) => {
       console.log(resp)
   
       if (resp.status === 200) {
-        // localStorage.setItem("token", "abcd");
         console.log(resp)
-        // localStorage.setItem("refresh_token",resp.data.refresh)
-        // localStorage.setItem("access_token",resp.data.access)
-        // this.setState({ redirect: "/" });
+
       }
     
     })
@@ -93,7 +90,7 @@ render(){
     <p className={(this.state.ageError==="fine")? classes.invisible: classes.visible}>{this.state.ageError}</p>
     <input type="submit" value="Submit" className={classes.sub} /><br/>
     <p className={classes.reotp} onClick={this.resend}><Link className={classes.linkswitch1}> Resend OTP </Link></p>
-    
+
    </form>
    </div>
   </div>

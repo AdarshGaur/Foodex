@@ -3,6 +3,8 @@ import classes from './Signform.module.css';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../services/serverService';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+
 
 const validEmailRegex = RegExp(
   /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/
@@ -41,7 +43,13 @@ class Form extends Component{
 handlechangeall = (event) =>{
  this.setState ( { [event.target.name] :event.target.value  } )
 }
- 
+
+createNotification = () => {
+
+        NotificationManager.success('Success message', 'Title here');
+
+
+};
 
 validemail=()=>{
 
@@ -124,6 +132,7 @@ confirmclean=()=>{
 }
 
 handlesubmit = (event) => {
+
   
   // if(this.valid()){
 
@@ -152,6 +161,7 @@ ServerService.signup(data)
   }
 
 })
+.catch(err => (console.log(err)))
 
 
 
@@ -169,6 +179,8 @@ render(){
 
  return(
   <div className={classes.signup}>
+
+
     <div className={classes.imgbox}>
 
     </div>
@@ -204,11 +216,9 @@ render(){
     <input type="submit" value="Submit" 
     className= {classes.sub}
     /><br/>
-    {/* <p ><Link to='/sign-in'>click to login </Link></p> */}
-    {/* <div className={classes.wraplinks}> */}
+
     <div className={classes.resign}><Link to='/sign-in' className={classes.linkswitch1}>Already a user? Sign In</Link></div>
-    {/* <span className={classes.linkwrap}><Link to='/sign-up' className={classes.linkswitch2}>Sign up </Link></span> */}
-    {/* </div> */}
+    
    </form>
    </div>
   </div>
