@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
-import NavigationBar from '../Navbar/Navbar';
+import NavigationBar from '../../Navbar/Navbar';
 import classes from './Profile.module.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import axios from 'axios';
-import FollowingList from '../../containers/FollowingList/FollowingList';
-import FollowersList from '../../containers/FollowersList/FollowersList';
+import FollowingList from '../FollowingList/FollowingList';
+import FollowersList from '../FollowersList/FollowersList';
+// import FollowersList from '../../../containers/FollowersList/FollowersList';
+import MyRecipes from '../MyRecipes/MyRecipes';
+import Bookmarks from '../Bookmarks/Bookmarks';
 
 class Profile extends Component {
 
@@ -41,10 +44,11 @@ class Profile extends Component {
   return (
     <>
     <NavigationBar />     
+    <Router>
     <div className={classes.totalwrap}>
     <div className={classes.bookmarks}>
     <button className={classes.bookmarkbtn}> <i className="fa fa-bookmark" aria-hidden="true"></i>
-    <span className={classes.savetext}>My Bookmarks</span></button>
+    <Link className={classes.savetext} to="/profile/bookmarks/"><span >My Bookmarks</span></Link></button>
     </div>
     <div className={classes.cover}>
     <div className={classes.wrapper}>
@@ -58,30 +62,30 @@ class Profile extends Component {
     </div>
 
     <div className={classes.options}>
-        <div>
+        <div className={classes.profilenums}>
             <h5 className={classes.headingnums}>Following</h5>
             <p className={classes.nums}>34</p>
         </div>
-        <div>
+        <div className={classes.profilenums}>
             <h5 className={classes.headingnums}>Followers</h5>
             <p className={classes.nums}>34</p>
         </div>
-        <div>
+        <Link className={classes.profilenums} to="/profile"><div>
             <h5 className={classes.headingnums}>Posts</h5>
             <p className={classes.nums}>34</p>
-        </div>
+        </div></Link>
 
     </div>
 
     </div>
     </div>
 
-    <Router>
+
         <Switch>
-        {/* <Route path='/profile' exact component={MyRecipes} /> */}
+        <Route path='/profile' exact component={MyRecipes} />
         <Route path='/profile/following' component={FollowingList} />
         <Route path='/profile/followers' component={FollowersList} />
-        {/* <Route path='/profile/bookmarks' component={Bookmarks} /> */}
+        <Route path='/profile/bookmarks' component={Bookmarks} />
 
         </Switch>
     </Router>
