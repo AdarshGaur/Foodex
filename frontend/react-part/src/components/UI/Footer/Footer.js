@@ -30,10 +30,11 @@ const Footer = () => {
 </div>
 
 <div className={classes.footercenter}>
+<p className={classes.contacttext}>Contact</p><br/>
 
-    <div>
+    <div> 
         <i className="fa fa-map-marker"></i>
-        <p><span>444 S. Cedros Ave</span> Solana Beach, California</p>
+        <p><span>Ajay Kumar Garg Engineering College</span>Ghaziabad</p>
     </div>
 
     <div>
@@ -50,14 +51,14 @@ const Footer = () => {
         Foodex is a blogging platform where users can share their own recipes and read the recipes posted by others.
     </p>
 
-    <div className={classes.footericons}>
+    {/* <div className={classes.footericons}>
 
         <a href="#"><i className="fab fa-facebook-square"></i></a>
         <a href="#"><i className="fab fa-twitter-square"></i></a>
         <a href="#"><i className="fab fa-instagram-square"></i></a>
         <a href="#"><i className="fab fa-github-square"></i></a>
 
-    </div>
+    </div> */}
 
 </div>
 

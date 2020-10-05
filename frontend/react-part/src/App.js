@@ -45,7 +45,7 @@ function App() {
         <Route path='/main-course' component={MainCourse} />
         <Route path='/others' component={Others} />
         <Route path='/search-page' component={SearchPage} />
-        <Route path='/followers' component={FollowersList} />
+        {/* <Route path='/followers' component={FollowersList} /> */}
         {/* <Route path='/search-page/:searchTerm' component={SearchPage}/> */}
 
       </Switch>

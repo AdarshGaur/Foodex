@@ -69,7 +69,7 @@ class AddRecipe extends Component {
             <label className={classes.labels}><h3>Upload Image:</h3></label>
             {/* <div className={classes.imgcontainer}> */}
             <input className={classes.hidden} id="postimage" type="file" name="img" accept="image/*" />
-            <label className={classes.imgbtn} for="postimage">Add Image</label>
+            <label className={classes.imgbtn} for="postimage"><i className="fa fa-upload" aria-hidden="true"></i>Add Image</label>
             {/* </div> */}
 
             <input className={classes.submitrecipe} type="submit" value="ADD RECIPE" />

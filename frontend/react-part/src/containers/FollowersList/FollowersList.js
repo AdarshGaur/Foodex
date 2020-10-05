@@ -11,12 +11,10 @@ class FollowersList extends Component {
 
     render(){
   return (
-    <>
-    <NavigationBar />
-    <Person />
-    <Footer />
 
-    </>
+    <div>helloewtwretwrt</div>
+
+
   );
 }
 }

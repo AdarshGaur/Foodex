@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import NavigationBar from '../Navbar/Navbar';
 import classes from './Profile.module.css';
-import {Link} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
+import FollowingList from '../../containers/FollowingList/FollowingList';
+import FollowersList from '../../containers/FollowersList/FollowersList';
 
 class Profile extends Component {
 
@@ -57,15 +59,15 @@ class Profile extends Component {
 
     <div className={classes.options}>
         <div>
-            <h5>Following</h5>
+            <h5 className={classes.headingnums}>Following</h5>
             <p className={classes.nums}>34</p>
         </div>
         <div>
-            <h5>Followers</h5>
+            <h5 className={classes.headingnums}>Followers</h5>
             <p className={classes.nums}>34</p>
         </div>
         <div>
-            <h5>Posts</h5>
+            <h5 className={classes.headingnums}>Posts</h5>
             <p className={classes.nums}>34</p>
         </div>
 
@@ -73,6 +75,16 @@ class Profile extends Component {
 
     </div>
     </div>
+
+    <Router>
+        <Switch>
+        {/* <Route path='/profile' exact component={MyRecipes} /> */}
+        <Route path='/profile/following' component={FollowingList} />
+        <Route path='/profile/followers' component={FollowersList} />
+        {/* <Route path='/profile/bookmarks' component={Bookmarks} /> */}
+
+        </Switch>
+    </Router>
 
     </>
   );

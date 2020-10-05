@@ -8,7 +8,10 @@
 }
 
 .totalwrap{
-    background-color: yellow;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.32)),
+    url(../../assets/images/profile-cover.jpg);
+    background-size: cover;
+    background-position: start;
 }
 
 .wrapper{
@@ -42,19 +45,22 @@
  }
 
 .change{
-    color:white;
-    /* height:60px;
-    width:250px; */
+    color: white;
+    font-family: Roboto;
     display: block;
     text-align: center;
     margin-top: 10px;
-    background:blue;
+    background: #ff0000;
+    /* opacity: 90%; */
+    cursor: pointer;
     border-radius: 4px;
     font-size: 15px;
 }
 
 .nums{
     text-align: center;
+    font-family: Roboto !important;
+    color: whitesmoke;
 }
 
 .options{
@@ -66,7 +72,7 @@
 }
 
 .wrapper>h3 {
-    color: black;    
+    color: whitesmoke;    
     /* background-color: white; */
     display: flex;
     align-items: center;
@@ -87,13 +93,20 @@
     justify-content: flex-end;
 }
 
+.headingnums{
+    font-family: Roboto;
+    color: whitesmoke;
+}
+
+
 .bookmarkbtn{
     display: flex;
     align-items: center;
     padding: 0 10px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
-    background-color:  #ff0000;;
+    background-color:  #ff0000;
+    font-family: Roboto !important;
     color: white;
     border: none;
     outline: none;
@@ -149,6 +162,20 @@
         /* align-items: center; */
     
     }
+
+}
+
+@media(max-width: 550px){
+   .savetext{
+       display:none;
+
+   }
+
+   .bookmarkbtn{
+    margin-right: 20px;
+    border-radius: 50%;
+    transform: scale(1.3);
+   }
 
 }
 

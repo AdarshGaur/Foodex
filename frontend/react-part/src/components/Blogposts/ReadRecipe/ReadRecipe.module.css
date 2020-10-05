@@ -1,5 +1,5 @@
 .readrecipe{
-    background-color: #f1f1f1;
+    background-color: white;
     width: 50%;
     /* height:100vh; */
     padding: 0 2%;
@@ -53,12 +53,13 @@
 }
 
 .tags{
-    background-color: aqua;
+    color: #ff1742;
     margin-right: 2%;
-    opacity: 0.54;
+    /* opacity: 0.84; */
     border-radius: 4%;
     font-size: small;
-    padding: 2px;
+    /* color: white; */
+    padding: 3px;
 }
 
 .tipscard{

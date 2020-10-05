@@ -1,6 +1,6 @@
 
 .footerdistributed{
-	background: #ff1742;
+	background: #1d2331;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
 	box-sizing: border-box;
 	width: 100%;
@@ -52,7 +52,7 @@
 }
 
 .footerdistributed .footercompanyname{
-	color:  #222;
+	color:  #fff;
 	font-size: 14px;
 	font-weight: normal;
 	margin: 0;
@@ -98,7 +98,7 @@
 }
 
 .footerdistributed .footercenter p a{
-	color:  lightseagreen;
+	color:  #fff;
 	text-decoration: none;;
 }
 
@@ -122,20 +122,35 @@
 	width: 20%;
 }
 
+
 .footerdistributed .footercompanyabout{
 	line-height: 20px;
-	color:  #c0d3e4;
-	font-size: 13px;
+	color:  #f2f2f2;
+	font-family: Lato;
+	font-size: 15px;
 	font-weight: normal;
 	margin: 0;
 }
 
 .footerdistributed .footercompanyabout span{
+	font-family: Roboto;
 	display: block;
-	color:  #ffffff;
-	font-size: 14px;
-	font-weight: bold;
+	color:  #ff1742;
+	font-weight: 600 !important;
+	font-size: 25px;
+	/* font-weight: bold; */
 	margin-bottom: 20px;
+}
+
+.contacttext{
+	font-family: Roboto;
+	display: block;
+	color:  #ff1742 !important;
+	font-weight: 600 !important;
+	font-size: 25px;
+	/* font-weight: bold; */
+	margin-bottom: 10px !important;	
+	margin-left: 15px !important;
 }
 
 .footerdistributed .footericons{

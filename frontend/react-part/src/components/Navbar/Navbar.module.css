@@ -12,6 +12,8 @@
   /* border-radius: 5px !important; */
 }
 
+
+
 .sbar:focus{
   outline: none;
   box-shadow:none !important;
