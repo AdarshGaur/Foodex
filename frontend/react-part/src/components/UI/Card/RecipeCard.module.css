@@ -24,6 +24,17 @@
   border: 1px solid #ccc;
 }
 
+.readtime{
+  color: #ff1742;
+  font-family:Roboto !important;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.blogtitle{
+  margin-bottom: 0;
+}
+
 .pinkbtn:focus{
 
   border: 1px solid #ccc;

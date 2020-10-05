@@ -9,8 +9,9 @@ const RecipeCard = (props) => {
       <Card style={{ width: "18rem" }} className={classes.box} index={props.pk}>
         <Card.Img variant="top" height="250px" src="holder.js/100px180" src= {props.img} />
         <Card.Body>
-          <Card.Title>{props.title}</Card.Title>
-          <Card.Text>{props.content.substring(0, 50)}...</Card.Text>
+          <Card.Title className={classes.blogtitle}>{props.title}</Card.Title>
+          <p className={classes.readtime}>3 min read</p>
+          <Card.Text>{props.content.substring(0, 151)}...</Card.Text>
           <Button className={classes.pinkbtn} as={Link} 
            to= {{
             pathname:'/read-recipe',

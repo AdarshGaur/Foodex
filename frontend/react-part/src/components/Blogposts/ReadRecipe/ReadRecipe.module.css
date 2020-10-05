@@ -25,6 +25,8 @@
     /* text-align: justify; */
     display: block;
     white-space: pre-line;
+    font-family: Lato;
+    color: #808080;
     /* background-color: aquamarine; */
 }
 
@@ -36,8 +38,31 @@
     /* margin-bottom: 4%; */
 }
 
+.ingredients{
+    font-family: Lato;
+    color: #808080;
+}
+
+
+.extras{
+font-family: Quicksand;
+font-weight: 500;
+color: #708090;
+
+}
+
 .area{
     width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #c9c9c9;
+}
+
+
+.area:focus{
+
+    border: 1px solid #e60e3c;
 }
 
 .foodimg{
@@ -46,20 +71,33 @@
 
 .foodhead{
     margin-top: 4%;
+    font-family: Quicksand;
 }
+
 
 .bulletpoints{
     margin-left: 8%;
 }
 
 .tags{
-    color: #ff1742;
+    background-color: #808080;
     margin-right: 2%;
+    cursor: pointer;
     /* opacity: 0.84; */
     border-radius: 4%;
     font-size: small;
-    /* color: white; */
+    color: white;
     padding: 3px;
+}
+
+.titlerecipe{
+    margin-top: 2%;
+    font-family: Quicksand;
+
+}
+
+.tags:hover{
+    background-color: #ff1742;
 }
 
 .tipscard{
