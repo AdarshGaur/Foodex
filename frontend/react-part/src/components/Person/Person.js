@@ -3,13 +3,13 @@ import {Link} from 'react-router-dom'
 import classes from './Person.module.css'
 
 
-const RecipeCard = (props) => {
+const Person = (props) => {
  return(
-<h1>hi</h1>
+ <h1>hi</h1>
 )
 };
 
 
 
-export default RecipeCard;
+export default Person;
 

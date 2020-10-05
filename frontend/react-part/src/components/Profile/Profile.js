@@ -39,6 +39,11 @@ class Profile extends Component {
   return (
     <>
     <NavigationBar />     
+    <div className={classes.totalwrap}>
+    <div className={classes.bookmarks}>
+    <button className={classes.bookmarkbtn}> <i className="fa fa-bookmark" aria-hidden="true"></i>
+    <span className={classes.savetext}>My Bookmarks</span></button>
+    </div>
     <div className={classes.cover}>
     <div className={classes.wrapper}>
     <div className={classes.dp}>
@@ -47,6 +52,7 @@ class Profile extends Component {
     <label className={classes.change} for="uploadpic">Change Picture</label>
     </div>
     <h3>Sheela Kumari</h3>
+    {/* <p className={classes.bookmark}>my bookmarks</p> */}
     </div>
 
     <div className={classes.options}>
@@ -65,6 +71,7 @@ class Profile extends Component {
 
     </div>
 
+    </div>
     </div>
 
     </>
