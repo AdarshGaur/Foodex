@@ -27,7 +27,7 @@ SECRET_KEY = 'zwx^cvzjf3qob&0i(uiij*3s79$!fm661%1q%^p4-sfsa27fme'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'a964c75a8aed.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0b63f94a8cfb.ngrok.io']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     #customs
     'rest_framework',
     'corsheaders',
-    'blog.apps.BlogConfig',
+    # 'blog.apps.BlogConfig',
+    'blog'
 ]
 
 MIDDLEWARE = [
@@ -147,7 +148,17 @@ MEDIA_URL = '/media/'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
+    'AUTHENTICATION_BACKENDS' : ( 
+    'django.contrib.auth.backends.ModelBackend', 
+    ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    # 'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
+
+    'DEFAULT_PERMISSION_CLASSES': (
+        #'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
+    ),
+
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.MultiPartParser',
@@ -201,3 +212,8 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=60),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=7),
 }
+
+
+
+# "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYwMjQ5NzM2MCwianRpIjoiMTlhNjMwYWU3ZGZiNDNkYmI2YmJkZjgxMjEwYTBkNmUiLCJ1c2VyX2lkIjozfQ.KIHGSjjt8QgIT2Yc5N1MamTQMl2WXJsUHPalYTAVuh4",
+# "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjAxODk2MTYwLCJqdGkiOiJjMzEyNjczMjUzMTc0NzFmOWFmMzk5ODIyMDUyZDNiZCIsInVzZXJfaWQiOjN9.OvqQbBum3JGZORoL67u68ny9SntdWjIAGxpeF6kiYqE"

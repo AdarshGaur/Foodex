@@ -2,7 +2,7 @@ from .models import Recipe, MyUser, OtpModel, LikeSystem
 from rest_framework import serializers
 
 
-#Serializer for registriation of New Users
+
 class RegisterMyUser(serializers.ModelSerializer):
 
 	confirm_password = serializers.CharField(style={'input_type': "password"}, write_only=True,)
@@ -40,7 +40,7 @@ class RegisterMyUser(serializers.ModelSerializer):
 		elif user_already_exists and otp_already_exists==False:
 			raise serializers.ValidationError({'email': 'User already exists'})
 
-		
+
 		password = validated_data['password']
 		confirm_password = validated_data['confirm_password']
 		print('check2')
@@ -49,12 +49,13 @@ class RegisterMyUser(serializers.ModelSerializer):
 
 
 		user = MyUser.objects.create(
+					username = validated_data['username'],
 					name = validated_data['name'],
 					age = validated_data['age'],
 					email = validated_data['email'],
-					username = 'anything',
 					password = validated_data['password'],
 				)
+		user.is_active=False
 		user.set_password(password)
 		user.save()
 
@@ -62,96 +63,61 @@ class RegisterMyUser(serializers.ModelSerializer):
 
 
 
-
-
-# class AuthorSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = MyUser
-#         fields = ('email', 'image_user')
-
-
-
-
-
-# recipe creating/edit/get serializer
 class PostRecipeSerializer(serializers.ModelSerializer):
-	#owner = serializers.ReadOnlyField(source='owner.name')
-	#owner = AuthorSerializer(read_only=True)
+	# owner = serializers.ReadOnlyField(source='owner.name')
 	# email = serializers.ReadOnlyField(source='owner.email')
-	# img = serializers.SerializerMethodField()
+	# img_url = serializers.SerializerMethodField()
 	# pk = serializers.ReadOnlyField(source=id)
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['title', 'img', 'category', 'ingredients', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'read_time', 'veg']
-	
+		fields = ['title', 'category','img', 'ingredients','owner', 'content', 'published_on', 'modified_on', 'cook_time', 'read_time', 'veg']
 
-	# def get_img(self, Recipe):
+
+	# def get_img_url(self, Recipe):
 	# 	request = self.context.get('request')
-	# 	img = Recipe.img.url
-	# 	return request.build_absolute_uri(img)
+	# 	img_url = Recipe.img.url
+	# 	return request.build_absolute_uri(img_url)
 
 
-
-
-
-# good
+# recipe creating/edit/get serializer
 class RecipeSerializer(serializers.ModelSerializer):
 	#owner_pk = serializers.IntegerField(source=owner.pk)
-	#owner = serializers.ReadOnlyField(source='owner.name')
+	owner = serializers.ReadOnlyField(source='owner.name')
 	# email = serializers.ReadOnlyField(source='owner.email')
-	img_url = serializers.SerializerMethodField()
-	#author_name = serializers.CharField(owner.name)
-	authorname = serializers.SerializerMethodField('get_authorname_from_owner')
-	#id = serializers.IntegerField()
-
-
+	# img_url = serializers.SerializerMethodField()
+	
+	# pk = serializers.ReadOnlyField(source=id)
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['pk', 'title', 'img_url', 'category', 'ingredients', 'content', 'owner', 'authorname', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
+		fields = ['pk', 'title', 'img', 'category', 'ingredients', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
 	
 
-	def get_img_url(self, Recipe):
-		request = self.context.get('request')
-		img_url = Recipe.img.url
-		return request.build_absolute_uri(img_url)
-
-	# def get_id(self, Recipe):
-	# 	user_id = Recipe.owner.id
-	# 	return user_id
-
-	def get_authorname_from_owner(self, Recipe):
-		name = Recipe.owner.name
-		return name
+	# def get_img_url(self, Recipe):
+	# 	request = self.context.get('request')
+	# 	img_url = Recipe.img.url
+	# 	return request.build_absolute_uri(img_url)
 
 	# def get_owner_pk(self, Recipe):
 	# 	request = self.context.get('request')
 	# 	owner_pk = self.owner.pk
 	# 	return owner_pk
 
-
-
-
-
 #cards serializer
 class RecipeCardSerializer(serializers.ModelSerializer):
-	#owner = serializers.ReadOnlyField(source='owner.name')
-	img_url = serializers.SerializerMethodField()
+	owner = serializers.ReadOnlyField(source='owner.name')
+	# img_url = serializers.SerializerMethodField()
 	# only for cards
 	class Meta:
 		model = Recipe
-		fields = ['pk', 'title', 'img_url', 'content', 'owner', 'cook_time', 'read_time', 'points', 'veg']
+		fields = ['pk', 'title', 'img', 'content', 'owner', 'read_time', 'points', 'veg']
 
 
-	def get_img_url(self, Recipe):
-		request = self.context.get('request')
-		img_url = Recipe.img.url
-		return request.build_absolute_uri(img_url)
-
-
-
+	# def get_img_url(self, Recipe):
+	# 	request = self.context.get('request')
+	# 	img_url = Recipe.img.url
+	# 	return request.build_absolute_uri(img_url)
 
 
 #serializer for user details
@@ -161,7 +127,7 @@ class MyUserSerializer(serializers.ModelSerializer):
 	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
 	class Meta:
 		model = MyUser
-		fields = ['name', 'email', 'age', 'image_user', 'followers', 'following', 'bookmark_count', 'recipes']
+		fields = ['name', 'email', 'age', 'image_user', 'followers', 'following', 'bookmark_count', 'posts', 'recipes']
 
 
 
@@ -173,18 +139,11 @@ class MyUserSerializer(serializers.ModelSerializer):
 	# 	return request.build_absolute_uri(img_url)
 
 
-
-
-
-
 #lkjghgfghkfghkfjhtbd ytjvd ytjxcyfoyulrfyv.fgjkd' ghyisfhild
 # .mgjkfbd li;suda fghps9da;gdugjb[io'nha/gki fytdapg;hoipreaht;jkl
 # g gjklunlsrdhyiobrea gyhfidgy hiljkdagytiljkafhisjkdafbiasudgbfguasdhfg;iouasdyfgjkdgfjk
 # asdfhuisdhfklsdayfiljkadfbguioadfgb;uioadghiodafghladuytghkl.jagfjh
 # kdagfaisdfnoiashfl;kahfoalkhioahfkldabngjkdfayt ihk;jagpdifhg[ofdnglfkdaghi
 # kasldfhlksjafhkljsahfudfgyp9doglkdngpfidgh[0fdag]]]
-
-
-
 # class ProfileSerializer(serializers.ModelSerializer):
-# 	
+

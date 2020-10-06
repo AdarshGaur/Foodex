@@ -38,7 +38,7 @@ class Recipe(models.Model):
     veg = models.BooleanField()
     cook_time = models.PositiveIntegerField()
     read_time = models.PositiveIntegerField(default=5)
-    img = models.ImageField(upload_to=upload_path, null=False, blank=False)
+    img = models.ImageField(upload_to=upload_path, null=True, blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='recipes', on_delete=models.CASCADE)
     published_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
@@ -60,6 +60,7 @@ class MyUser(AbstractUser):
     password_regex = RegexValidator("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$", "Invalid Password")
 
 
+
     name = models.CharField(blank=False, max_length=50, validators=[name_regex])
     #recipemagic = models.PositiveIntegerField(default=0)
     followers = models.PositiveIntegerField(default=0)
@@ -67,18 +68,17 @@ class MyUser(AbstractUser):
     image_user = models.ImageField(upload_to=user_upload_path, default='default-avatar.png')
     age = models.IntegerField(default=22, blank=False, validators=[MaxValueValidator(100), MinValueValidator(5)])
     email = models.EmailField(blank=False, unique=True, validators=[email_regex])
-    is_active = models.BooleanField(default=False)
-    username = models.CharField(max_length=50, unique=False)
+    #is_active = models.BooleanField(default=False)
+    username = models.CharField(max_length=50, unique=True)
     password = models.CharField(blank=False, max_length=21, validators=[password_regex])
     bookmark_count = models.PositiveIntegerField(default=0)
-    #recipe_count = models.IntegerField(default=0)
+    posts = models.IntegerField(default=0)
 
-    
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'age', 'username']
+    REQUIRED_FIELDS = ['name', 'username', 'password']
 
     def __str__(self):
-        return self.email
+        return self.name
 
 
 
@@ -109,9 +109,6 @@ class BookmarkRecord(models.Model):
 
 
 
-# class FollowersRecord(models.Model):
-#     active = models.BooleanField()
-#     follower = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='follow_by', on_delete=models.CASCADE)
-#     following = models.ForeignKey(MyUser, related_name='following', on_delete=models.CASCADE)
+
 
 
