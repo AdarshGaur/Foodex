@@ -2,7 +2,7 @@
 
 .startersCover{
     color: white;
-    font-size: 4rem;
+    font-size: 6rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,7 +30,7 @@
 
 .dessertsCover{
     color: white;
-    font-size: 4rem;
+    font-size: 6rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -44,7 +44,7 @@
 
 .maincourseCover{
     color: white;
-    font-size: 4rem;
+    font-size: 6rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -58,7 +58,7 @@
 
 .othersCover{
     color: white;
-    font-size: 4rem;
+    font-size: 6rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -84,5 +84,34 @@
       .grid{
           grid-template-columns: 1fr;
           /* overflow: hidden; */
+      }
+  }
+
+  @media(max-width: 390px){
+    .startersCover, .dessertsCover, .othersCover{
+        font-size: 4rem;
+      }
+  }
+
+  @media(max-width: 586px){
+    .maincourseCover{
+        font-size: 4rem;
+      }
+  }
+
+  @media(max-width: 420px){
+    .maincourseCover{
+        font-size: 2.8rem;
+    }
+
+    .drinksCover{
+        font-size: 1.7rem !important;
+    }
+  }
+
+
+  @media(max-width: 660px){
+    .drinksCover{
+        font-size: 2.5rem;
       }
   }
