@@ -42,7 +42,7 @@
 	padding: 0;
 }
 
-.footerdistributed .footerlinks a{
+.footerdistributed .footerlinks .categoryroutes{
 	display:inline-block;
 	line-height: 1.8;
   font-weight:400;
@@ -50,6 +50,8 @@
 	text-decoration: none;
 	color:  inherit;
 }
+
+
 
 .footerdistributed .footercompanyname{
 	color:  #fff;
@@ -114,6 +116,22 @@
 
 .footerdistributed .footerlinks .link1:after {
   content: none;
+
+}
+
+.footerdistributed .footerlinks .link1{
+	display:inline-block;
+	line-height: 1.8;
+  font-weight:400;
+  margin-right: 3px;
+	text-decoration: none;
+	color:  inherit;
+}
+
+.footerdistributed .footerlinks .link1:hover , .footerdistributed .footerlinks .categoryroutes:hover{
+	color: #ff1742;
+	font:Roboto;
+	font-weight: 600;
 }
 
 /* Footer Right */

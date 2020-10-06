@@ -63,10 +63,24 @@ class AddRecipe extends Component {
                 {this.state.recipe.content}
                 </h5>
 
+<div className={classes.btnwrap}>
+                <div className={classes.btndivfirst}>
                 <LikeButton pk={this.props.location.state.recipeid} />
                 <BookmarkButton pk={this.props.location.state.recipeid} />
-                <button><Link to="/add-recipe">Edit</Link></button>
-                <button>delete</button>
+                {/* <button><Link to="/edit-recipe">Edit</Link></button> */}
+                </div>
+                <div className={classes.btndivsecond}>                
+                    <Button className={classes.editbtn} as={Link} 
+           to= {{
+            pathname:'/edit-recipe',
+            state:{recipeid: this.props.location.state.recipeid}
+          }} 
+          >Edit</Button>
+
+                <button className={classes.deletebtn}>delete</button>
+                </div>
+
+</div>
 
                 <h2>Drop a Suggestion<i className="far fa-sticky-note"></i></h2>
                 <textarea rows="10" className={classes.area} name = 'instructions'  placeholder={this.state.instructions} onChange = {this.handlechangeall} />

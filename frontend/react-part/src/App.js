@@ -8,6 +8,7 @@ import SignUp from './components/Navbar/pages/SignUp';
 import Otp from './components/Navbar/pages/Otp';
 import Profile from './components/ProfileElements/Profile/Profile'
 import AddRecipe from './components/Blogposts/AddRecipe/AddRecipe'
+import EditRecipe from './components/Blogposts/EditRecipe/EditRecipe'
 import ReadRecipe from './components/Blogposts/ReadRecipe/ReadRecipe'
 import Starters from './components/Categories/Starters'
 import MainCourse from './components/Categories/MainCourse'
@@ -35,6 +36,7 @@ function App() {
         <Route path='/profile' component={Profile} />
         <Route path='/otp' component={Otp} />
         <Route path='/add-recipe' component={AddRecipe} />
+        <Route path='/edit-recipe' component={EditRecipe} />
         <Route path='/read-recipe' component={ReadRecipe} />
         <Route path='/starters' component={Starters} />
         <Route path='/drinks-smoothies' component={Drinks} />

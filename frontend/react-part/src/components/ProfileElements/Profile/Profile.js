@@ -11,6 +11,10 @@ import Bookmarks from '../Bookmarks/Bookmarks';
 
 class Profile extends Component {
 
+    state={
+        userdetails:[]
+    }
+
     upload(e){
         console.warn(e.target.files)
         const files= e.target.files
@@ -26,16 +30,18 @@ class Profile extends Component {
     }
 
     componentDidMount(){
- axios.get('https://04fab899189c.ngrok.io/user/1/',
+        const userpk= localStorage.getItem('mypk')
+ axios.get('https://a964c75a8aed.ngrok.io/user/' +userpk+'/',
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    // 'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 },
                 
             })
             .then((resp)=>{
-                console.log(resp)          
+                console.log(resp.data)    
+                this.setState({userdetails: resp.data})
               })
 
     }
@@ -53,11 +59,11 @@ class Profile extends Component {
     <div className={classes.cover}>
     <div className={classes.wrapper}>
     <div className={classes.dp}>
-    <img  src="https://images.unsplash.com/photo-1494548162494-384bba4ab999?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"/>
+    <img src={this.state.userdetails.image_user} />
     <input className={classes.avatar} id="uploadpic" type="file" className={classes.avatar} onChange={(e)=>this.upload(e)} name="img" accept="image/*" />
     <label className={classes.change} htmlFor="uploadpic">Change Picture</label>
     </div>
-    <h3>Sheela Kumari</h3>
+    <h3>{this.state.userdetails.name}</h3>
     {/* <p className={classes.bookmark}>my bookmarks</p> */}
     </div>
 
