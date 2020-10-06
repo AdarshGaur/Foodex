@@ -1,0 +1,205 @@
+.cover{
+    /* background: pink; */
+    background-size: cover;
+    height: 40vh;
+    /* align-items: center; */
+   
+
+}
+
+.totalwrap{
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.32)),
+    url(../../../assets/images/profile-cover.jpg);
+    background-size: cover;
+    background-position: start;
+}
+
+.wrapper{
+    /* height: 40vh; */
+    display: flex;
+    /* background-color: teal; */
+    /* justify-content: center; */
+    align-items: flex-start;
+}
+
+.dp>img{
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    margin-left:5px;
+}
+
+.dp{
+    margin-left: 20px;
+    margin-right: 10px;
+    /* background: red; */
+    height: 130px;
+    width:110px;
+}
+
+ .avatar{
+    display: block;
+    /* color: yellow; */
+    background-color: aliceblue;
+    display: none;
+ }
+
+
+
+.change{
+    color: white;
+    font-family: Roboto;
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    background: #ff0000;
+    /* opacity: 90%; */
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 15px;
+}
+
+.nums{
+    text-align: center;
+
+}
+
+.options{
+    height: 10vh;
+    /* background: chocolate; */
+    display: flex;
+    align-items: baseline;
+    justify-content: space-around;
+}
+
+.wrapper>h3 {
+    color: whitesmoke;    
+    /* background-color: white; */
+    display: flex;
+    align-items: center;
+    height: 130px;
+}
+
+/* .bookmark{
+    text-align: right;
+    background-color: lawngreen;
+    
+} */
+
+.bookmarks{
+    padding-top: 2vh;
+    /* background-color: lawngreen; */
+    height: 7.5vh;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+
+.profilenums:hover{
+    text-decoration: none;
+    font-family: Roboto;
+    color: #ccc;
+
+}
+.profilenums{
+    text-decoration: none;
+    font-family: Roboto;
+    color: whitesmoke;
+
+}
+
+
+.bookmarkbtn{
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background-color:  #ff0000;
+    font-family: Roboto !important;
+    color: white;
+    border: none;
+    outline: none;
+}
+
+.bookmarkbtn:active{
+    background-color: #d10f0f;
+}
+
+.bookmarkbtn:focus{
+    outline: none;
+    border: none;
+}
+
+.savetext{
+    margin-left: 5px;
+    font-weight: 400;
+    font-family: Lato;
+    color: white;
+    text-decoration: none;
+    
+    /* color: black; */
+}
+
+.savetext:hover{
+    color: white;
+    text-decoration: none;
+
+    /* color: black; */
+}
+
+@media(max-width: 1030px){
+    .wrapper{
+        height: 30vh;
+        display: flex;
+        /* background-color: teal; */
+        /* justify-content: center; */
+        align-items: center;
+    }
+
+    .cover{
+
+        height: 40vh;
+        /* align-items: center; */
+    
+    }
+
+    .dp{
+        margin-left: 10%;
+    }
+
+}
+@media(min-width: 750px){
+    .wrapper{
+        height: 30vh;
+        display: flex;
+        /* background-color: teal; */
+        /* justify-content: center; */
+        align-items: center;
+    }
+
+    .cover{
+
+        height: 40vh;
+        /* align-items: center; */
+    
+    }
+
+}
+
+@media(max-width: 550px){
+   .savetext{
+       display:none;
+
+   }
+
+   .bookmarkbtn{
+    margin-right: 20px;
+
+    border-radius: 50%;
+    transform: scale(1.3);
+   }
+
+}
+

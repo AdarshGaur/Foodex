@@ -4,6 +4,7 @@ import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../services/serverService';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import LoadingOverlay from 'react-loading-overlay';
 
 
 const validEmailRegex = RegExp(
@@ -36,7 +37,8 @@ class Form extends Component{
      passwordError : "fine",
      confirmError:"fine",
      nameError:"fine",
-     redirect: null
+     redirect: null,
+     isLoading: false
   }
 
 
@@ -44,11 +46,12 @@ handlechangeall = (event) =>{
  this.setState ( { [event.target.name] :event.target.value  } )
 }
 
-createNotification = () => {
+createNotification = (info) => {
+  NotificationManager.error( info, 'Error');
+};
 
-        NotificationManager.success('Success message', 'Title here');
-
-
+createSuccess = (info) => {
+  NotificationManager.success( info, 'Success');
 };
 
 validemail=()=>{
@@ -134,9 +137,9 @@ confirmclean=()=>{
 handlesubmit = (event) => {
 
   
-  // if(this.valid()){
+  // if(!this.state.disabled){
+    this.setState({ isLoading: true });
 
-    // if(this.validname() && this.validage() && this.validemail() && this.validpassword() && this.validconfirm()){
     const data={
       name: this.state.name,
       email: this.state.email,
@@ -150,21 +153,25 @@ handlesubmit = (event) => {
 
   console.log(data);
 
-// axios.post('https://776d58591d10.ngrok.io/auth/register/', data)
 ServerService.signup(data)
 .then((resp)=>{
   console.log(resp)
 
   if (resp.data.message === "otp_sent") {
+    this.createSuccess("OTP sent to the mail")
     localStorage.setItem('email', this.state.email)
+    this.setState({isLoading: false});
     this.setState({ redirect: "/otp" });
   }
 
 })
-.catch(err => (console.log(err)))
-
-
-
+.catch(err => {
+  console.log(err.response)
+  this.setState({isLoading: false})
+  if(err.response.data.email){
+  this.createNotification(err.response.data.email)
+  }
+})
 
 // }
  }
@@ -178,6 +185,11 @@ render(){
   }
 
  return(
+  <LoadingOverlay
+  active={this.state.isLoading}
+  spinner
+  text='Loading...'
+  >
   <div className={classes.signup}>
 
 
@@ -191,11 +203,6 @@ render(){
     <input  type="text" name="name" className={classes.field} required placeholder={this.state.name}  
     onChange={this.handlechangeall} onBlur={this.validname} onFocus={this.nameclean}/> <br/>
     <p className={(this.state.nameError==="fine")? classes.invisible: classes.visible}>{this.state.nameError}</p>
-   
-    {/* <label className={classes.labelfield}> Age </label><br />
-    <input  type="number" name="age" className={classes.field} required placeholder={this.state.age}  
-    onChange={this.handlechangeall} onBlur={this.validage} onFocus={this.ageclean}/> <br/>
-    <p className={(this.state.ageError==="fine")? classes.invisible: classes.visible}>{this.state.ageError}</p> */}
 
     <label className={classes.labelfield}> Email </label><br />
     <input  type="email" name="email" className={classes.field} required placeholder= {this.state.email} 
@@ -222,9 +229,11 @@ render(){
    </form>
    </div>
   </div>
+  </LoadingOverlay>
  )
 }
 
 }
+
 
 export default Form;

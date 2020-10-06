@@ -3,6 +3,8 @@ import classes from './Signform.module.css';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../services/serverService';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import LoadingOverlay from 'react-loading-overlay';
 
 const validPasswordRegex = RegExp(
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
@@ -24,6 +26,14 @@ class PassResetform extends Component{
 handlechangeall = (event) =>{
  this.setState ( { [event.target.name] :event.target.value  } )
 }
+
+createSuccess = (info) => {
+  NotificationManager.success( info, 'Success');
+};
+
+createNotification = (info) => {
+  NotificationManager.error( info, 'Error');
+};
 
 validconfirm=()=>{
 
@@ -59,6 +69,8 @@ confirmclean=()=>{
 
 handlesubmit = (event) => {
 
+  this.setState({isLoading: true});
+
     const data={
         email: this.state.email,
         password: this.state.password,
@@ -77,19 +89,25 @@ handlesubmit = (event) => {
     console.log(resp)
 
     if (resp.status === 202) {
-      // localStorage.setItem("token", "abcd");
       localStorage.setItem("refresh_token",resp.data.refresh)
       localStorage.setItem("access_token",resp.data.access)
+      this.setState({isLoading: false});
       this.setState({ redirect: "/" });
     }
   
+  })
+  .catch(error => {
+    console.log(error.response)
+    this.setState({isLoading: false});
+    if(error.response.data.message){
+      this.createNotification(error.response.data.message)
+    }
+
   })
 
 
 }
  
-
-
 
 render(){
 
@@ -98,6 +116,13 @@ render(){
   }
 
  return(
+
+  <LoadingOverlay
+  active={this.state.isLoading}
+  spinner
+  text='Loading...'
+  >
+
   <div className={classes.signup}>
     <div className={classes.imgbox}>
 
@@ -120,6 +145,7 @@ render(){
    </form>
    </div>
   </div>
+  </LoadingOverlay>
  )
 }
 

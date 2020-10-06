@@ -3,13 +3,16 @@ import classes from './Signform.module.css';
 import {Redirect, Link} from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../services/serverService'
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import LoadingOverlay from 'react-loading-overlay';
 
 class Otpform extends Component{
   
     state = {   email: localStorage.getItem('email'),
       otp: "otp",
       redirect: null,
-      ageError:"fine"
+      ageError:"fine",
+      isLoading: false
   }
 
 
@@ -17,9 +20,17 @@ handlechangeall = (event) =>{
  this.setState ( { [event.target.name] :event.target.value  } )
 }
 
+createSuccess = (info) => {
+  NotificationManager.success( info, 'Success');
+};
 
+createNotification = (info) => {
+  NotificationManager.error( info, 'Error');
+};
 
 handlesubmit = (event) => {
+
+  this.setState({ isLoading: true });
   
 const data={
   email: this.state.email,
@@ -38,11 +49,19 @@ console.log(data)
       console.log(resp)
       localStorage.setItem("refresh_token",resp.data.refresh)
       localStorage.setItem("access_token",resp.data.access)
+      this.setState({isLoading: false});
       this.setState({ redirect: "/" });
     }
   
   })
-  .catch(error => console.log(error.resp))
+  .catch(error => {
+    console.log(error.response)
+    this.setState({isLoading: false});
+    if(error.response.data.message==="wrong_otp"){
+      this.createNotification("Wrong OTP")
+    }
+
+  })
 
  }
 
@@ -61,11 +80,8 @@ console.log(resenddata)
     console.log(resp)
 
     if (resp.status === 200) {
-      // localStorage.setItem("token", "abcd");
       console.log(resp)
-      // localStorage.setItem("refresh_token",resp.data.refresh)
-      // localStorage.setItem("access_token",resp.data.access)
-      // this.setState({ redirect: "/" });
+      this.createSuccess("OTP sent again")
     }
   
   })
@@ -81,6 +97,12 @@ render(){
   }
 
  return(
+  <LoadingOverlay
+  active={this.state.isLoading}
+  spinner
+  text='Loading...'
+  >
+
   <div className={classes.signup}>
     <div className={classes.imgbox}>
 
@@ -94,10 +116,11 @@ render(){
     <p className={(this.state.ageError==="fine")? classes.invisible: classes.visible}>{this.state.ageError}</p>
 
     <input type="submit" value="Submit" className={classes.sub}/><br/>
-    <p className={classes.reotp} onClick={this.resend}><Link className={classes.linkswitch1}> Resend OTP </Link></p>
+    <p className={classes.reotp} onClick={this.resend}><span className={classes.linkswitch1}> Resend OTP </span></p>
    </form>
    </div>
   </div>
+  </LoadingOverlay>
  )
 }
 

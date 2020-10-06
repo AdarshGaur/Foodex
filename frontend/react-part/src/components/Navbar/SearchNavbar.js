@@ -105,8 +105,8 @@ class SearchNavbar extends Component{
                 <NavDropdown.Item as={Link} className={classes.dditems} to="/drinks-smoothies">Drinks and Smoothies</NavDropdown.Item>
                 <NavDropdown.Item as={Link} className={classes.dditems} to="/others">Others</NavDropdown.Item>
                 </NavDropdown>
-                <Nav.Link as={Link} className={classes.logopt} to="/add-recipe">Post</Nav.Link>
-                <Nav.Link as={Link} className={classes.logopt} to="/profile">My Profile</Nav.Link>
+                <Nav.Link as={Link} className={classes.logopt} to="/add-recipe"><i class="fa fa-edit" aria-hidden="true"></i>Post</Nav.Link>
+                <Nav.Link as={Link} className={classes.logopt} to="/profile"><i className="fa fa-user" aria-hidden="true"></i>My Profile</Nav.Link>
                 <Nav.Link as={Link} className={classes.navoptions} to="/" onClick={logoutHandler}>Logout</Nav.Link>
               </Nav>
               

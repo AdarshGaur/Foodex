@@ -35,11 +35,11 @@ class AddRecipe extends Component {
                 <div className={classes.readrecipe}>
                     <span className={classes.tags}>Drinks and Smoothies</span>
                     <span className={classes.tags}>Vegetarian</span>
-                <h1>{this.state.recipe.title}</h1>
+                <h1 className={classes.titlerecipe}>{this.state.recipe.title}</h1>
                 {/* <h1>Butter Paneer</h1> */}
                 <div className={classes.options}>
-                <p>by {this.state.recipe.owner}</p>
-        <p>Cooking Time: {this.state.recipe.cook_time} mins</p>
+                <p className={classes.extras}>by {this.state.recipe.owner}</p>
+        <p className={classes.extras}>Cooking Time: {this.state.recipe.cook_time} mins</p>
                 </div>
                 <div className={classes.imgwrap}>
                 <img  className={classes.foodimg} 
@@ -49,7 +49,7 @@ class AddRecipe extends Component {
                 />
                 </div>
                 <h2 className={classes.foodhead}>Ingredients</h2>
-                <h5>
+                <h5 className={classes.ingredients}>
                     {/* Tomato, Onion, Paneer, Pickle, Garlic, Butter, Masala, Cashews, Pickle, Ginger, Wheat. */}
                     {this.state.recipe.ingredients}
                 </h5>
@@ -66,7 +66,7 @@ class AddRecipe extends Component {
                 <LikeButton pk={this.props.location.state.recipeid} />
                 <BookmarkButton pk={this.props.location.state.recipeid} />
 
-                <h2>Drop a Suggestion</h2>
+                <h2>Drop a Suggestion<i className="far fa-sticky-note"></i></h2>
                 <textarea rows="10" className={classes.area} name = 'instructions'  placeholder={this.state.instructions} onChange = {this.handlechangeall} />
 
                 </div>

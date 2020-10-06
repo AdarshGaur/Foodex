@@ -66,11 +66,13 @@
 
 }
 
+
+
 .linkswitch1{
     text-decoration: none;
     color: #696667;
     margin-right: 20%;
-
+    cursor:pointer;
 }
 
 .linkswitch2{

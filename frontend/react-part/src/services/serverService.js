@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://6f0699832a56.ngrok.io/";
+const BASE_URL = "https://d5a4466f9886.ngrok.io/";
 
 class ServerService {
 
@@ -10,6 +10,8 @@ class ServerService {
 
     signup(data){
       return axios.post(BASE_URL + 'auth/register/', data)
+
+      
    }
 
     otp(data){

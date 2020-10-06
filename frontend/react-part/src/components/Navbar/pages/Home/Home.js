@@ -5,6 +5,7 @@ import RecipeCard from '../../../UI/Card/RecipeCard'
 import NavigationBar from '../../Navbar';
 import axios from 'axios';
 import ServerService from '../../../../services/serverService'
+import Footer from '../../../UI/Footer/Footer';
 
 class Home extends Component {
   state = {
@@ -37,7 +38,7 @@ class Home extends Component {
       <h1 className={classes.recentrecipes}>Recent Recipes</h1>
     <div className={classes.grid}>
     {recipecards}
-
+      <Footer />
     </div>
     </>
     )
