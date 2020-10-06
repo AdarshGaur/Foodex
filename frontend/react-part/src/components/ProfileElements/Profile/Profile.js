@@ -55,7 +55,7 @@ class Profile extends Component {
     <div className={classes.dp}>
     <img  src="https://images.unsplash.com/photo-1494548162494-384bba4ab999?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"/>
     <input className={classes.avatar} id="uploadpic" type="file" className={classes.avatar} onChange={(e)=>this.upload(e)} name="img" accept="image/*" />
-    <label className={classes.change} for="uploadpic">Change Picture</label>
+    <label className={classes.change} htmlFor="uploadpic">Change Picture</label>
     </div>
     <h3>Sheela Kumari</h3>
     {/* <p className={classes.bookmark}>my bookmarks</p> */}

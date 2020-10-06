@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import LogIn from './components/Navbar/pages/LogIn';
 import SignUp from './components/Navbar/pages/SignUp';
 import Otp from './components/Navbar/pages/Otp';
-// import Profile from './components/Profile/Profile'
 import Profile from './components/ProfileElements/Profile/Profile'
 import AddRecipe from './components/Blogposts/AddRecipe/AddRecipe'
 import ReadRecipe from './components/Blogposts/ReadRecipe/ReadRecipe'
@@ -28,8 +27,6 @@ function App() {
     <Router>
       <Switch>
         <Route path='/' exact component={Home} />
-
-        {/* <Route path='/contact-us' component={ContactUs} /> */}
         <Route path='/sign-up' component={SignUp} />
         <Route path='/sign-in' component={LogIn} />
         <Route path='/forgot-password' component={ForgotPassword} />
@@ -45,8 +42,6 @@ function App() {
         <Route path='/main-course' component={MainCourse} />
         <Route path='/others' component={Others} />
         <Route path='/search-page' component={SearchPage} />
-        {/* <Route path='/followers' component={FollowersList} /> */}
-        {/* <Route path='/search-page/:searchTerm' component={SearchPage}/> */}
 
       </Switch>
       <NotificationContainer />
@@ -58,5 +53,6 @@ function App() {
 }
 
 export default App;
+
 
 

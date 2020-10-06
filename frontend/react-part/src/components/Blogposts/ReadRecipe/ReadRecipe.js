@@ -65,6 +65,8 @@ class AddRecipe extends Component {
 
                 <LikeButton pk={this.props.location.state.recipeid} />
                 <BookmarkButton pk={this.props.location.state.recipeid} />
+                <button><Link to="/add-recipe">Edit</Link></button>
+                <button>delete</button>
 
                 <h2>Drop a Suggestion<i className="far fa-sticky-note"></i></h2>
                 <textarea rows="10" className={classes.area} name = 'instructions'  placeholder={this.state.instructions} onChange = {this.handlechangeall} />

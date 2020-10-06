@@ -18,6 +18,7 @@
     "react-loading-overlay": "^1.0.1",
     "react-notifications": "^1.7.2",
     "react-scripts": "3.4.3",
+    "react-select": "^3.1.0",
     "styled-components": "^5.2.0"
   },
   "scripts": {

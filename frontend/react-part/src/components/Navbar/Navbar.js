@@ -31,10 +31,6 @@ class NavigationBar extends Component{
   }
   
 
- 
-
-
-
 
   render() {
 
@@ -58,7 +54,7 @@ class NavigationBar extends Component{
 
       if(auth){
         return(
-          <Navbar bg="light" expand="lg" sticky="top">
+          <Navbar bg="light" expand="lg" sticky="top" className={classes.navshadow}>
             <Link className={classes.brand} to="/">Foodex</Link>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">

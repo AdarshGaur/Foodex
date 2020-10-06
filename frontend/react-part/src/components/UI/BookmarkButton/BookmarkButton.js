@@ -51,7 +51,7 @@ class BookmarkButton extends Component {
             return (
             
                 <button onClick={this.handlechange} className={classes.bookmarkbtn} > 
-                <i class="far fa-bookmark"></i>
+                <i className="far fa-bookmark"></i>
                 </button>
             )
         }

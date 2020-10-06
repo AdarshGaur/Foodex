@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import NavigationBar from '../../Navbar/Navbar';
-import classes from './AddRecipe.module.css';
+import classes from '../AddRecipe/AddRecipe.module.css';
 import {Link, Redirect} from 'react-router-dom';
 import {Card, Button} from 'react-bootstrap'
 import axios from 'axios'
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 
-class AddRecipe extends Component {
+class EditRecipe extends Component {
 
     state = { 
     title:"",
@@ -153,7 +153,7 @@ class AddRecipe extends Component {
     }
 }
 
-export default AddRecipe;
+export default EditRecipe;
 
 
 
