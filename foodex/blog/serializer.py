@@ -104,6 +104,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 	img_url = serializers.SerializerMethodField()
 	#author_name = serializers.CharField(owner.name)
 	authorname = serializers.SerializerMethodField('get_authorname_from_owner')
+	#id = serializers.IntegerField()
 
 
 	#this serializer include both create and update recipe
@@ -116,6 +117,10 @@ class RecipeSerializer(serializers.ModelSerializer):
 		request = self.context.get('request')
 		img_url = Recipe.img.url
 		return request.build_absolute_uri(img_url)
+
+	# def get_id(self, Recipe):
+	# 	user_id = Recipe.owner.id
+	# 	return user_id
 
 	def get_authorname_from_owner(self, Recipe):
 		name = Recipe.owner.name

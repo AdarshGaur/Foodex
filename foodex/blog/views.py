@@ -236,7 +236,7 @@ class VerifyOTP(APIView):
         tokens = {
             'refresh': str(r_token),
             'access': str(a_token),
-            'pk': userspk
+            'my_pk': userspk
         }
         #message = {'message': 'email_verified'}
         return Response(tokens, status = status.HTTP_200_OK)
@@ -401,32 +401,32 @@ class NewPassword(APIView):
 
 
 
-# class LoginAuth(APIView):
-#     permission_classes = [permissions.AllowAny]
+class LoginAuth(APIView):
+    permission_classes = [permissions.AllowAny]
 
-#     def post(self, request):
-#         email = request.data.get('email')
-#         password = request.data.get('password')
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        
+        try:
+            user_exists = MyUser.objects.get(email__iexact=email)
+        except MyUser.DoesNotExist:
+            message = {'message': 'User Not Found.'}
+            return Response(message ,status= status.HTTP_401_UNAUTHORIZED)
 
-#         try:
-#             user_exists = MyUser.objects.get(email__iexact=email)
-#         except MyUser.DoesNotExist:
-#             message = {'message': 'User Not Found.'}
-#             return Response(message ,status= status.HTTP_401_UNAUTHORIZED)
+        if user_exists.check_password(password):
+            userspk = user_exists.pk
+            r_token = TokenObtainPairSerializer().get_token(request.user)
+            a_token = AccessToken().for_user(request.user)
+            message = {
+            'refresh': str(r_token),
+            'access': str(a_token),
+            'my_pk': userspk
+            }
+        else:
+            message = {'message':'Wrong Password'}
 
-#         user_password = user_exists.password.clean()
-#         if user_password != password:
-#             message = {'message': 'Wrong Password. Try Again !'}
-#         else:
-#             userspk = user_exists.pk
-#             r_token = TokenObtainPairSerializer().get_token(request.user)
-#             a_token = AccessToken().for_user(request.user)
-#             message = {
-#             'refresh': str(r_token),
-#             'access': str(a_token),
-#             'pk': userspk
-#             }
-#         return Response(message, status = status.HTTP_200_OK)
+        return Response(message, status = status.HTTP_200_OK)
 
 
 

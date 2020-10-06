@@ -36,14 +36,14 @@ urlpatterns = [
 	path('recipe/<int:pk>/', views.RecipeDetail.as_view()),             #for recipes details
 	# path('users/', views.MyUserList.as_view()),                          #for users list 'no_use'
 	path('user/<int:pk>/', views.MyUserDetail.as_view()),                  #for users details
-	path('my-account/', views.MyAccountDetail.as_view()),                  #for my-account details
+	# path('my-account/', views.MyAccountDetail.as_view()),                  #for my-account details
 	#path('user/<int:pk>/bookmark-list/', views.Bookmarklist.as_view()),    #for listing bookmarked recipes
 
 
 	#authentication
 	path('api-auth/', include('rest_framework.urls')),
 	path('api/token/refresh/', TokenRefreshView.as_view()),                   #for refresh token
-	path('api/token/', TokenObtainPairView.as_view()),                        #for access token / login
+	path('api/token/', views.LoginAuth.as_view()),                        #for access token / login
 	path('auth/register/', views.CreateUser.as_view()),                       #for sign up
 	path('auth/register/otp/', views.VerifyOTP.as_view()),                    #for verifying OTP
 	path('auth/register/otp/resend/', views.ResendOtp.as_view()),             #for resending the otp
