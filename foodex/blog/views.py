@@ -27,16 +27,25 @@ from django.db.models import Q, F
 
 class CreateRecipe(APIView):
     print('started')
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     print('check1')
     def post(self, request, format=None):
         print('check2')
-        serializer = PostRecipeSerializer(data=request.data)
+        serializer = PostRecipeSerializer(data=request.data, context={'request': request})
         print('check3')
         if serializer.is_valid():
-            serializer.save(owner=self.request.user)
+            print('check4')
+            serializer.save()
+            print('check5')
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    # def upload_docs(self, request):
+    #     try:
+    #         file = request.data['file']
+    #     except KeyError:
+    #         raise ParseError('Request has no resource file attached')
+    #     recipe = Recipe.objects.create(img=file)
 
 
 
@@ -75,13 +84,13 @@ class RecipeDetail(APIView):
 
 
 
-class MyUserList(APIView):
-    permission_classes=[permissions.AllowAny]
+# class MyUserList(APIView):
+#     permission_classes=[permissions.AllowAny]
     
-    def get(self, request, format=None):
-        user = MyUser.objects.all()
-        serializer = MyUserSerializer(user, many=True)
-        return Response(serializer.data)
+#     def get(self, request, format=None):
+#         user = MyUser.objects.all()
+#         serializer = MyUserSerializer(user, many=True)
+#         return Response(serializer.data)
 
 
 
@@ -92,10 +101,11 @@ class MyUserDetail(APIView):
     def get_user(self, pk):
         try:
             print(pk)
-            return MyUser.objects.get(pk=pk)
+            user = MyUser.objects.get(pk=pk)
         except MyUser.DoesNotExist:
             message = {'message': 'page not found'}
             return Response(message, status=status.HTTP_404_NOT_FOUND)
+        return user
     
     #get the details
     def get(self, request, pk, format=None):
@@ -118,11 +128,11 @@ class MyUserDetail(APIView):
 
 
 class MyAccountDetail(APIView):
-    permission_classes=[permissions.IsAuthenticated]
+    permission_classes=[permissions.AllowAny]
 
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
         user = request.user
-        serializer = MyUserSerializer(user, context={'request': request})
+        serializer = MyUserSerializer(user)
         return Response(serializer.data)
 
 
@@ -188,7 +198,7 @@ class CreateUser(APIView):
 
 
 
-
+#verfiy changes on postman
 class VerifyOTP(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -198,35 +208,37 @@ class VerifyOTP(APIView):
         try:
             email_to_verify = OtpModel.objects.get(email__iexact=email)
         except OtpModel.DoesNotExist:
-            message = {'message': 'register_first'}
+            message = {'message': 'Register first !'}
             return Response(message ,status= status.HTTP_401_UNAUTHORIZED)
         print(email_to_verify.otp)
         print(client_otp)
         verifying_time = int(time.time())
 
         if (verifying_time - email_to_verify.at_time)>300:
-            error_detail = {'message': "otp_expired"}
+            error_detail = {'message': "OTP Expired"}
             email_to_verify.delete()
             return Response(error_detail, status.HTTP_403_FORBIDDEN)
 
         if email_to_verify.otp != int(client_otp):
-            message = {'message': 'wrong_otp'}
+            message = {'message': 'Wrong OTP'}
             return Response(message ,status = status.HTTP_401_UNAUTHORIZED)
         
-        user_to_allow = MyUser.objects.get(email=email)
+        user_to_allow = MyUser.objects.get(email__iexact=email)
         user_to_allow.is_active=True
         user_to_allow.save()
         #print(user_to_allow.is_active)
         email_to_verify.delete()
 
         #getting token
+        userspk = user_to_allow.pk
         r_token = TokenObtainPairSerializer().get_token(request.user)
         a_token = AccessToken().for_user(request.user)
         tokens = {
             'refresh': str(r_token),
-            'access': str(a_token)
+            'access': str(a_token),
+            'pk': userspk
         }
-        message = {'message': 'email_verified'}
+        #message = {'message': 'email_verified'}
         return Response(tokens, status = status.HTTP_200_OK)
 
 
@@ -386,6 +398,35 @@ class NewPassword(APIView):
         }
         message = {"message": "password_changed"}
         return Response(tokens, status=status.HTTP_202_ACCEPTED)
+
+
+
+# class LoginAuth(APIView):
+#     permission_classes = [permissions.AllowAny]
+
+#     def post(self, request):
+#         email = request.data.get('email')
+#         password = request.data.get('password')
+
+#         try:
+#             user_exists = MyUser.objects.get(email__iexact=email)
+#         except MyUser.DoesNotExist:
+#             message = {'message': 'User Not Found.'}
+#             return Response(message ,status= status.HTTP_401_UNAUTHORIZED)
+
+#         user_password = user_exists.password.clean()
+#         if user_password != password:
+#             message = {'message': 'Wrong Password. Try Again !'}
+#         else:
+#             userspk = user_exists.pk
+#             r_token = TokenObtainPairSerializer().get_token(request.user)
+#             a_token = AccessToken().for_user(request.user)
+#             message = {
+#             'refresh': str(r_token),
+#             'access': str(a_token),
+#             'pk': userspk
+#             }
+#         return Response(message, status = status.HTTP_200_OK)
 
 
 
@@ -932,10 +973,17 @@ class SortCardsList(APIView):
 
 
 class CardLike(APIView):
+    
+
+
     permission_classes = [permissions.IsAuthenticated]
 
 
-    def post(self, request, pk, format=None):
+    def post(self, request, pk, format=None):        
+
+        print(request.user)
+        #print(message)
+
         # key = request.data.get('pk')
         # print(key)
         # upvoted = request.data.get('like')

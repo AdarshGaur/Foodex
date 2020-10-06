@@ -9,5 +9,3 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 			return True
 		if obj.owner == request.user:
 			return True
-
-

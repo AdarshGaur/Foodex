@@ -76,44 +76,50 @@ class RegisterMyUser(serializers.ModelSerializer):
 
 # recipe creating/edit/get serializer
 class PostRecipeSerializer(serializers.ModelSerializer):
-	owner = serializers.ReadOnlyField(source='owner.name')
-	#author = AuthorSerializer(read_only=True)
+	#owner = serializers.ReadOnlyField(source='owner.name')
+	#owner = AuthorSerializer(read_only=True)
 	# email = serializers.ReadOnlyField(source='owner.email')
-	img_url = serializers.SerializerMethodField()
+	# img = serializers.SerializerMethodField()
 	# pk = serializers.ReadOnlyField(source=id)
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['title', 'img_url', 'category', 'ingredients', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'read_time', 'veg']
+		fields = ['title', 'img', 'category', 'ingredients', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'read_time', 'veg']
 	
 
-	def get_img_url(self, Recipe):
-		request = self.context.get('request')
-		img_url = Recipe.img.url
-		return request.build_absolute_uri(img_url)
+	# def get_img(self, Recipe):
+	# 	request = self.context.get('request')
+	# 	img = Recipe.img.url
+	# 	return request.build_absolute_uri(img)
 
 
 
 
 
-
+# good
 class RecipeSerializer(serializers.ModelSerializer):
 	#owner_pk = serializers.IntegerField(source=owner.pk)
-	owner = serializers.ReadOnlyField(source='owner.name')
+	#owner = serializers.ReadOnlyField(source='owner.name')
 	# email = serializers.ReadOnlyField(source='owner.email')
 	img_url = serializers.SerializerMethodField()
-	
-	# pk = serializers.ReadOnlyField(source=id)
+	#author_name = serializers.CharField(owner.name)
+	authorname = serializers.SerializerMethodField('get_authorname_from_owner')
+
+
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['pk', 'title', 'img_url', 'category', 'ingredients', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
+		fields = ['pk', 'title', 'img_url', 'category', 'ingredients', 'content', 'owner', 'authorname', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
 	
 
 	def get_img_url(self, Recipe):
 		request = self.context.get('request')
 		img_url = Recipe.img.url
 		return request.build_absolute_uri(img_url)
+
+	def get_authorname_from_owner(self, Recipe):
+		name = Recipe.owner.name
+		return name
 
 	# def get_owner_pk(self, Recipe):
 	# 	request = self.context.get('request')
@@ -126,12 +132,12 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 #cards serializer
 class RecipeCardSerializer(serializers.ModelSerializer):
-	owner = serializers.ReadOnlyField(source='owner.name')
+	#owner = serializers.ReadOnlyField(source='owner.name')
 	img_url = serializers.SerializerMethodField()
 	# only for cards
 	class Meta:
 		model = Recipe
-		fields = ['title', 'img_url', 'content', 'owner', 'cook_time', 'read_time', 'points', 'veg']
+		fields = ['pk', 'title', 'img_url', 'content', 'owner', 'cook_time', 'read_time', 'points', 'veg']
 
 
 	def get_img_url(self, Recipe):
@@ -146,20 +152,20 @@ class RecipeCardSerializer(serializers.ModelSerializer):
 #serializer for user details
 class MyUserSerializer(serializers.ModelSerializer):
 	recipes = RecipeCardSerializer(many=True, read_only=True)
-	user_img_url = serializers.SerializerMethodField()
+	# user_img_url = serializers.SerializerMethodField()
 	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
 	class Meta:
 		model = MyUser
-		fields = ['name', 'email', 'age', 'user_img_url', 'followers', 'following', 'bookmark_count', 'recipes']
+		fields = ['name', 'email', 'age', 'image_user', 'followers', 'following', 'bookmark_count', 'recipes']
 
 
 
-	def get_user_img_url(self, MyUser):
-		request = self.context.get('request')
-		img_url = MyUser.image_user.url
-		print(img_url)
-		print(request)
-		return request.build_absolute_uri(img_url)
+	# def get_user_img_url(self, MyUser):
+	# 	request = self.context.get('request')
+	# 	img_url = MyUser.image_user.url
+	# 	print(img_url)
+	# 	print(request)
+	# 	return request.build_absolute_uri(img_url)
 
 
 
