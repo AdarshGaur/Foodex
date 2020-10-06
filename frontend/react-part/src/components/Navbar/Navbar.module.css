@@ -117,3 +117,10 @@ font-family: Lato !important;
     font-weight: 200 !important;
   }
 }
+
+@media(max-width:1090px){
+  .brand{
+    font-size: 25px;
+
+   }
+}

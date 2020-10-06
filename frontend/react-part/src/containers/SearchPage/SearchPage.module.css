@@ -20,7 +20,7 @@
     position: fixed;
     top: 22px;
     z-index:4000;
-    margin-left:20vw;
+    margin-left:15.3vw;
     /* margin-bottom:2% */
 }
 
@@ -132,4 +132,23 @@
   }
 
 
-  
+  @media(max-width:400px){
+
+.sortwrap{
+  flex-direction: column;
+  /* align-content: center;
+  justify-content: center; */
+}
+
+.dropbtns{
+  width: 100%;
+  text-align: center;
+  /* font-size: 2px; */
+}
+.dropsbtns{
+  width: 100%;
+  text-align: center;
+  /* font-size: 2px; */
+
+}
+  }
