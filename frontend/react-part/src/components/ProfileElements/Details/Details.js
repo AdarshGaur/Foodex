@@ -57,12 +57,13 @@ render(){
 <div className={classes.cover}>
 <div className={classes.wrapper}>
 <div className={classes.dp}>
-<img src={this.state.userdetails.image_user} />
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR-fzwMTk8dQytNQnl1vC97OHhsrGaEa2RFAg&usqp=CAU"/>
 <input className={classes.avatar} id="uploadpic" type="file" className={classes.avatar} onChange={(e)=>this.upload(e)} name="img" accept="image/*" />
 <label className={classes.change} htmlFor="uploadpic">Change Picture</label>
 </div>
-<h3>{this.state.userdetails.name}</h3>
-{/* <p className={classes.bookmark}>my bookmarks</p> */}
+<h3> Rakshit
+    {/* {this.state.userdetails.name} */}
+</h3>
 </div>
 
 <div className={classes.options}>

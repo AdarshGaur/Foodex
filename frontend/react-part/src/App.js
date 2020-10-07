@@ -23,6 +23,8 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import FollowersList from './components/ProfileElements/FollowersList/FollowersList';
 import MyRecipes from './components/ProfileElements/MyRecipes/MyRecipes';
 import Bookmarks from './components/ProfileElements/Bookmarks/Bookmarks';
+import FollowingList from './components/ProfileElements/FollowingList/FollowingList';
+import OtherUser from './components/ProfileElements/OtherUser/OtherUser'
 
 
 function App() {
@@ -36,6 +38,7 @@ function App() {
         <Route path='/forgot-otp' component={ForgotOtp} />
         <Route path='/change-password' component={PasswordReset} />
         <Route path='/profile' component={MyRecipes} />
+        <Route path='/user-profile' component={OtherUser} />
         <Route path='/bookmarks' component={Bookmarks} />
         <Route path='/otp' component={Otp} />
         <Route path='/add-recipe' component={AddRecipe} />
@@ -48,6 +51,7 @@ function App() {
         <Route path='/others' component={Others} />
         <Route path='/search-page' component={SearchPage} />
         <Route path='/followers' component={FollowersList} />
+        <Route path='/following' component={FollowingList} />
 
       </Switch>
       <NotificationContainer />

@@ -17,15 +17,15 @@ class AddRecipe extends Component {
         
       }
     
-      componentDidMount(){
-          const data= this.props.location.state.recipeid;
-        // axios.get('http://af3c2d386213.ngrok.io/recipe/'+this.props.location.state.recipeid+'/')
-        serverService.readrecipe(data)
-        .then(response=>{
-          console.log(response);
-          this.setState({recipe: response.data})
-        })
-      }
+    //   componentDidMount(){
+    //       const data= this.props.location.state.recipeid;
+
+    //     serverService.readrecipe(data)
+    //     .then(response=>{
+    //       console.log(response);
+    //       this.setState({recipe: response.data})
+    //     })
+    //   }
 
     render(){
         return (
@@ -65,15 +65,19 @@ class AddRecipe extends Component {
 
 <div className={classes.btnwrap}>
                 <div className={classes.btndivfirst}>
-                <LikeButton pk={this.props.location.state.recipeid} />
-                <BookmarkButton pk={this.props.location.state.recipeid} />
-                {/* <button><Link to="/edit-recipe">Edit</Link></button> */}
+                <LikeButton 
+                // pk={this.props.location.state.recipeid} 
+                />
+                <BookmarkButton 
+                // pk={this.props.location.state.recipeid} 
+                />
+
                 </div>
                 <div className={classes.btndivsecond}>                
                     <Button className={classes.editbtn} as={Link} 
            to= {{
             pathname:'/edit-recipe',
-            state:{recipeid: this.props.location.state.recipeid}
+            // state:{recipeid: this.props.location.state.recipeid}
           }} 
           >Edit</Button>
 

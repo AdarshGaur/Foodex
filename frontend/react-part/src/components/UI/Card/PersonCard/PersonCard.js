@@ -9,7 +9,7 @@ const PersonCard = () => {
 <Card className={classes.personbox} style={{ width: '39rem' }}>
   <Card.Body><img className={classes.personimg}
   src="https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-260nw-1048185397.jpg"/>
-    <span img className={classes.usrname}>MS Dhoni <button className={classes.checkprofilebtn}>Check Profile</button></span></Card.Body>
+    <span img className={classes.usrname}>MS Dhoni <Link to="/user-profile"><button className={classes.checkprofilebtn}>Check Profile</button></Link></span></Card.Body>
 </Card>
 <Card className={classes.personbox} style={{ width: '39rem' }}>
   <Card.Body><img className={classes.personimg}
