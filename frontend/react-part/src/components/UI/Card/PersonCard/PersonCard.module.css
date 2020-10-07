@@ -1,0 +1,29 @@
+.personbox{
+    margin-top: 1rem;
+}
+
+.personimg{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-left:5%;
+}
+
+.usrname{
+    margin-left: 6%;
+    font-size: 25px;
+}
+
+.checkprofilebtn{
+    margin-left: 25%;
+    padding: 4px !important;
+    font-size: 16px !important;
+}
+
+.persongrid{
+        /* min-height: 100%; */
+        display: flex;
+       justify-content: space-evenly;
+        flex-wrap: wrap;
+        flex-direction: row;
+}

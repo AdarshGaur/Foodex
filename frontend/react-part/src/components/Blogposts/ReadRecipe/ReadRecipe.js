@@ -43,7 +43,7 @@ class AddRecipe extends Component {
                 </div>
                 <div className={classes.imgwrap}>
                 <img  className={classes.foodimg} 
-                src={this.state.recipe.img_url}
+                src={this.state.recipe.img}
                 // src="https://www.cookwithmanali.com/wp-content/uploads/2019/05/Paneer-Butter-Masala-500x500.jpg" 
                 
                 />

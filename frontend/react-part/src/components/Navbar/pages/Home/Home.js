@@ -26,7 +26,7 @@ class Home extends Component {
   render() {
 
     const recipecards= this.state.recipecards.map(recipecard=>{
-    return <RecipeCard title={recipecard.title} img={recipecard.img_url} pk={recipecard.pk} content={recipecard.content} />
+    return <RecipeCard title={recipecard.title} img={recipecard.img} pk={recipecard.pk} content={recipecard.content} />
     })
 
     return(

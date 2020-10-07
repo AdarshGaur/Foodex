@@ -21,6 +21,7 @@ import ForgotOtp from './components/Navbar/pages/ForgotPass/ForgotOtp';
 import PasswordReset from './components/Navbar/pages/ForgotPass/PasswordReset';
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import FollowersList from './components/ProfileElements/FollowersList/FollowersList';
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
         <Route path='/main-course' component={MainCourse} />
         <Route path='/others' component={Others} />
         <Route path='/search-page' component={SearchPage} />
+        <Route path='/followers' component={FollowersList} />
 
       </Switch>
       <NotificationContainer />

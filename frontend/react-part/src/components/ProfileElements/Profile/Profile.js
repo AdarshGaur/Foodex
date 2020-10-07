@@ -33,7 +33,7 @@ class Profile extends Component {
 
     componentDidMount(){
         const userpk= localStorage.getItem('mypk')
- axios.get('https://a964c75a8aed.ngrok.io/user/' +userpk+'/',
+ axios.get('https://21926280b2ec.ngrok.io/user/2' +userpk+'/',
             {
                 headers: {
                     'Content-Type': 'application/json',
