@@ -3,6 +3,8 @@ import classes from '../../Categories/Categories.module.css';
 import RecipeCard from '../../UI/Card/RecipeCard'
 import axios from 'axios';
 import ServerService from '../../../services/serverService'
+import NavigationBar from '../../Navbar/Navbar';
+import Details from '../Details/Details';
 
 class MyRecipes extends Component {
   state = {
@@ -29,7 +31,8 @@ class MyRecipes extends Component {
 
     return(
     <>
-
+    <NavigationBar />
+    <Details />
     <div className={classes.grid}>
     {recipecards}
 

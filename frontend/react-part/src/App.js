@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import LogIn from './components/Navbar/pages/LogIn';
 import SignUp from './components/Navbar/pages/SignUp';
 import Otp from './components/Navbar/pages/Otp';
-import Profile from './components/ProfileElements/Profile/Profile'
 import AddRecipe from './components/Blogposts/AddRecipe/AddRecipe'
 import EditRecipe from './components/Blogposts/EditRecipe/EditRecipe'
 import ReadRecipe from './components/Blogposts/ReadRecipe/ReadRecipe'
@@ -22,6 +21,8 @@ import PasswordReset from './components/Navbar/pages/ForgotPass/PasswordReset';
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import FollowersList from './components/ProfileElements/FollowersList/FollowersList';
+import MyRecipes from './components/ProfileElements/MyRecipes/MyRecipes';
+import Bookmarks from './components/ProfileElements/Bookmarks/Bookmarks';
 
 
 function App() {
@@ -34,7 +35,8 @@ function App() {
         <Route path='/forgot-password' component={ForgotPassword} />
         <Route path='/forgot-otp' component={ForgotOtp} />
         <Route path='/change-password' component={PasswordReset} />
-        <Route path='/profile' component={Profile} />
+        <Route path='/profile' component={MyRecipes} />
+        <Route path='/bookmarks' component={Bookmarks} />
         <Route path='/otp' component={Otp} />
         <Route path='/add-recipe' component={AddRecipe} />
         <Route path='/edit-recipe' component={EditRecipe} />

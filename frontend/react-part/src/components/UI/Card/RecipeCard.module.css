@@ -14,14 +14,16 @@
   
 .pinkbtn{
   background-color: #ff1742 !important;
-
-  border: 1px solid #ccc;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
-.pinkbtn:hover{
+.pinkbtn:hover, .pinkbtn:focus{
   background-color: #c9042b !important;
-
-  border: 1px solid #ccc;
+border: none !important;
+box-shadow: none !important;
+outline: none !important;
 }
 
 .readtime{
