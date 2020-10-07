@@ -16,13 +16,12 @@
 	vertical-align: top;
 }
 
-/* Footer left */
+
 
 .footerdistributed .footerleft{
 	width: 40%;
 }
 
-/* The company logo */
 
 .footerdistributed h3{
 	color:  #ffffff;
@@ -34,7 +33,7 @@
 	color:  lightseagreen;
 }
 
-/* Footer links */
+
 
 .footerdistributed .footerlinks{
 	color:  #ffffff;
@@ -60,14 +59,13 @@
 	margin: 0;
 }
 
-/* Footer Center */
 
 .footerdistributed .footercenter{
 	width: 35%;
 }
 
 .footerdistributed .footercenter i{
-	background-color:  #33383b;
+	/* background-color:  #33383b; */
 	color: #ffffff;
 	font-size: 25px;
 	width: 38px;
@@ -99,7 +97,7 @@
 	line-height:2;
 }
 
-.footerdistributed .footercenter p a{
+.footerdistributed .footercenter p span{
 	color:  #fff;
 	text-decoration: none;;
 }
@@ -134,7 +132,6 @@
 	font-weight: 600;
 }
 
-/* Footer Right */
 
 .footerdistributed .footerright{
 	width: 20%;
@@ -192,9 +189,6 @@
 	margin-bottom: 5px;
 }
 
-
-
-/*media queries */
 
 @media (max-width: 880px) {
 

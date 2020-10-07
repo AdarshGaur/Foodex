@@ -9,6 +9,8 @@ import FollowersList from '../FollowersList/FollowersList';
 import MyRecipes from '../MyRecipes/MyRecipes';
 import Bookmarks from '../Bookmarks/Bookmarks';
 
+import ReadRecipe from '../../Blogposts/ReadRecipe/ReadRecipe'
+
 class Profile extends Component {
 
     state={
@@ -92,6 +94,7 @@ class Profile extends Component {
         <Route path='/profile/following' component={FollowingList} />
         <Route path='/profile/followers' component={FollowersList} />
         <Route path='/profile/bookmarks' component={Bookmarks} />
+        <Route path='/read-recipe' component={ReadRecipe} />
 
         </Switch>
     </Router>
