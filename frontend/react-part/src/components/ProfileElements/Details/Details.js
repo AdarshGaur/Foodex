@@ -52,7 +52,7 @@ render(){
 <div className={classes.totalwrap}>
 <div className={classes.bookmarks}>
 <button className={classes.bookmarkbtn}> <i className="fa fa-bookmark" aria-hidden="true"></i>
-<Link className={classes.savetext} to="/bookmarks/"><span >My Bookmarks</span></Link></button>
+<Link className={classes.savetext} to="/bookmarks"><span >My Bookmarks</span></Link></button>
 </div>
 <div className={classes.cover}>
 <div className={classes.wrapper}>
@@ -66,14 +66,17 @@ render(){
 </div>
 
 <div className={classes.options}>
-    <div className={classes.profilenums}>
+     <Link to="/following" className={classes.profilenums}><div>
         <h5 className={classes.headingnums}>Following</h5>
         <p className={classes.nums}>34</p>
-    </div>
-    <div className={classes.profilenums}>
+        </div>
+        </Link>
+    
+    <Link to="/followers"  className={classes.profilenums}><div>
         <h5 className={classes.headingnums}>Followers</h5>
-        <p className={classes.nums}>34</p>
+        <p className={classes.nums}>34</p>     
     </div>
+    </Link>
     <Link className={classes.profilenums} to="/profile"><div>
         <h5 className={classes.headingnums}>Posts</h5>
         <p className={classes.nums}>34</p>
