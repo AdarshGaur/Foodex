@@ -70,7 +70,7 @@ render(){
 <div className={classes.cover}>
 <div className={classes.wrapper}>
 <div className={classes.dp}>
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR-fzwMTk8dQytNQnl1vC97OHhsrGaEa2RFAg&usqp=CAU"/>
+<img src="https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-260nw-1048185397.jpg"/>
 {/* <input className={classes.avatar} id="uploadpic" type="file" className={classes.avatar} onChange={(e)=>this.upload(e)} name="img" accept="image/*" /> */}
 <label onClick={this.handlefollow} className={classes.change}>{this.state.isfollow}</label>
 </div>

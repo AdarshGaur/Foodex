@@ -21,6 +21,13 @@
     /* justify-content: left; */
 }
 
+.tiphead{
+    background-color: #e60e3c !important;
+    font-weight: 600;
+    /* font-family: Lato; */
+    color: white;
+}
+
 .recipe{
     /* text-align: justify; */
     display: block;
@@ -75,21 +82,12 @@ color: #708090;
 
 .btndivsecond{
 display: flex;
-/* margin-right: 0vw; */
-/* margin-left: 22vw; */
 justify-content: flex-end;
-/* align-self: center; */
-/* background-color: blueviolet; */
 width: 50%;
 }
 
 .btndivfirst{
-/* display: inline; */
-/* margin-right: 0vw; */
-/* margin-left: 22vw; */
 
-/* align-self: center; */
-/* background-color: yellow; */
 width: 50%;
 }
 
@@ -113,6 +111,7 @@ width: 50%;
     margin-top: 4%;
     margin-bottom: 4%;
 }
+
 
 .editbtn:hover, .deletebtn:hover, .editbtn:focus, .deletebtn:focus{
 background-color: #ff1742 !important;
@@ -155,6 +154,8 @@ color:white;
     margin-left: 8%;
 }
 
+
+
 .tags{
     background-color: #808080;
     margin-right: 2%;
@@ -194,3 +195,29 @@ color:white;
 }
 
 
+@media(max-width:960px){
+
+
+.btndivsecond{
+    display: block;
+    margin-right: 0;
+    display: flex;
+    flex-direction: column;
+}
+.btndivfirst{
+    display: block;
+    margin-left:0;
+}
+.editbtn, .deletebtn{
+    margin-right: 0;
+    display: block;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-left: 0;
+}
+
+.suggest{
+    margin-top: 5%;
+}
+
+}

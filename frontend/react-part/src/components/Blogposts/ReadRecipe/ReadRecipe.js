@@ -86,13 +86,13 @@ class AddRecipe extends Component {
 
 </div>
 
-                <h2>Drop a Suggestion<i className="far fa-sticky-note"></i></h2>
+                <h2 className={classes.suggest}>Drop a Suggestion<i className="far fa-sticky-note"></i></h2>
                 <textarea rows="10" className={classes.area} name = 'instructions'  placeholder={this.state.instructions} onChange = {this.handlechangeall} />
                 <input className={classes.suggestionbtn} type="submit" onClick={this.handlesuggestion} value="SUBMIT SUGGESTION" />
                 </div>
                 <div className={classes.tips}>
                 <Card style={{ width: '18rem' }} className={classes.tipscard}>
-                <Card.Header>Quick Tips</Card.Header>
+                <Card.Header className={classes.tiphead}><i className="fa fa-bullhorn"> </i> Q U I C K - T I P S</Card.Header>
                 <Card.Body className={classes.bulletpoints}>
                 <Card.Text>
                 <ul>
