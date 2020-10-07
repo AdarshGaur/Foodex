@@ -141,3 +141,12 @@ input[type=number] {
     }
     
 }
+
+@media(max-width: 370px){
+    .recipehead{
+        font-size: 30px !important;
+    }
+    .labels{
+        font-size: 25px !important;
+    }
+}
