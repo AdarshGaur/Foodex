@@ -84,6 +84,7 @@ class PostRecipeSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
 	#owner_pk = serializers.IntegerField(source=owner.pk)
 	owner = serializers.ReadOnlyField(source='owner.name')
+	# ownerkapk = serializers.IntegerField(source='owner.pk')
 	# email = serializers.ReadOnlyField(source='owner.email')
 	# img_url = serializers.SerializerMethodField()
 	
@@ -91,7 +92,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['pk', 'title', 'category', 'ingredients', 'img', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points', 'like_is', 'bookmark_is']
+		fields = ['pk', 'title', 'category', 'ingredients', 'img', 'content', 'owner', 'ownerkapk', 'published_on', 'modified_on', 'cook_time', 'veg', 'points', 'like_is', 'bookmark_is']
 	
 
 	# def get_img_url(self, Recipe):
@@ -127,7 +128,7 @@ class MyUserSerializer(serializers.ModelSerializer):
 	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
 	class Meta:
 		model = MyUser
-		fields = ['name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'recipes']
+		fields = ['name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'post_count', 'recipes']
 
 
 

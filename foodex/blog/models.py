@@ -117,7 +117,7 @@ class MyUser(AbstractUser):
     # password = models.CharField(blank=False, max_length=21, validators=[password_regex])
 
     bookmark_count = models.PositiveIntegerField(default=0)
-    #post
+    post_count = models.PositiveIntegerField(default=0)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'age']

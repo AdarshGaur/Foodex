@@ -36,6 +36,8 @@ class CreateRecipe(APIView):
         serializer = PostRecipeSerializer(data=request.data)
         print('check3')
         if serializer.is_valid():
+            owner.post_count = F('post_count') + 1
+            owner.save()
             serializer.save(owner=owner)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -107,6 +109,7 @@ class RecipeDetail(APIView):
     def delete(self, request, pk, format=None):
         recipe = self.get_object(pk)
         recipe.delete()
+        # posts_count decrement
         message = {'message': 'deleted'}
         return Response(message, status = status.HTTP_204_NO_CONTENT)
 
