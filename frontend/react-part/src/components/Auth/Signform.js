@@ -118,6 +118,7 @@ emailclean=()=>{
   this.setState({emailError:"fine"})
 }
 
+
 passwordclean=()=>{
   this.setState({passwordError:"fine"})
 }
@@ -136,8 +137,18 @@ confirmclean=()=>{
 
 handlesubmit = (event) => {
 
-  
-  // if(!this.state.disabled){
+if(
+  this.state.emailError!=='fine' ||
+  this.state.nameError!=='fine' ||
+  this.state.passwordError!=='fine' ||
+  this.state.confirmError!=='fine' 
+){
+  event.preventDefault();
+  this.createNotification("Please Check your entered information")
+}
+
+else{
+
     this.setState({ isLoading: true });
 
     const data={
@@ -173,7 +184,7 @@ ServerService.signup(data)
   }
 })
 
-// }
+}
  }
 
 

@@ -74,6 +74,15 @@ passwordclean=()=>{
 
 handlesubmit = (event) => {
 
+  if(
+    this.state.emailError!=='fine' ||
+    this.state.passwordError!=='fine'
+  ){
+    event.preventDefault();
+    this.createNotification("Please Check your entered information")
+  }
+
+  else{
   this.setState({ isLoading: true });
 
 const data={
@@ -104,7 +113,7 @@ const data={
   })
 
 
-// }
+}
 }
 
 render(){

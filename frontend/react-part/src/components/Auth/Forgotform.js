@@ -46,6 +46,15 @@ emailclean=()=>{
 
 handlesubmit = (event) => {
 
+  if(
+    this.state.emailError!=='fine' 
+  ){
+    event.preventDefault();
+    this.createNotification("Please Check your entered information")
+  }
+
+  else{
+
   this.setState({isLoading: true})
 
 const data={
@@ -75,7 +84,7 @@ ServerService.forgotform(data)
     }
   })
 
-
+  }
 
 }
 
