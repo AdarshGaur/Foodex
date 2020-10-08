@@ -28,16 +28,9 @@ class Details extends Component {
 
     componentDidMount(){
         const userpk= localStorage.getItem('mypk')
- axios.get('https://8a5f7f0c745b.ngrok.io/user/2/' 
+ axios.get('http://58eaa649e23e.ngrok.io/user/'+userpk +'/')
 //  +userpk+'/'
- ,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-                },
-                
-            })
+
             .then((resp)=>{
                 console.log(resp.data)    
                 this.setState({userdetails: resp.data})
@@ -61,21 +54,22 @@ render(){
 <input className={classes.avatar} id="uploadpic" type="file" className={classes.avatar} onChange={(e)=>this.upload(e)} name="img" accept="image/*" />
 <label className={classes.change} htmlFor="uploadpic">Change Picture</label>
 </div>
-<h3> Rakshit
-    {/* {this.state.userdetails.name} */}
+<h3> 
+    {/* Rakshit */}
+    {this.state.userdetails.name}
 </h3>
 </div>
 
 <div className={classes.options}>
      <Link to="/following" className={classes.profilenums}><div>
         <h5 className={classes.headingnums}>Following</h5>
-        <p className={classes.nums}>34</p>
+        <p className={classes.nums}>{this.state.userdetails.following}</p>
         </div>
         </Link>
     
     <Link to="/followers"  className={classes.profilenums}><div>
         <h5 className={classes.headingnums}>Followers</h5>
-        <p className={classes.nums}>34</p>     
+        <p className={classes.nums}>{this.state.userdetails.followers}</p>     
     </div>
     </Link>
     <Link className={classes.profilenums} to="/profile"><div>

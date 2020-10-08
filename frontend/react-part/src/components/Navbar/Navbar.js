@@ -5,6 +5,7 @@ import {Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootst
 import axios from 'axios';
 
 
+
 class NavigationBar extends Component{
 
   state = { 
@@ -31,7 +32,6 @@ class NavigationBar extends Component{
   }
   
 
-
   render() {
 
     if(this.state.redirect){
@@ -55,7 +55,10 @@ class NavigationBar extends Component{
       if(auth){
         return(
           <Navbar bg="light" expand="lg" sticky="top" className={classes.navshadow}>
-            <Link className={classes.brand} to="/">Foodex</Link>
+            <Link className={classes.brand} to="/">
+              Foodex
+
+            </Link>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Form inline className="ml-auto"> 

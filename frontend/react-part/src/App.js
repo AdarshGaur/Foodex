@@ -26,6 +26,7 @@ import Bookmarks from './components/ProfileElements/Bookmarks/Bookmarks';
 import FollowingList from './components/ProfileElements/FollowingList/FollowingList';
 import OtherUser from './components/ProfileElements/OtherUser/OtherUser'
 
+import Protected from './services/Protected'
 
 function App() {
   return (
@@ -37,9 +38,9 @@ function App() {
         <Route path='/forgot-password' component={ForgotPassword} />
         <Route path='/forgot-otp' component={ForgotOtp} />
         <Route path='/change-password' component={PasswordReset} />
-        <Route path='/profile' component={MyRecipes} />
+        <Protected path='/profile' component={MyRecipes} />
         <Route path='/user-profile' component={OtherUser} />
-        <Route path='/bookmarks' component={Bookmarks} />
+        <Protected path='/bookmarks' component={Bookmarks} />
         <Route path='/otp' component={Otp} />
         <Route path='/add-recipe' component={AddRecipe} />
         <Route path='/edit-recipe' component={EditRecipe} />
@@ -50,8 +51,8 @@ function App() {
         <Route path='/main-course' component={MainCourse} />
         <Route path='/others' component={Others} />
         <Route path='/search-page' component={SearchPage} />
-        <Route path='/followers' component={FollowersList} />
-        <Route path='/following' component={FollowingList} />
+        <Protected path='/followers' component={FollowersList} />
+        <Protected path='/following' component={FollowingList} />
 
       </Switch>
       <NotificationContainer />

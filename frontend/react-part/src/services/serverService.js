@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://58eaa649e23e.ngrok.io/";
+const BASE_URL = "https://18092a30b6fb.ngrok.io/";
 
 class ServerService {
 
@@ -9,9 +9,7 @@ class ServerService {
     }
 
     signup(data){
-      return axios.post(BASE_URL + 'auth/register/', data)
-
-      
+      return axios.post(BASE_URL + 'auth/register/', data) 
    }
 
     otp(data){
@@ -47,8 +45,17 @@ class ServerService {
     }
 
     readrecipe(data){
-      return axios.get(BASE_URL + 'recipe/'+ data+'/')
+      return axios.get(BASE_URL + 'recipe/'+ data+'/'
+      // ,      {
+      //   params:{
+      //     my_pk: localStorage.getItem('mypk')
+      //   }
+      // }
+      )
     }
+
+
+
 
     sort(sortdata){
       return axios.post(BASE_URL + 'search/sort/',sortdata)

@@ -20,6 +20,8 @@ class AddRecipe extends Component {
       componentDidMount(){
           const data= this.props.location.state.recipeid;
 
+
+
         serverService.readrecipe(data)
         .then(response=>{
           console.log(response);
@@ -33,8 +35,14 @@ class AddRecipe extends Component {
                 <NavigationBar />
                 <div className= {classes.outerwrap}>
                 <div className={classes.readrecipe}>
-                    <span className={classes.tags}>Drinks and Smoothies</span>
-                    <span className={classes.tags}>Vegetarian</span>
+                  {(this.state.recipe.category==='main_course')?<span className={classes.tags}>Main Course</span>: null}
+                  {(this.state.recipe.category==='starter')?<span className={classes.tags}>Starters</span>: null}
+                  {(this.state.recipe.category==='drink')?<span className={classes.tags}>Drinks and Smoothies</span>: null}
+                  {(this.state.recipe.category==='others')?<span className={classes.tags}>Others</span>: null}
+                  {(this.state.recipe.category==='desserts')?<span className={classes.tags}>Desserts</span>: null}
+
+                    {this.state.recipe.veg? <span className={classes.tags}>Vegetarian</span>:<span className={classes.tags}>Non-Vegetarian</span>}
+                    {/* <span className={classes.tags}>Vegetarian</span> */}
                 <h1 className={classes.titlerecipe}>{this.state.recipe.title}</h1>
                 {/* <h1>Butter Paneer</h1> */}
                 <div className={classes.options}>
@@ -75,6 +83,8 @@ class AddRecipe extends Component {
                 <div className={classes.btndivfirst}>
                 <LikeButton 
                 pk={this.props.location.state.recipeid} 
+                likedis= {this.state.recipe.points} 
+                points= {this.state.recipe.points} 
                 />
                 <BookmarkButton 
                 pk={this.props.location.state.recipeid} 
