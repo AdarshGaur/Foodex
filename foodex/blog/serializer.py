@@ -2,7 +2,7 @@ from .models import Recipe, MyUser, OtpModel, LikeSystem
 from rest_framework import serializers
 
 
-
+#Serializer for registriation of New Users
 class RegisterMyUser(serializers.ModelSerializer):
 
 	confirm_password = serializers.CharField(style={'input_type': "password"}, write_only=True,)
@@ -49,20 +49,20 @@ class RegisterMyUser(serializers.ModelSerializer):
 
 
 		user = MyUser.objects.create(
-					username = validated_data['username'],
+					username ='random',
 					name = validated_data['name'],
 					age = validated_data['age'],
 					email = validated_data['email'],
 					password = validated_data['password'],
 				)
-		user.is_active=False
 		user.set_password(password)
+		user.is_active=False
 		user.save()
 
 		return user
 
 
-
+# recipe creating/edit/get serializer
 class PostRecipeSerializer(serializers.ModelSerializer):
 	# owner = serializers.ReadOnlyField(source='owner.name')
 	# email = serializers.ReadOnlyField(source='owner.email')
@@ -71,7 +71,7 @@ class PostRecipeSerializer(serializers.ModelSerializer):
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['title', 'category','img', 'ingredients','owner', 'content', 'published_on', 'modified_on', 'cook_time', 'read_time', 'veg']
+		fields = ['title', 'category', 'ingredients', 'img', 'content', 'published_on', 'modified_on', 'cook_time', 'read_time', 'veg']
 
 
 	# def get_img_url(self, Recipe):
@@ -91,7 +91,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['pk', 'title', 'img', 'category', 'ingredients', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points']
+		fields = ['pk', 'title', 'category', 'ingredients', 'img', 'content', 'owner', 'published_on', 'modified_on', 'cook_time', 'veg', 'points', 'like_is', 'bookmark_is']
 	
 
 	# def get_img_url(self, Recipe):
@@ -111,7 +111,7 @@ class RecipeCardSerializer(serializers.ModelSerializer):
 	# only for cards
 	class Meta:
 		model = Recipe
-		fields = ['pk', 'title', 'img', 'content', 'owner', 'read_time', 'points', 'veg']
+		fields = ['title', 'content', 'owner', 'img', 'cook_time', 'read_time', 'points', 'veg']
 
 
 	# def get_img_url(self, Recipe):
@@ -127,7 +127,7 @@ class MyUserSerializer(serializers.ModelSerializer):
 	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
 	class Meta:
 		model = MyUser
-		fields = ['name', 'email', 'age', 'image_user', 'followers', 'following', 'bookmark_count', 'posts', 'recipes']
+		fields = ['name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'recipes']
 
 
 

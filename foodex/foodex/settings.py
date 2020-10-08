@@ -27,7 +27,7 @@ SECRET_KEY = 'zwx^cvzjf3qob&0i(uiij*3s79$!fm661%1q%^p4-sfsa27fme'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0b63f94a8cfb.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '6f0699832a56.ngrok.io']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -175,6 +175,7 @@ AUTH_USER_MODEL = 'blog.MyUser'
 #Email confirmation
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
+
 EMAIL_HOST_USER = "aarushjohri65@gmail.com"
 EMAIL_HOST_PASSWORD = "don't#gdjtuvxngwoirnz420"
 EMAIL_PORT = 587

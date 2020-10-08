@@ -32,15 +32,13 @@ class CreateRecipe(APIView):
 
     def post(self, request,format=None):
         print('check2')
-        # owner=MyUser.objects.get(id=pk)
+        owner= request.user
         serializer = PostRecipeSerializer(data=request.data)
         print('check3')
         if serializer.is_valid():
-            serializer.save()
-            
+            serializer.save(owner=owner)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class RecipeDetail(APIView):
@@ -56,6 +54,42 @@ class RecipeDetail(APIView):
     #to get the object
     def get(self, request, pk, format=None):
         recipe = self.get_object(pk)
+
+        if request.user.is_anonymous:
+            recipe.like_is=False
+            recipe.bookmark_is=False
+            recipe.save()
+            serializer = RecipeSerializer(recipe, context={'request': request})
+            return Response(serializer.data)
+
+
+        liker = request.user
+        past = False
+        try:
+            islike = LikeSystem.objects.get(liked_by=liker, like_to=recipe)
+            past = True
+        except LikeSystem.DoesNotExist:
+            recipe.like_is=False
+        if past:
+            if islike.active == -1:
+                recipe.like_is=False
+            else:
+                recipe.like_is=True
+
+        bookmarker = request.user
+        past = False
+        try:
+            isbookmark = BookmarkRecord.objects.get(bookmarked_by=bookmarker, bookmark_to=recipe)
+            past = True
+        except BookmarkRecord.DoesNotExist:
+            recipe.bookmark_is=False
+        if past:
+            if isbookmark.active == -1:
+                recipe.bookmark_is=False
+            else:
+                recipe.bookmark_is=True
+        
+        recipe.save()
         serializer = RecipeSerializer(recipe, context={'request': request})
         return Response(serializer.data)
 
@@ -130,6 +164,22 @@ class MyAccountDetail(APIView):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class CreateUser(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -161,9 +211,6 @@ class CreateUser(APIView):
                 user_exists.delete()
                 user_otp = OtpModel.objects.get(email=email_for_otp)
                 user_otp.delete()
-            else:
-                message = {'message': 'User already exists.'}
-                return Response(message, status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = RegisterMyUser(data=request.data)
         if serializer.is_valid():
@@ -187,12 +234,9 @@ class CreateUser(APIView):
                 fail_silently=False,
             )
             print('checkemail')
-            message = {'message': 'OTP Sent.'}
+            message = {'message': 'otp_sent'}
             return Response(message, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
 
 
 class VerifyOTP(APIView):
@@ -204,19 +248,19 @@ class VerifyOTP(APIView):
         try:
             email_to_verify = OtpModel.objects.get(email__iexact=email)
         except OtpModel.DoesNotExist:
-            message = {'message': 'Register First'}
+            message = {'message': 'register_first'}
             return Response(message ,status= status.HTTP_401_UNAUTHORIZED)
         print(email_to_verify.otp)
         print(client_otp)
         verifying_time = int(time.time())
 
         if (verifying_time - email_to_verify.at_time)>300:
-            error_detail = {'message': "OTP Expired"}
+            error_detail = {'message': "otp_expired"}
             email_to_verify.delete()
             return Response(error_detail, status.HTTP_403_FORBIDDEN)
 
         if email_to_verify.otp != int(client_otp):
-            message = {'message': 'Wrong OTP'}
+            message = {'message': 'wrong_otp'}
             return Response(message ,status = status.HTTP_401_UNAUTHORIZED)
         
         user_to_allow = MyUser.objects.get(email=email)
@@ -230,12 +274,10 @@ class VerifyOTP(APIView):
         a_token = AccessToken().for_user(request.user)
         tokens = {
             'refresh': str(r_token),
-            'access': str(a_token),
-            'my_pk': user_to_allow.pk
+            'access': str(a_token)
         }
-        message = {'message': 'Email Verified.'}
+        message = {'message': 'email_verified'}
         return Response(tokens, status = status.HTTP_200_OK)
-
 
 
 class ResendOtp(APIView):
@@ -266,9 +308,8 @@ class ResendOtp(APIView):
             fail_silently=False,
         )
         print('checkemail')
-        message = {'message': 'OTP Sended Again.'}
+        message = {'message': 'otp_sent_again'}
         return Response(message, status=status.HTTP_200_OK)
-
 
 
 class ForgotPassword(APIView):
@@ -287,7 +328,7 @@ class ForgotPassword(APIView):
         try:
             change_pass_email = MyUser.objects.get(email=email)
         except MyUser.DoesNotExist:
-            message = {"message": "Register First."}
+            message = {"message": "register_first"}
             return Response(message, status=status.HTTP_401_UNAUTHORIZED)
 
         # check if user completed registration process
@@ -308,10 +349,10 @@ class ForgotPassword(APIView):
                 to_email,
                 fail_silently=False,
             )
-            message = {'message': 'Email OK.'}
+            message = {'message': 'email_ok'}
             return Response(message, status=status.HTTP_200_OK)
 
-        message = {"message": "Complete Registration First"}
+        message = {"message": "complete_registration_first"}
         return Response(message, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
@@ -337,13 +378,13 @@ class ForgotPasswordOtp(APIView):
 
         # check otp expiration here
         if (verifying_time - email_to_verify.at_time)>5000:
-            error_detail = {'message': "OTP Expired !"}
+            error_detail = {'message': "otp_expired"}
             email_to_verify.delete()
             return Response(error_detail, status.HTTP_403_FORBIDDEN)
 
         # check otp here
         if email_to_verify.otp != int(client_otp):
-            message = {'message': 'Wrong OTP'}              # delete opt models when resend otp either by resending or re-registering
+            message = {'message': 'wrong_otp'}              # delete opt models when resend otp either by resending or re-registering
             return Response(message ,status = status.HTTP_401_UNAUTHORIZED)
         
         user_to_allow = MyUser.objects.get(email=email)
@@ -359,9 +400,8 @@ class ForgotPasswordOtp(APIView):
         #     'refresh': str(r_token),
         #     'access': str(a_token)
         # }
-        message = {'message': 'Email Verified Now Continue.'}
+        message = {'message': 'email_verified_now_continue'}
         return Response(message, status = status.HTTP_200_OK)
-
 
 
 class NewPassword(APIView):
@@ -381,7 +421,7 @@ class NewPassword(APIView):
             return Response(message, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         user = MyUser.objects.get(email__iexact=email)
-        user.set_password(new_password)
+        user.password = new_password
         user.save()
 
         #getting token
@@ -389,11 +429,25 @@ class NewPassword(APIView):
         a_token = AccessToken().for_user(request.user)
         tokens = {
             'refresh': str(r_token),
-            'access': str(a_token),
-            'my_pk': user.pk
+            'access': str(a_token)
         }
-        message = {"message": "Password Changed."}
+        message = {"message": "password_changed"}
         return Response(tokens, status=status.HTTP_202_ACCEPTED)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -467,8 +521,6 @@ class RecipeCardsList(APIView):
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
-
-
 
 
 class StartersCardsList(APIView):
@@ -546,7 +598,6 @@ class StartersCardsList(APIView):
         return Response(serializer.data)
 
 
-
 class MainCourseCardsList(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -621,7 +672,6 @@ class MainCourseCardsList(APIView):
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
-
 
 
 class DessertsCardsList(APIView):
@@ -701,7 +751,6 @@ class DessertsCardsList(APIView):
         return Response(serializer.data)
 
 
-
 class DrinksCardsList(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -776,7 +825,6 @@ class DrinksCardsList(APIView):
 
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
-
 
 
 class OthersCardsList(APIView):
@@ -855,7 +903,6 @@ class OthersCardsList(APIView):
         return Response(serializer.data)
 
 
-
 class SearchCardsList(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -865,8 +912,6 @@ class SearchCardsList(APIView):
         recipe = Recipe.objects.filter(title__icontains=search_title).order_by('?')[:16]
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
-
-
 
 
 class SortCardsList(APIView):
@@ -939,11 +984,18 @@ class SortCardsList(APIView):
 
 
 
+
+
+
+
+
+
+
+
 class CardLike(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-
-    def post(self, request, format=None):
+    def post(self, request, *args,**kwargs):
         # key = request.data.get('pk')
         # print(key)
         # upvoted = request.data.get('like')
@@ -956,10 +1008,19 @@ class CardLike(APIView):
             raise Http404
         print(recipe)
 
+        # userpk = request.data.get('my_pk')
+        # try:
+        #     user = MyUser.objects.get(pk=userpk)
+        # except MyUser.DoesNotExist:
+        #     message = {'message': 'user_must_login'}
+        #     return Response(message, status=status.HTTP_401_UNAUTHORIZED)
+
+        user = request.user
+
         try:
-            like = LikeSystem.objects.get(Q(liked_by=request.user) & Q(like_to=recipe))
+            like = LikeSystem.objects.get(Q(liked_by=user) & Q(like_to=recipe))
         except LikeSystem.DoesNotExist:
-            like = LikeSystem.objects.create(liked_by=request.user, like_to=recipe, active=-1)
+            like = LikeSystem.objects.create(liked_by=user, like_to=recipe, active=-1)
 
         response_data = {}
 
@@ -991,48 +1052,66 @@ class CardLike(APIView):
         return Response(response_data, status=status.HTTP_200_OK)
 
 
-
-
-
 class Bookmark(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, pk, format=None):
-        key = request.data.get('pk')
-
+    def post(self, request, *args,**kwargs):
+        # key = request.data.get('pk')
+        # print(key)
+        # upvoted = request.data.get('like')
+        
+        k=request.data.get('pk')
+    
         try:
-            recipe = Recipe.objects.get(pk=key)
+            recipe = Recipe.objects.get(pk=k)
         except:
             raise Http404
+        print(recipe)
 
-        user = request.user
+        # userpk = request.data.get('my_pk')
+        # try:
+        #     user = MyUser.objects.get(pk=userpk)
+        # except MyUser.DoesNotExist:
+        #     message = {'message': 'user_must_login'}
+        #     return Response(message, status=status.HTTP_401_UNAUTHORIZED)
+
+        u = request.user
 
         try:
-            bookmark = BookmarkRecord.objects.get(Q(bookmarked_by=user) & Q(bookmark_to=recipe))
+            user = MyUser.objects.get(pk=u.pk)
+        except MyUser.DoesNotExist:
+            message = {'message': 'Please Login First'}
+            return Response(message, status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            Bookmark = BookmarkRecord.objects.get(Q(bookmarked_by=user) & Q(bookmark_to=recipe))
         except BookmarkRecord.DoesNotExist:
-            bookmark = BookmarkRecord.objects.create(bookmarked_by=user, bookmark_to=recipe, active=-1)
+            Bookmark = BookmarkRecord.objects.create(bookmarked_by=user, bookmark_to=recipe, active=-1)
 
+        response_data = {}
 
-        # 1 means already bookmarked and
-        # -1 means not bookmarked 
-
-        if bookmark.active == -1:
-            bookmark.active = 1
-            bookmark.save()
-            user.bookmark_count = F('bookmark_count') + 1
-            user.save()
-            message= {"message": "bookmark_added"}
+        # 1 means already liked and
+        # -1 means not liked
+        if Bookmark.active == -1:
+            Bookmark.active = 1
+            response_data['message'] = 'Bookmarked'
+            user.bookmark_count = F('bookmark_count') +1
         else:
-            bookmark.active = -1
-            bookmark.save()
-            user.bookmark_count = F('bookmark_count') - 1
-            user.save()
-            message= {"message": "bookmark_removed"}
+            Bookmark.active = -1
+            response_data['message'] = 'UnBookmarked'
+            user.bookmark_count = F('bookmark_count') -1
+        Bookmark.save()
+        user.save()
 
-        return Response(message, status=status.HTTP_200_OK)
+        #print(like_count)
+        #print('########################')
+        print('response_data')
+        #return JsonResponse(response_data)
+        return Response(response_data, status=status.HTTP_200_OK)
+
+    
 
 
 
-# class LikeLog(APIView):
 
 

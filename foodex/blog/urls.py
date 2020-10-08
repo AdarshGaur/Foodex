@@ -29,7 +29,6 @@ urlpatterns = [
 	#bookmark
 	path('recipe/bookmark/', views.Bookmark.as_view()),                #for bookmarking recipes
 
-	# path('post/like/', views.LikeLog.as_view()),
 
 	#
 	path('recipe/post/', views.CreateRecipe.as_view()),                       #for recipe create
