@@ -15,6 +15,7 @@ class FollowingList extends Component {
     <div>
       <NavigationBar/>
       <Details/>
+      <h1 className={classes.recentrecipes}>Following</h1>
       <PersonCard />
     </div>
 

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 import NavigationBar from '../../Navbar/Navbar';
 import UserPosts from './UserPosts'
+import serverService from '../../../services/serverService';
 
 
 class OtherUser extends Component {
@@ -13,40 +14,19 @@ class OtherUser extends Component {
         userdetails:[],
         isfollow:"Follow"
     }
+    
+    
+      componentDidMount(){
+          const data= this.props.location.state.ownerpk;
+          console.log(data);
 
-//     upload(e){
-//         console.warn(e.target.files)
-//         const files= e.target.files
-//         const formData= new FormData();
-//         fetch('http://apiUrl',{
-//             method:"POST",
-//             body:formData
-//         }).then((resp)=>{
-//             resp.json().then((result)=>{
-//                 console.warn("result",result)
-//             })
-//         })
-//     }
-
-//     componentDidMount(){
-//         const userpk= localStorage.getItem('mypk')
-//  axios.get('https://8a5f7f0c745b.ngrok.io/user/2/' 
-// //  +userpk+'/'
-//  ,
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     // 'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-//                 },
-                
-//             })
-//             .then((resp)=>{
-//                 console.log(resp.data)    
-//                 this.setState({userdetails: resp.data})
-//               })
-
-//     }
-
+        //   axios.get('http://58eaa649e23e.ngrok.io/user/' +data+'/')
+        serverService.otheruser(data)
+          .then((resp)=>{
+            console.log(resp.data)    
+            this.setState({userdetails: resp.data})
+          })
+      }
 
 handlefollow=()=>{
     if(this.state.isfollow==="Follow"){
@@ -74,8 +54,8 @@ render(){
 {/* <input className={classes.avatar} id="uploadpic" type="file" className={classes.avatar} onChange={(e)=>this.upload(e)} name="img" accept="image/*" /> */}
 <label onClick={this.handlefollow} className={classes.change}>{this.state.isfollow}</label>
 </div>
-<h3>MS Dhoni
-    {/* {this.state.userdetails.name} */}
+<h3>
+    {this.state.userdetails.name}
 </h3>
 {/* <p className={classes.bookmark}>my bookmarks</p> */}
 </div>
@@ -102,6 +82,7 @@ render(){
 </div>
 </div>
 
+<h1 className={classes.recentrecipes}>Posts</h1>
 <UserPosts/>
 
 </>

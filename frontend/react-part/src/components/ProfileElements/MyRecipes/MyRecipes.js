@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from '../../Categories/Categories.module.css';
+import classes from '../../Navbar/pages/Home/Home.module.css';
 import RecipeCard from '../../UI/Card/RecipeCard'
 import axios from 'axios';
 import ServerService from '../../../services/serverService'
@@ -33,6 +33,7 @@ class MyRecipes extends Component {
     <>
     <NavigationBar />
     <Details />
+    <h1 className={classes.recentrecipes}>Posts</h1>
     <div className={classes.grid}>
     {recipecards}
 

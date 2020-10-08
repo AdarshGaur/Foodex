@@ -33,7 +33,6 @@ class UserPosts extends Component {
     <>
     <div className={classes.grid}>
     {recipecards}
-
     </div>
     </>
     )

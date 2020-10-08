@@ -16,12 +16,17 @@ class AddRecipe extends Component {
     content:"",
     img: "",
     contentLimit:4000,
-    category:"starters",
+    category:"starter",
     veg:true,
     cook_time: 60,
-    owner:2
+    // owner:2
 
   }
+
+     createNotification = (info) => {
+        NotificationManager.error( info, 'Error');
+    };
+  
 
     handlechangeall = (event) =>{
         this.setState ( { [event.target.name] :event.target.value  } )
@@ -39,8 +44,16 @@ class AddRecipe extends Component {
 
     handlesubmit = (event) => {
         event.preventDefault();
-// console.log(this.state.img)
 
+if(this.state.title.length - this.state.titleLimit>0 ||
+  this.state.content.length - this.state.contentLimit>0 ||
+  this.state.ingredients.length - this.state.ingredientsLimit>0 ||
+  this.state.title.length==0 || this.state.content.length==0 || this.state.ingredients.length==0
+  ){
+    this.createNotification("Please ensure you have filled all the fields within character limit")
+}
+
+else{
       const data={
         title: this.state.title,
         category: this.state.category,
@@ -48,18 +61,18 @@ class AddRecipe extends Component {
         content: this.state.content,
         veg: this.state.veg,
         cook_time: this.state.cook_time,
-        owner: this.state.owner,
+        // owner: this.state.owner,
         img: this.state.img
       }
         
       const formdata = new FormData();
-
+      const userpk= localStorage.getItem('mypk')
     for (let formElement in data) {
       formdata.append(formElement, data[formElement]);
     //   console.log(formElement, data[formElement]);
     }
 
-        axios.post('https://a964c75a8aed.ngrok.io/recipe/post/', formdata)
+        axios.post('http://58eaa649e23e.ngrok.io/recipe/post/'+ userpk +'/', formdata)
         .then((resp)=>{
           console.log(resp)
           if(resp.status===201){
@@ -69,7 +82,7 @@ class AddRecipe extends Component {
       
         })
         .catch(err => {console.log(err.response)})
-      
+}
     
       }
 
@@ -89,7 +102,7 @@ class AddRecipe extends Component {
                 
                 
 
-        <form onSubmit = {this.handleOnSubmit}>
+        <form onSubmit = {this.handlesubmit}>
 
             <label><h3 className={classes.labels}>Recipe Title</h3></label>
             <input type="text" className={classes.area} name = 'title'  placeholder={this.state.title} onChange = {this.handlechangeall} />
@@ -126,7 +139,7 @@ class AddRecipe extends Component {
             <label className={classes.imgbtn} htmlFor="postimage"><i className="fa fa-upload" aria-hidden="true"></i>Add Image</label>
             {/* </div> */}
 
-            <input className={classes.submitrecipe} type="submit" onClick={this.handlesubmit} value="ADD RECIPE" />
+            <input className={classes.submitrecipe} type="submit" value="ADD RECIPE" />
 
         </form>
 

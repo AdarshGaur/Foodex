@@ -224,3 +224,17 @@
     
 }
 
+.recentrecipes{
+    margin: 2vw;
+    font-size: 4rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media(max-width: 1000px){
+    .recentrecipes{
+        font-size: 2rem;
+        justify-content: center;
+      }
+  }

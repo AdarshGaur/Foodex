@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://8a5f7f0c745b.ngrok.io/";
+const BASE_URL = "http://58eaa649e23e.ngrok.io/";
 
 class ServerService {
 
@@ -36,6 +36,10 @@ class ServerService {
 
     homecards(){
       return axios.get(BASE_URL)
+    }
+
+    otheruser(data){
+      return axios.get(BASE_URL+ 'user/' +data+'/')
     }
 
     searchpage(data){

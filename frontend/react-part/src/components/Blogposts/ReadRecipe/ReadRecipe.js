@@ -17,15 +17,15 @@ class AddRecipe extends Component {
         
       }
     
-    //   componentDidMount(){
-    //       const data= this.props.location.state.recipeid;
+      componentDidMount(){
+          const data= this.props.location.state.recipeid;
 
-    //     serverService.readrecipe(data)
-    //     .then(response=>{
-    //       console.log(response);
-    //       this.setState({recipe: response.data})
-    //     })
-    //   }
+        serverService.readrecipe(data)
+        .then(response=>{
+          console.log(response);
+          this.setState({recipe: response.data})
+        })
+      }
 
     render(){
         return (
@@ -38,7 +38,15 @@ class AddRecipe extends Component {
                 <h1 className={classes.titlerecipe}>{this.state.recipe.title}</h1>
                 {/* <h1>Butter Paneer</h1> */}
                 <div className={classes.options}>
-                <p className={classes.extras}>by {this.state.recipe.owner}</p>
+                <p className={classes.by}> by
+                <Link className={classes.authorname}
+                to= {{
+                    pathname:'/user-profile',
+                    state:{ownerpk: this.state.recipe.owner_pk}
+                  }} 
+                >{this.state.recipe.owner}
+                </Link>
+                </p>
         <p className={classes.extras}>Cooking Time: {this.state.recipe.cook_time} mins</p>
                 </div>
                 <div className={classes.imgwrap}>
@@ -66,10 +74,10 @@ class AddRecipe extends Component {
 <div className={classes.btnwrap}>
                 <div className={classes.btndivfirst}>
                 <LikeButton 
-                // pk={this.props.location.state.recipeid} 
+                pk={this.props.location.state.recipeid} 
                 />
                 <BookmarkButton 
-                // pk={this.props.location.state.recipeid} 
+                pk={this.props.location.state.recipeid} 
                 />
 
                 </div>
@@ -77,7 +85,7 @@ class AddRecipe extends Component {
                     <Button className={classes.editbtn} as={Link} 
            to= {{
             pathname:'/edit-recipe',
-            // state:{recipeid: this.props.location.state.recipeid}
+            state:{recipeid: this.props.location.state.recipeid}
           }} 
           >Edit</Button>
 
