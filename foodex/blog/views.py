@@ -137,7 +137,7 @@ class MyUserDetail(APIView):
     #to get the user
     def get_user(self, pk):
         try:
-            print(pk)
+            # print(pk)
             return MyUser.objects.get(pk=pk)
         except MyUser.DoesNotExist:
             message = {'message': 'page not found'}
@@ -145,11 +145,11 @@ class MyUserDetail(APIView):
     
     #get the details
     def get(self, request, pk, format=None):
-        print('2----------')
-        print(pk)
+        # print('2----------')
+        # print(pk)
         solo_user = self.get_user(pk)
         serializer = MyUserSerializer(solo_user, context={'request': request})
-        print(serializer)
+        # print(serializer)
         return Response(serializer.data)
 
     #to update user details
@@ -1155,42 +1155,44 @@ class MyRecipeList(APIView):
         return Response(serializer.data)
 
 
-class Folllow(APIView):
+class Follow(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+
         k = request.user
         try:
             follower = MyUser.objects.get(pk=k.pk)
         except MyUser.DoesNotExist:
             return Response({'message':'Sign In/Up First'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        u = request.data.get('ownerkapk')
-
+        u = request.data.get('userpk')
         try:
             user = MyUser.objects.get(pk=u)
         except MyUser.DoesNotExist:
             return Response({'message':'User Not Found'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            alreadyfollowed = FollowSystem.objects.get(followed_by=follower, followed_to=user)
+            alreadyfollowed = FollowSystem.objects.get(Q(followed_by=follower) & Q(followed_to=user))
+            print(alreadyfollowed)
         except FollowSystem.DoesNotExist:
-            alreadyFollowed = FollowSystem.object.create(followed_by=follower, followed_to=user, acitve=False)
+            print('called')
+            alreadyfollowed = FollowSystem.objects.create(followed_by=follower, followed_to=user, active=False)
         
         response_data = {}
 
-        if alreadyFollowed.active :
-            alreadyFollowed.active=False
-            user.follower = F('follower') -1
+        if alreadyfollowed.active==True:
+            alreadyfollowed.active=False
+            user.followers = F('followers') -1
             follower.following = F('following') -1
             response_data['message'] = 'Unfollowed.'
         else:
-            alreadyFollowed.active=True
-            user.follower = F('follower') +1
-            follower.following = F('follower') +1
+            alreadyfollowed.active=True
+            user.followers = F('followers') +1
+            follower.following = F('following') +1
             response_data['message'] = 'followed.'
         
-        alreadyFollowed.save()
+        alreadyfollowed.save()
         user.save()
         follower.save()
         return Response(response_data, status=status.HTTP_200_OK)

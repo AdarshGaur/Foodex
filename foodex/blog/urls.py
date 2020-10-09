@@ -26,7 +26,7 @@ urlpatterns = [
 	#
 	path('recipe/like/', views.CardLike.as_view()),                		 #for liking recipes
 	path('recipe/bookmark/', views.Bookmark.as_view()),                  #for bookmarking recipes
-	# path('user/follow/', views.Follow.as_view()),                      #to follow users
+	path('user/follow/', views.Follow.as_view()),                        #to follow users
 
 
 
