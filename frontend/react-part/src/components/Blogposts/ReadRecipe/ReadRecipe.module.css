@@ -48,14 +48,12 @@
 }
 
 .authorname{
-    margin-left: 10%;
     color: #e60e3c;
     font-weight: 600;
     text-decoration: none;
 }
 
 .authorname:hover{
-    margin-left: 10%;
     color: #ff0000;
     text-decoration: none;
 }

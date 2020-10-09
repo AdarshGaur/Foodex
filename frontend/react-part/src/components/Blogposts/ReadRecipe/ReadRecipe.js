@@ -53,6 +53,7 @@ class AddRecipe extends Component {
 
         let editing
         let deleting
+        let authorprofile
       if(this.state.recipe.ownit){
         editing= <Button className={classes.editbtn} as={Link} 
            to= {{
@@ -62,6 +63,11 @@ class AddRecipe extends Component {
           >Edit</Button>
 
           deleting= <button className={classes.deletebtn}>delete</button>
+
+          authorprofile= <Link className={classes.authorname}
+                to= 'profile'
+                >{this.state.recipe.owner}
+                </Link>
       }
       else{
         editing= <Button className={classes.btnhide} as={Link} 
@@ -72,6 +78,14 @@ class AddRecipe extends Component {
        >Edit</Button>
 
        deleting= <button className={classes.btnhide}>delete</button>
+
+       authorprofile= <Link className={classes.authorname}
+                to= {{
+                    pathname:'/user-profile',
+                    state:{ownerpk: this.state.recipe.ownerkapk}
+                  }} 
+                >{this.state.recipe.owner}
+                </Link>
 
       }
 
@@ -91,15 +105,15 @@ class AddRecipe extends Component {
                 <h1 className={classes.titlerecipe}>{this.state.recipe.title}</h1>
                 {/* <h1>Butter Paneer</h1> */}
                 <div className={classes.options}>
-                <p className={classes.by}> by
-                <Link className={classes.authorname}
+                <span className={classes.by}> by
+                {/* <Link className={classes.authorname}
                 to= {{
                     pathname:'/user-profile',
                     state:{ownerpk: this.state.recipe.ownerkapk}
                   }} 
                 >{this.state.recipe.owner}
-                </Link>
-                </p>
+                </Link> */} {authorprofile}
+                </span>
         <p className={classes.extras}>Cooking Time: {this.state.recipe.cook_time} mins</p>
                 </div>
                 <div className={classes.imgwrap}>

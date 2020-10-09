@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import classes from './Details.module.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import axios from 'axios';
+import ServerService from '../../../services/serverService';
 
 
 
@@ -28,17 +29,8 @@ class Details extends Component {
 
     componentDidMount(){
 
- axios.get('https://f301cd771e23.ngrok.io/my-account/',
- {
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    },
-    
-}
- )
-
-            .then((resp)=>{
+        ServerService.userdetails()
+        .then((resp)=>{
                 console.log(resp.data)    
                 this.setState({userdetails: resp.data})
               })

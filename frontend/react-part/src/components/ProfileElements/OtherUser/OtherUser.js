@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import classes from '../Details/Details.module.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import axios from 'axios';
+import RecipeCard from '../../UI/Card/RecipeCard'
 import NavigationBar from '../../Navbar/Navbar';
-import UserPosts from './UserPosts'
 import serverService from '../../../services/serverService';
 
 
@@ -12,6 +12,7 @@ class OtherUser extends Component {
 
     state={
         userdetails:[],
+        recipecards:[],
         isfollow:"Follow"
     }
     
@@ -24,7 +25,7 @@ class OtherUser extends Component {
         serverService.otheruser(data)
           .then((resp)=>{
             console.log(resp.data)    
-            this.setState({userdetails: resp.data})
+            this.setState({userdetails: resp.data, recipecards: resp.data.recipes})
           })
       }
 
@@ -38,6 +39,14 @@ handlefollow=()=>{
 }
 
 render(){    
+
+    const recipecards= this.state.recipecards.map(recipecard=>{
+        console.log(recipecard.pk)
+      return <RecipeCard title={recipecard.title} img={recipecard.img} pk={recipecard.pk} content={recipecard.content} />
+      })
+
+// console.log(this.state.recipecards)
+
     return (
       <>
 <NavigationBar/>
@@ -83,7 +92,12 @@ render(){
 </div>
 
 <h1 className={classes.recentrecipes}>Posts</h1>
-<UserPosts/>
+
+<div className={classes.grid}>
+    {recipecards}
+    </div>
+
+{/* <UserPosts usrpk={this.state.userdetails.id} /> */}
 
 </>
   );

@@ -223,6 +223,13 @@
     } */
     
 }
+.grid {
+    /* min-height: 100%; */
+    display: flex;
+    /* grid-template-columns: 1fr 1fr 1fr 1fr; */
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
 
 .recentrecipes{
     margin: 2vw;
@@ -236,5 +243,12 @@
     .recentrecipes{
         font-size: 2rem;
         justify-content: center;
-      }
+    }
+
+    .grid{
+        grid-template-columns: 1fr;
+        /* overflow: hidden; */
+    }
   }
+
+

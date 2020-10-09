@@ -40,6 +40,18 @@ class ServerService {
       return axios.get(BASE_URL+ 'user/' +data+'/')
     }
 
+    userdetails(){
+      return axios.get(BASE_URL+ 'my-account/',
+      {
+         headers: {
+             'Content-Type': 'application/json',
+             'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+         },
+         
+     }
+      )
+    }
+
     searchpage(data){
       return axios.post(BASE_URL + 'search/',data)
     }
