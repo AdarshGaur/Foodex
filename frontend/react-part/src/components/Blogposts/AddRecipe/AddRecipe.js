@@ -5,6 +5,7 @@ import {Link, Redirect} from 'react-router-dom';
 import {Card, Button} from 'react-bootstrap'
 import axios from 'axios'
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import ServerService from '../../../services/serverService';
 
 class AddRecipe extends Component {
 
@@ -72,7 +73,9 @@ else{
     //   console.log(formElement, data[formElement]);
     }
 
-        axios.post('http://58eaa649e23e.ngrok.io/recipe/post/'+ userpk +'/', formdata)
+        // axios.post('http://58eaa649e23e.ngrok.io/recipe/post/'+ userpk +'/', formdata)
+        // axios.post('https://f301cd771e23.ngrok.io/recipe/post/', formdata)
+        ServerService.addrecipe(formdata)
         .then((resp)=>{
           console.log(resp)
           if(resp.status===201){

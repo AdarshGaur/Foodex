@@ -20,7 +20,7 @@ class AddRecipe extends Component {
       componentDidMount(){
           const data= this.props.location.state.recipeid;
 
-
+        console.log(localStorage.getItem('access_token'))
 
         serverService.readrecipe(data)
         .then(response=>{

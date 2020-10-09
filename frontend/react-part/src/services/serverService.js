@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://a033d30f4049.ngrok.io/";
+const BASE_URL = "https://f301cd771e23.ngrok.io/";
 
 class ServerService {
 
@@ -45,18 +45,50 @@ class ServerService {
     }
 
     readrecipe(data){
-      return axios.get(BASE_URL + 'recipe/'+ data+'/',
-      {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        },
-        
-    }
-      )
-    }
+
+if(localStorage.getItem('access_token')){
+  return axios.get(BASE_URL + 'recipe/'+ data+'/',
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    },
+    
+}
+  )
+
+}
+
+else{
+  return axios.get(BASE_URL + 'recipe/'+ data+'/',
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': ``
+    },
+    
+}
+  )
+}
 
 
+}
+
+
+  addrecipe(formdata){
+
+  return axios.post(BASE_URL + 'recipe/post/', formdata,
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
+    
+}
+  )
+
+
+  }
 
 
     sort(sortdata){

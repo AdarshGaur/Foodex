@@ -14,8 +14,8 @@ class MyRecipes extends Component {
   }
 
   componentDidMount(){
-    // axios.get('http://af3c2d386213.ngrok.io/desserts/')
-    ServerService.homecards()
+    axios.get('https://f301cd771e23.ngrok.io/user/recipe-list/')
+    // ServerService.homecards()
     .then(response=>{
       console.log(response.data);
       this.setState({recipecards: response.data})

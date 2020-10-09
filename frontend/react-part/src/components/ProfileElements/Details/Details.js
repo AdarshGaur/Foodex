@@ -27,9 +27,16 @@ class Details extends Component {
     }
 
     componentDidMount(){
-        const userpk= localStorage.getItem('mypk')
- axios.get('http://58eaa649e23e.ngrok.io/user/'+userpk +'/')
-//  +userpk+'/'
+
+ axios.get('https://f301cd771e23.ngrok.io/my-account/',
+ {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    },
+    
+}
+ )
 
             .then((resp)=>{
                 console.log(resp.data)    
@@ -74,7 +81,7 @@ render(){
     </Link>
     <Link className={classes.profilenums} to="/profile"><div>
         <h5 className={classes.headingnums}>Posts</h5>
-        <p className={classes.nums}>34</p>
+        <p className={classes.nums}>{this.state.userdetails.post_count}</p>
     </div></Link>
 
 </div>
