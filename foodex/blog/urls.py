@@ -23,11 +23,14 @@ urlpatterns = [
 	path('search/sort/', views.SortCardsList.as_view()),                #for searching cards
 	#added sorting routes also
 	
-	#like routes
-	path('recipe/like/', views.CardLike.as_view()),                #for liking recipes
-	
-	#bookmark
-	path('recipe/bookmark/', views.Bookmark.as_view()),                #for bookmarking recipes
+	#
+	path('recipe/like/', views.CardLike.as_view()),                		 #for liking recipes
+	path('recipe/bookmark/', views.Bookmark.as_view()),                  #for bookmarking recipes
+	# path('user/follow/', views.Follow.as_view()),                      #to follow users
+	# path('user/following-list/', views.Follow.as_view()),              #for following list
+	# path('user/follower-list/', views.Follow.as_view()),               #for follower list
+	path('user/bookmark-list/', views.BookmarkList.as_view()),               #for bookmark list
+	path('user/recipe-list/', views.MyRecipeList.as_view()),               #for My Recipe list
 
 
 	#
@@ -37,6 +40,9 @@ urlpatterns = [
 	path('user/<int:pk>/', views.MyUserDetail.as_view()),                  #for users details
 	path('my-account/', views.MyAccountDetail.as_view()),                  #for my-account details
 	#path('user/<int:pk>/bookmark-list/', views.Bookmarklist.as_view()),    #for listing bookmarked recipes
+
+	#
+	# path('user/my-posts/', views.MyPosts.as_view()),               #for follower list
 
 
 	#authentication

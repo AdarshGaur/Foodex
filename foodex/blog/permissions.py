@@ -6,8 +6,14 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 		# print('2######2')
 		# print(request.user)
 		if request.method in permissions.SAFE_METHODS:
+			print('passed')
+			print(obj)
+			print(obj.owner)
+			print(request.user)
 			return True
-		if obj.owner == request.user:
+		u = request.user
+		if obj.owner == u:
+			print('called')
 			return True
 
 

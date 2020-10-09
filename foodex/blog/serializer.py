@@ -84,7 +84,7 @@ class PostRecipeSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
 	#owner_pk = serializers.IntegerField(source=owner.pk)
 	owner = serializers.ReadOnlyField(source='owner.name')
-	# ownerkapk = serializers.IntegerField(source='owner.pk')
+	ownerkapk = serializers.IntegerField(source='owner.pk')
 	# email = serializers.ReadOnlyField(source='owner.email')
 	# img_url = serializers.SerializerMethodField()
 	
@@ -140,11 +140,5 @@ class MyUserSerializer(serializers.ModelSerializer):
 	# 	return request.build_absolute_uri(img_url)
 
 
-#lkjghgfghkfghkfjhtbd ytjvd ytjxcyfoyulrfyv.fgjkd' ghyisfhild
-# .mgjkfbd li;suda fghps9da;gdugjb[io'nha/gki fytdapg;hoipreaht;jkl
-# g gjklunlsrdhyiobrea gyhfidgy hiljkdagytiljkafhisjkdafbiasudgbfguasdhfg;iouasdyfgjkdgfjk
-# asdfhuisdhfklsdayfiljkadfbguioadfgb;uioadghiodafghladuytghkl.jagfjh
-# kdagfaisdfnoiashfl;kahfoalkhioahfkldabngjkdfayt ihk;jagpdifhg[ofdnglfkdaghi
-# kasldfhlksjafhkljsahfudfgyp9doglkdngpfidgh[0fdag]]]
-# class ProfileSerializer(serializers.ModelSerializer):
+
 

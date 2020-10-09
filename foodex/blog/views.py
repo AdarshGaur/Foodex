@@ -4,7 +4,7 @@ import time
 from django.shortcuts import render
 
 from rest_framework import status, permissions
-from django.http import Http404 #, JsonResponse
+from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -1071,13 +1071,6 @@ class Bookmark(APIView):
             raise Http404
         print(recipe)
 
-        # userpk = request.data.get('my_pk')
-        # try:
-        #     user = MyUser.objects.get(pk=userpk)
-        # except MyUser.DoesNotExist:
-        #     message = {'message': 'user_must_login'}
-        #     return Response(message, status=status.HTTP_401_UNAUTHORIZED)
-
         u = request.user
 
         try:
@@ -1093,8 +1086,7 @@ class Bookmark(APIView):
 
         response_data = {}
 
-        # 1 means already liked and
-        # -1 means not liked
+        
         if Bookmark.active == -1:
             Bookmark.active = 1
             response_data['message'] = 'Bookmarked'
@@ -1109,11 +1101,54 @@ class Bookmark(APIView):
         #print(like_count)
         #print('########################')
         print('response_data')
-        #return JsonResponse(response_data)
+        #return JsonResponse(response_data) 
         return Response(response_data, status=status.HTTP_200_OK)
 
-    
+####### debug this ########
+class BookmarkList(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
+    def get(self, request, *args, **kwargs):
+        k =request.user
+        try:
+            user = MyUser.objects.get(pk=k.pk)
+        except MyUser.DoesNotExist:
+            return Response({'message':'Page Not Found'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            bookmark = BookmarkRecord.objects.filter(bookmarked_by=user, acitve=1)
+        except:
+            pass
+        
+        i = bookmark.count()
+        for i in range(0, i):
+            pass
+        serializer = RecipeCardSerializer(bookmark.bookmark_to, context={'request': request})
+        print(serializer)
+        return Response(serializer.data)
+
+
+class MyRecipeList(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        k = request.user
+
+        try:
+            user = MyUser.objects.get(pk=k.pk)
+        except MyUser.DoesNotExist:
+            return Response({'message':'Page Not Found'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            posts = Recipe.objects.filter(owner=user)
+        except:
+            pass
+        
+        # i = posts.count()
+        # print(i)
+
+        serializer = RecipeCardSerializer(posts, many=True, context={'request': request})
+        return Response(serializer.data)
 
 
 
