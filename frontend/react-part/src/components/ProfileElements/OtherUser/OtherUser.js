@@ -63,18 +63,18 @@ render(){
 <div className={classes.options}>
      <div className={classes.profilenums}>
         <h5 className={classes.headingnums}>Following</h5>
-        <p className={classes.nums}>34</p>
+        <p className={classes.nums}>{this.state.userdetails.following}</p>
         </div>
        
     
    <div className={classes.profilenums}>
         <h5 className={classes.headingnums}>Followers</h5>
-        <p className={classes.nums}>34</p>     
+        <p className={classes.nums}>{this.state.userdetails.followers}</p>     
     </div>
    
 <div className={classes.profilenums}>
         <h5 className={classes.headingnums}>Posts</h5>
-        <p className={classes.nums}>34</p>
+        <p className={classes.nums}>{this.state.userdetails.post_count}</p>
     </div>
 
 </div>

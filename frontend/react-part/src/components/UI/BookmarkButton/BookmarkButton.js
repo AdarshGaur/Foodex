@@ -10,6 +10,15 @@ class BookmarkButton extends Component {
         isclicked: false
     };
 
+    componentDidMount(){
+        const data= this.props.pk;
+
+      ServerService.readrecipe(data)
+      .then(response=>{
+        console.log(response);
+        this.setState({isclicked: response.data.bookmark_is,})
+      })
+    }
 
     handlechange = () => {
           this.setState({

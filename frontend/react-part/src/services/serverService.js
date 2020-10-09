@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://18092a30b6fb.ngrok.io/";
+const BASE_URL = "https://a033d30f4049.ngrok.io/";
 
 class ServerService {
 
@@ -45,12 +45,14 @@ class ServerService {
     }
 
     readrecipe(data){
-      return axios.get(BASE_URL + 'recipe/'+ data+'/'
-      // ,      {
-      //   params:{
-      //     my_pk: localStorage.getItem('mypk')
-      //   }
-      // }
+      return axios.get(BASE_URL + 'recipe/'+ data+'/',
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        
+    }
       )
     }
 

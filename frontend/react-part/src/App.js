@@ -42,7 +42,7 @@ function App() {
         <Route path='/user-profile' component={OtherUser} />
         <Protected path='/bookmarks' component={Bookmarks} />
         <Route path='/otp' component={Otp} />
-        <Route path='/add-recipe' component={AddRecipe} />
+        <Protected path='/add-recipe' component={AddRecipe} />
         <Route path='/edit-recipe' component={EditRecipe} />
         <Route path='/read-recipe' component={ReadRecipe} />
         <Route path='/starters' component={Starters} />

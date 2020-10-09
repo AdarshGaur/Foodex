@@ -7,12 +7,30 @@ class LikeButton extends Component {
 
     state = {
         // likes: 0,
-        isclicked: false
+        isclicked: false,
+        likes: 0
     };
 
 
+    componentDidMount(){
+        const data= this.props.pk;
+
+      ServerService.readrecipe(data)
+      .then(response=>{
+        console.log(response);
+        this.setState({isclicked: response.data.like_is, likes: response.data.points})
+      })
+    }
+
     addLike = () => {
  
+        if(this.state.isclicked){
+            this.setState({likes: this.state.likes-1})
+        }
+        else{
+            this.setState({likes: this.state.likes+1})
+        }
+
           this.setState({
           isclicked: ((this.state.isclicked)?false:true)
         });
@@ -21,16 +39,6 @@ class LikeButton extends Component {
             pk: this.props.pk
         }
         console.log(data)
-        // axios.post('https://776d58591d10.ngrok.io/recipe/like/', data)
-
-        // axios.post('https://776d58591d10.ngrok.io/recipe/like/', data,
-        // {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        //     },
-            
-        // }) 
 
         ServerService.like(data)
         .then((resp)=>{
@@ -45,7 +53,7 @@ class LikeButton extends Component {
             return (
             
                 <button onClick={this.addLike} className={classes.likebtn} >
-                    <i className="fa fa-heart" aria-hidden="true"></i> 1
+                    <i className="fa fa-heart" aria-hidden="true"></i> {this.state.likes}
                 </button>
             )
         }
@@ -54,7 +62,7 @@ class LikeButton extends Component {
             return (
             
                 <button onClick={this.addLike} className={classes.likebtn} > 
-                <i className="far fa-heart"></i> 0 
+                <i className="far fa-heart"></i> {this.state.likes}
                 </button>
             )
         }

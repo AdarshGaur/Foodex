@@ -50,7 +50,7 @@ class AddRecipe extends Component {
                 <Link className={classes.authorname}
                 to= {{
                     pathname:'/user-profile',
-                    state:{ownerpk: this.state.recipe.owner_pk}
+                    state:{ownerpk: this.state.recipe.ownerkapk}
                   }} 
                 >{this.state.recipe.owner}
                 </Link>
@@ -83,7 +83,7 @@ class AddRecipe extends Component {
                 <div className={classes.btndivfirst}>
                 <LikeButton 
                 pk={this.props.location.state.recipeid} 
-                likedis= {this.state.recipe.points} 
+                likeis= {this.state.recipe.like_is} 
                 points= {this.state.recipe.points} 
                 />
                 <BookmarkButton 
