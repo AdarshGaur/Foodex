@@ -8,7 +8,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Recipe, MyUser, OtpModel, LikeSystem, BookmarkRecord
+from .models import Recipe, MyUser, OtpModel, LikeSystem, BookmarkRecord, FollowSystem
 from .serializer import RecipeSerializer, MyUserSerializer, RegisterMyUser, RecipeCardSerializer, PostRecipeSerializer
 from rest_framework import serializers
 
@@ -999,9 +999,6 @@ class CardLike(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args,**kwargs):
-        # key = request.data.get('pk')
-        # print(key)
-        # upvoted = request.data.get('like')
         
         k=request.data.get('pk')
     
@@ -1076,7 +1073,7 @@ class Bookmark(APIView):
         try:
             user = MyUser.objects.get(pk=u.pk)
         except MyUser.DoesNotExist:
-            message = {'message': 'Please Login First'}
+            message = {'message': 'Sign In/Up First'}
             return Response(message, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
@@ -1120,9 +1117,9 @@ class BookmarkList(APIView):
         except:
             pass
         
-        i = bookmark.count()
-        for i in range(0, i):
-            pass
+        # i = bookmark.count()
+        # for i in range(0, i):
+        #     queryset |= bookmark[i].bookmark_to
         serializer = RecipeCardSerializer(bookmark.bookmark_to, context={'request': request})
         print(serializer)
         return Response(serializer.data)
@@ -1149,6 +1146,53 @@ class MyRecipeList(APIView):
 
         serializer = RecipeCardSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data)
+
+
+class Folllow(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        k = request.user
+        try:
+            follower = MyUser.objects.get(pk=k.pk)
+        except MyUser.DoesNotExist:
+            return Response({'message':'Sign In/Up First'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        u = request.data.get('ownerkapk')
+
+        try:
+            user = MyUser.objects.get(pk=u)
+        except MyUser.DoesNotExist:
+            return Response({'message':'User Not Found'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            alreadyfollowed = FollowSystem.objects.get(followed_by=follower, followed_to=user)
+        except FollowSystem.DoesNotExist:
+            alreadyFollowed = FollowSystem.object.create(followed_by=follower, followed_to=user, acitve=False)
+        
+        response_data = {}
+
+        if alreadyFollowed.active :
+            alreadyFollowed.active=False
+            user.follower = F('follower') -1
+            follower.following = F('following') -1
+            response_data['message'] = 'Unfollowed.'
+        else:
+            alreadyFollowed.active=True
+            user.follower = F('follower') +1
+            follower.following = F('follower') +1
+            response_data['message'] = 'followed.'
+        
+        alreadyFollowed.save()
+        user.save()
+        follower.save()
+        return Response(response_data, status=status.HTTP_200_OK)
+
+
+
+
+
+
 
 
 
