@@ -8,7 +8,8 @@ from .models import (
 	MyUser,
 	OtpModel,
 	LikeSystem,
-	BookmarkRecord
+	BookmarkRecord,
+	FollowSystem
 )
 
 admin.site.register(Recipe)
@@ -16,6 +17,7 @@ admin.site.register(MyUser)
 admin.site.register(OtpModel)
 admin.site.register(LikeSystem)
 admin.site.register(BookmarkRecord)
+admin.site.register(FollowSystem)
 
 
 

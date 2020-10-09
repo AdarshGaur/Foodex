@@ -45,6 +45,7 @@ class Recipe(models.Model):
     points = models.PositiveIntegerField(default=0)
     like_is = models.BooleanField(default=False)
     bookmark_is = models.BooleanField(default=False)
+    ownit = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

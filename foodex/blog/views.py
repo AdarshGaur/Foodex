@@ -60,6 +60,7 @@ class RecipeDetail(APIView):
         if request.user.is_anonymous:
             recipe.like_is=False
             recipe.bookmark_is=False
+            recipe.ownit=False
             recipe.save()
             serializer = RecipeSerializer(recipe, context={'request': request})
             return Response(serializer.data)
@@ -67,6 +68,7 @@ class RecipeDetail(APIView):
 
         liker = request.user
         past = False
+
         try:
             islike = LikeSystem.objects.get(liked_by=liker, like_to=recipe)
             past = True
@@ -90,6 +92,9 @@ class RecipeDetail(APIView):
                 recipe.bookmark_is=False
             else:
                 recipe.bookmark_is=True
+            
+        if recipe.owner == request.user:
+            recipe.ownit = True
         
         recipe.save()
         serializer = RecipeSerializer(recipe, context={'request': request})
@@ -99,6 +104,7 @@ class RecipeDetail(APIView):
     #to update
     def put(self, request, pk, format=None):
         recipe = self.get_object(pk)
+        u = request.user
         serializer = RecipeSerializer(recipe, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
@@ -160,10 +166,11 @@ class MyUserDetail(APIView):
 class MyAccountDetail(APIView):
     permission_classes=[permissions.IsAuthenticated]
 
-    def get(self, request, pk, format=None):
-        user = request.user
-        serializer = MyUserSerializer(user, context={'request': request})
+    def get(self, request):
+        u = request.user
+        serializer = MyUserSerializer(u, context={'request': request})
         return Response(serializer.data)
+
 
 
 
