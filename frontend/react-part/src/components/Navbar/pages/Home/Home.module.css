@@ -6,6 +6,12 @@
     flex-direction: row;
   }
 
+
+  .spinner{
+      margin-left: 45vw;
+      margin-top: 20px;
+  }
+
   .recentrecipes{
       margin: 2vw;
       font-size: 4rem;

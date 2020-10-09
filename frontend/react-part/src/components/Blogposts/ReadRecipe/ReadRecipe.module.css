@@ -21,6 +21,15 @@
     /* justify-content: left; */
 }
 
+.btnhide{
+    display: none;
+}
+
+.spinner{
+    margin-left: 45vw;
+    margin-top: 35vh;
+}
+
 .tiphead{
     background-color: #e60e3c !important;
     font-weight: 600;

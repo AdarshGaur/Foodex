@@ -6,6 +6,7 @@ import NavigationBar from '../../Navbar';
 import axios from 'axios';
 import ServerService from '../../../../services/serverService'
 import Footer from '../../../UI/Footer/Footer';
+import Loader from 'react-loader-spinner'
 
 class Home extends Component {
   state = {
@@ -19,12 +20,31 @@ class Home extends Component {
     ServerService.homecards()
     .then(response=>{
       console.log(response);
-      this.setState({recipecards: response.data})
+      this.setState({recipecards: response.data, isLoading:false})
     })
   }
 
   render() {
 
+    if(this.state.isLoading){
+      return  (
+        <>
+        <NavigationBar />     
+        <div>   
+        <Hero />
+        </div>
+      <Loader
+      type="TailSpin"
+      color="#ff1742"
+      height={100}
+      width={100}
+      className={classes.spinner}
+   />
+   </>
+   );
+    }
+
+    else{
     const recipecards= this.state.recipecards.map(recipecard=>{
     return <RecipeCard title={recipecard.title} img={recipecard.img} pk={recipecard.pk} content={recipecard.content} />
     })
@@ -43,6 +63,7 @@ class Home extends Component {
     </>
     )
   }
+}
 }
 
 

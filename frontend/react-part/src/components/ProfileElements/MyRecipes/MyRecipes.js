@@ -5,6 +5,7 @@ import axios from 'axios';
 import ServerService from '../../../services/serverService'
 import NavigationBar from '../../Navbar/Navbar';
 import Details from '../Details/Details';
+import Loader from 'react-loader-spinner'
 
 class MyRecipes extends Component {
   state = {
@@ -14,15 +15,32 @@ class MyRecipes extends Component {
   }
 
   componentDidMount(){
-    axios.get('https://f301cd771e23.ngrok.io/user/recipe-list/')
-    // ServerService.homecards()
+    ServerService.myrecipes()
     .then(response=>{
       console.log(response.data);
-      this.setState({recipecards: response.data})
+      this.setState({recipecards: response.data, isLoading: false})
     })
   }
 
   render() {
+
+    if(this.state.isLoading){
+      return  (
+        <>
+        <NavigationBar />     
+        <Details />
+      <Loader
+      type="TailSpin"
+      color="#ff1742"
+      height={100}
+      width={100}
+      className={classes.spinner}
+   />
+   </>
+   );
+    }
+
+    else{
 
     const recipecards= this.state.recipecards.map(recipecard=>{
       console.log(recipecard.pk)
@@ -41,6 +59,7 @@ class MyRecipes extends Component {
     </>
     )
   }
+}
 }
 
 

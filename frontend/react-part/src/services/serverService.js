@@ -82,13 +82,25 @@ else{
     headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    }
-    
+    }   
 }
   )
-
-
   }
+
+
+  myrecipes(){
+
+  return axios.get(BASE_URL + 'user/recipe-list/',
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }   
+}
+  )
+  }
+
+
 
 
     sort(sortdata){

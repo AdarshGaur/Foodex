@@ -4,6 +4,7 @@ import RecipeCard from '../UI/Card/RecipeCard'
 import NavigationBar from '../Navbar/Navbar';
 import axios from 'axios';
 import ServerService from '../../services/serverService'
+import Loader from 'react-loader-spinner'
 
 class MainCourse extends Component {
   state = {
@@ -17,11 +18,31 @@ class MainCourse extends Component {
     ServerService.maincourse()
     .then(response=>{
       console.log(response.data);
-      this.setState({recipecards: response.data})
+      this.setState({recipecards: response.data, isLoading:false})
     })
   }
 
   render() {
+
+    if(this.state.isLoading){
+      return  (
+        <>
+        <NavigationBar />     
+        <div className={classes.maincourseCover}>
+            Main Course
+        </div>
+      <Loader
+      type="TailSpin"
+      color="#ff1742"
+      height={100}
+      width={100}
+      className={classes.spinner}
+   />
+   </>
+   );
+    }
+
+    else{
 
     const recipecards= this.state.recipecards.map(recipecard=>{
     return <RecipeCard title={recipecard.title} img={recipecard.img} pk={recipecard.pk} content={recipecard.content} />
@@ -41,6 +62,7 @@ class MainCourse extends Component {
     </>
     )
   }
+}
 }
 
 

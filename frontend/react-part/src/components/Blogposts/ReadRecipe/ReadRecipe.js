@@ -7,6 +7,7 @@ import LikeButton from '../../UI/LikeButton/LikeButton';
 import BookmarkButton from '../../UI/BookmarkButton/BookmarkButton';
 import axios from 'axios';
 import serverService from '../../../services/serverService';
+import Loader from 'react-loader-spinner'
 
 class AddRecipe extends Component {
     state = {
@@ -25,11 +26,55 @@ class AddRecipe extends Component {
         serverService.readrecipe(data)
         .then(response=>{
           console.log(response);
-          this.setState({recipe: response.data})
+          this.setState({recipe: response.data, isLoading:false})
         })
       }
 
     render(){
+
+      
+
+      if(this.state.isLoading){
+        return  (
+          <>
+        <NavigationBar />     
+        <Loader
+        type="TailSpin"
+        color="#ff1742"
+        height={100}
+        width={100}
+        className={classes.spinner}
+     />
+     </>
+     );
+      }
+
+      else{
+
+        let editing
+        let deleting
+      if(this.state.recipe.ownit){
+        editing= <Button className={classes.editbtn} as={Link} 
+           to= {{
+            pathname:'/edit-recipe',
+            state:{recipeid: this.props.location.state.recipeid}
+          }} 
+          >Edit</Button>
+
+          deleting= <button className={classes.deletebtn}>delete</button>
+      }
+      else{
+        editing= <Button className={classes.btnhide} as={Link} 
+        to= {{
+         pathname:'/edit-recipe',
+         state:{recipeid: this.props.location.state.recipeid}
+       }} 
+       >Edit</Button>
+
+       deleting= <button className={classes.btnhide}>delete</button>
+
+      }
+
         return (
             <>
                 <NavigationBar />
@@ -91,15 +136,16 @@ class AddRecipe extends Component {
                 />
 
                 </div>
-                <div className={classes.btndivsecond}>                
-                    <Button className={classes.editbtn} as={Link} 
+                <div className={classes.btndivsecond}>     
+                           
+                    {/* <Button className={classes.editbtn} as={Link} 
            to= {{
             pathname:'/edit-recipe',
             state:{recipeid: this.props.location.state.recipeid}
           }} 
-          >Edit</Button>
+          >Edit</Button> */}  {editing}
 
-                <button className={classes.deletebtn}>delete</button>
+                {/* <button className={classes.deletebtn}>delete</button> */} {deleting}
                 </div>
 
 </div>
@@ -127,6 +173,7 @@ class AddRecipe extends Component {
                 </div>
             </>
         );
+      }
     }
 }
 
