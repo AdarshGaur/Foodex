@@ -6,6 +6,19 @@
     justify-content: center;
 }
 
+.spinner{
+    margin-left: 45vw;
+    margin-top: 20px;
+}
+
+.persongrid{
+    /* min-height: 100%; */
+    display: flex;
+   justify-content: space-evenly;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
 @media(max-width: 1000px){
     .recentrecipes{
         font-size: 2rem;

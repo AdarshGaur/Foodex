@@ -26,6 +26,12 @@ class OtherUser extends Component {
           .then((resp)=>{
             console.log(resp.data)    
             this.setState({userdetails: resp.data, recipecards: resp.data.recipes})
+            if(resp.data.alreadyfollowed){
+                this.setState({isfollow:"Unfollow"}) 
+            }
+            else{
+                this.setState({isfollow:"Follow"}) 
+            }
           })
       }
 
@@ -36,12 +42,29 @@ handlefollow=()=>{
     else{
         this.setState({isfollow:"Follow"})
     }
+
+    const data={
+        userpk: this.state.userdetails.id
+    }
+
+    axios.post('https://a0c943dc2eef.ngrok.io/user/follow/',data,
+    {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        
+    }
+    )
+    .then((resp)=>{
+        console.log(resp)          
+      })
 }
 
 render(){    
 
     const recipecards= this.state.recipecards.map(recipecard=>{
-        console.log(recipecard.pk)
+        // console.log(recipecard.pk)
       return <RecipeCard title={recipecard.title} img={recipecard.img} pk={recipecard.pk} content={recipecard.content} />
       })
 
@@ -61,7 +84,10 @@ render(){
 <div className={classes.dp}>
 <img src="https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-260nw-1048185397.jpg"/>
 {/* <input className={classes.avatar} id="uploadpic" type="file" className={classes.avatar} onChange={(e)=>this.upload(e)} name="img" accept="image/*" /> */}
+
 <label onClick={this.handlefollow} className={classes.change}>{this.state.isfollow}</label>
+
+
 </div>
 <h3>
     {this.state.userdetails.name}

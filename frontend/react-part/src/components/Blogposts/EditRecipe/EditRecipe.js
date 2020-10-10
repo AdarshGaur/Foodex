@@ -70,21 +70,14 @@ class EditRecipe extends Component {
       }
         
       const formdata = new FormData();
+      const recipeid= this.props.location.state.recipeid
 
     for (let formElement in data) {
       formdata.append(formElement, data[formElement]);
     //   console.log(formElement, data[formElement]);
     }
 
-        axios.put('https://ef5c8991fb23.ngrok.io/recipe/'+this.props.location.state.recipeid+'/' , formdata,
-        {
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-          },
-          
-      }
-        )
+        serverService.editrecipe(formdata, recipeid)
         .then((resp)=>{
           console.log(resp)
           if(resp.status===202){

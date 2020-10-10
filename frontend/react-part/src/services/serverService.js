@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://ef5c8991fb23.ngrok.io/";
+const BASE_URL = "https://a0c943dc2eef.ngrok.io/";
 
 class ServerService {
 
@@ -83,7 +83,6 @@ else{
   )
 }
 
-
 }
 
 
@@ -97,6 +96,18 @@ else{
     }   
 }
   )
+  }
+
+  editrecipe(formdata,recipeid){
+  return axios.put(BASE_URL+ 'recipe/'+recipeid+'/' , formdata,
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      },
+      
+  }
+    )
   }
 
 
@@ -130,6 +141,45 @@ else{
     sort(sortdata){
       return axios.post(BASE_URL + 'search/sort/',sortdata)
     }
+
+
+
+    following(){
+    return axios.get( BASE_URL +'user/following-list/',
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      },
+      
+  }
+    )
+}
+
+followers(){
+ return axios.get(BASE_URL + 'user/follower-list/',
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    },
+    
+}
+  )
+}
+
+
+bookmarklist(){
+  return axios.get(BASE_URL + 'user/bookmark-list',
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    },
+    
+}
+  )
+}
 
     starters(){
       return axios.get(BASE_URL +'starters/')
