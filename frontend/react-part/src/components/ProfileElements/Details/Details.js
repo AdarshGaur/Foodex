@@ -43,7 +43,7 @@ render(){
       <>
 <div className={classes.totalwrap}>
 <div className={classes.bookmarks}>
-<button className={classes.bookmarkbtn}> <i className="fa fa-bookmark" aria-hidden="true"></i>
+<button className={classes.bookmarkbtn}> <Link to='/bookmarks'><i className="fa fa-bookmark" aria-hidden="true"></i></Link>
 <Link className={classes.savetext} to="/bookmarks"><span >My Bookmarks</span></Link></button>
 </div>
 <div className={classes.cover}>

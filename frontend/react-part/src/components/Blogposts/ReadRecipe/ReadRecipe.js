@@ -223,7 +223,12 @@ class AddRecipe extends Component {
 
                 <h2 className={classes.suggest}>Drop a Suggestion<i className="far fa-sticky-note"></i></h2>
                 <textarea rows="10" className={classes.area} name = 'suggestion' onChange = {this.handlechangeall} />
-                <input className={classes.suggestionbtn} type="submit" onClick={this.handlesuggestion} value="SUBMIT SUGGESTION" />
+                {(localStorage.getItem('access_token'))? <input className={classes.suggestionbtn} type="submit" 
+                onClick={this.handlesuggestion} value="SUBMIT SUGGESTION" /> : 
+                <Link to='/sign-in'><input className={classes.suggestionbtn} type="submit" 
+                value="SUBMIT SUGGESTION" /></Link>
+                }
+                
                 </div>
                 <div className={classes.tips}>
                 <Card style={{ width: '18rem' }} className={classes.tipscard}>
