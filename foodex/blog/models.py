@@ -145,6 +145,10 @@ class LikeSystem(models.Model):
     liked_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='likes', on_delete=models.CASCADE)
     like_to = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
+    def __str__(self):
+        name = str(self.liked_by.name) + ' to ' + str(self.like_to.title)
+        return name
+
 
 
 
@@ -155,6 +159,10 @@ class BookmarkRecord(models.Model):
     bookmarked_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='bookmarked', on_delete=models.CASCADE)
     bookmark_to = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
+    def __str__(self):
+        name = str(self.bookmarked_by.name) + ' to ' + str(self.bookmark_to.title)
+        return name
+
 
 
 
@@ -162,6 +170,10 @@ class FollowSystem(models.Model):
     followed_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='follower', on_delete=models.CASCADE)
     followed_to = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='ffollowing', on_delete=models.CASCADE)
     active = models.BooleanField()
+
+    def __str__(self):
+        name = str(self.followed_by.name) + ' to ' + str(self.followed_to.name)
+        return name
 
 
 

@@ -1120,27 +1120,36 @@ class Bookmark(APIView):
         #return JsonResponse(response_data) 
         return Response(response_data, status=status.HTTP_200_OK)
 
-####### debug this ########
+
 class BookmarkList(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         k =request.user
         try:
-            user = MyUser.objects.get(pk=k.pk)
+            userby = MyUser.objects.get(pk=k.pk)
         except MyUser.DoesNotExist:
             return Response({'message':'Page Not Found'}, status=status.HTTP_400_BAD_REQUEST)
         
-        try:
-            bookmark = BookmarkRecord.objects.filter(bookmarked_by=user, acitve=1)
-        except:
-            pass
-        
-        # i = bookmark.count()
-        # for i in range(0, i):
-        #     queryset |= bookmark[i].bookmark_to
-        serializer = RecipeCardSerializer(bookmark.bookmark_to, context={'request': request})
-        print(serializer)
+        # try:
+        #     bookmark = BookmarkRecord.objects.filter(Q(bookmarked_by=userby) & Q(acitve=1))
+        # except:
+        #     bookmark = BookmarkRecord.objects.none()
+
+        bookmark = BookmarkRecord.objects.filter(Q(bookmarked_by=userby) & Q(active=1))
+        # listid = bookmark.values_list('pk', flat=True)
+        # print(listid)
+        # print(' i equals to :')
+        i = bookmark.count()
+        # print(i)
+        queryset = Recipe.objects.none()
+        for i in range(0, i):
+            recipepk = bookmark[i].bookmark_to.pk
+            # instance = Recipe.objects.filter(pk=recipepk)
+            queryset |= Recipe.objects.filter(pk=recipepk)
+        print(queryset)
+        serializer = RecipeCardSerializer(queryset, many=True, context={'request': request})
+        # print(serializer)
         return Response(serializer.data)
 
 
@@ -1225,7 +1234,7 @@ class UserPosts(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
+#   work in progress
 class Suggestion(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
