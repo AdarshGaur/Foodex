@@ -106,7 +106,8 @@ class RecipeDetail(APIView):
         recipe = self.get_recipeneeded(pk)
         u = request.user
         self.check_object_permissions(request, recipe)
-        serializer = RecipeSerializer(recipe, data=request.data, context={'request': request})
+        recipe.ownerkapk = u.pk
+        serializer = PostRecipeSerializer(recipe, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
