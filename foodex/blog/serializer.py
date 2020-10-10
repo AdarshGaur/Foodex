@@ -124,28 +124,19 @@ class RecipeCardSerializer(serializers.ModelSerializer):
 
 #serializer for user details
 class MyUserSerializer(serializers.ModelSerializer):
-	# recipes = RecipeCardSerializer(many=True, read_only=True)
-	# user_img_url = serializers.SerializerMethodField()
-	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
+
 	class Meta:
 		model = MyUser
 		fields = ['id', 'name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'post_count']
 
 
 
-	# def get_user_img_url(self, MyUser):
-	# 	request = self.context.get('request')
-	# 	img_url = MyUser.image_user.url
-	# 	print(img_url)
-	# 	print(request)
-	# 	return request.build_absolute_uri(img_url)
 
 
 
 class MyUserDetailSerializer(serializers.ModelSerializer):
 	recipes = RecipeCardSerializer(many=True, read_only=True)
-	# user_img_url = serializers.SerializerMethodField()
-	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
+
 	class Meta:
 		model = MyUser
-		fields = ['id', 'name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'post_count', 'recipes']
+		fields = ['id', 'name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'post_count' , 'alreadyfollowed', 'recipes']

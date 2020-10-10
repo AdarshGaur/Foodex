@@ -119,6 +119,7 @@ class MyUser(AbstractUser):
 
     bookmark_count = models.PositiveIntegerField(default=0)
     post_count = models.PositiveIntegerField(default=0)
+    alreadyfollowed = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'age']

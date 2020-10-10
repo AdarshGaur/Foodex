@@ -26,7 +26,8 @@ urlpatterns = [
 	#
 	path('recipe/like/', views.CardLike.as_view()),                		 #for liking recipes
 	path('recipe/bookmark/', views.Bookmark.as_view()),                  #for bookmarking recipes
-	path('user/follow/', views.Follow.as_view()),                        #to follow users
+	path('user/follow/', views.FollowCommand.as_view()),                        #to follow users
+	path('recipe/suggestion/', views.Suggestion.as_view()),                        #for sending suggestion
 
 
 
@@ -40,8 +41,8 @@ urlpatterns = [
 	#
 	path('recipe/post/', views.CreateRecipe.as_view()),                       #for recipe create
 	path('recipe/<int:pk>/', views.RecipeDetail.as_view()),                 #for recipes details
-	path('user/<int:pk>/', views.MyUserDetail.as_view()),                  #for users details
-	path('user/<int:pk>/posts/', views.UserPosts.as_view()),           #for users details
+	path('user/<int:pk>/', views.UserDetail.as_view()),                  #for users details
+	# path('user/<int:pk>/posts/', views.UserPosts.as_view()),           #for users post
 	path('my-account/', views.MyAccountDetail.as_view()),                  #for my-account details
 
 	#

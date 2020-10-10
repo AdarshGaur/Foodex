@@ -79,6 +79,8 @@ class RecipeDetail(APIView):
                 recipe.like_is=False
             else:
                 recipe.like_is=True
+        else:
+            recipe.like_is=False
 
         bookmarker = request.user
         past = False
@@ -92,9 +94,13 @@ class RecipeDetail(APIView):
                 recipe.bookmark_is=False
             else:
                 recipe.bookmark_is=True
+        else:
+            recipe.bookmark_is=False
             
         if recipe.owner == request.user:
             recipe.ownit = True
+        else:
+            recipe.ownit = False
         
         recipe.save()
         serializer = RecipeSerializer(recipe, context={'request': request})
@@ -137,7 +143,7 @@ class MyUserList(APIView):
 
 
 
-class MyUserDetail(APIView):
+class UserDetail(APIView):
     permission_classes = [IsOwnerOrReadOnly]
     
     #to get the user
@@ -151,11 +157,34 @@ class MyUserDetail(APIView):
     
     #get the details
     def get(self, request, pk, format=None):
-        print('2----------')
+        print(request.user)
         # print(pk)
         solo_user = self.get_user(pk)
+
+        if request.user.is_anonymous:
+            solo_user.alreadyfollowed=False
+            solo_user.save()
+            serializer = MyUserDetailSerializer(solo_user, context={'request': request})
+            return Response(serializer.data)
+
+        u = request.user
+        already = False
+        try:
+            followfound = FollowSystem.objects.get(followed_by=u, followed_to=solo_user)
+            already = True
+        except FollowSystem.DoesNotExist:
+            already = False
+
+        if already:
+            if followfound.active:
+                solo_user.alreadyfollowed=True
+            else:
+                solo_user.alreadyfollowed=False
+        else:
+            solo_user.alreadyfollowed=False
+        print(solo_user.alreadyfollowed)
+        solo_user.save()
         serializer = MyUserDetailSerializer(solo_user, context={'request': request})
-        # print(serializer)
         return Response(serializer.data)
 
     #to update user details
@@ -282,18 +311,18 @@ class VerifyOTP(APIView):
         user_to_allow = MyUser.objects.get(email=email)
         user_to_allow.is_active=True
         user_to_allow.save()
-        #print(user_to_allow.is_active)
         email_to_verify.delete()
 
         #getting token
-        r_token = TokenObtainPairSerializer().get_token(request.user)
-        a_token = AccessToken().for_user(request.user)
-        tokens = {
-            'refresh': str(r_token),
-            'access': str(a_token)
-        }
-        message = {'message': 'email_verified'}
-        return Response(tokens, status = status.HTTP_200_OK)
+        # print(request.user)
+        # r_token = TokenObtainPairSerializer().get_token(request.user)
+        # a_token = AccessToken().for_user(request.user)
+        # tokens = {
+        #     'refresh': str(r_token),
+        #     'access': str(a_token)
+        # }
+        message = {'message': 'Account Created'}
+        return Response(message, status = status.HTTP_200_OK)
 
 
 class ResendOtp(APIView):
@@ -497,7 +526,7 @@ class RecipeCardsList(APIView):
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(veg=False).order_by('-points', 'title')[:16]
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -509,7 +538,7 @@ class RecipeCardsList(APIView):
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(veg=False).order_by('points', 'title')[:16]
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -521,7 +550,7 @@ class RecipeCardsList(APIView):
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(veg=False).order_by('-published_on', 'title')[:16]
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -533,7 +562,7 @@ class RecipeCardsList(APIView):
             elif veg_non_veg == 'false':
                 recipe = Recipe.objects.filter(veg=False).order_by('published_on', 'title')[:16]
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -1137,11 +1166,8 @@ class BookmarkList(APIView):
         #     bookmark = BookmarkRecord.objects.none()
 
         bookmark = BookmarkRecord.objects.filter(Q(bookmarked_by=userby) & Q(active=1))
-        # listid = bookmark.values_list('pk', flat=True)
-        # print(listid)
-        # print(' i equals to :')
+        
         i = bookmark.count()
-        # print(i)
         queryset = Recipe.objects.none()
         for i in range(0, i):
             recipepk = bookmark[i].bookmark_to.pk
@@ -1173,44 +1199,49 @@ class MyRecipeList(APIView):
         return Response(serializer.data)
 
 
-class Follow(APIView):
+class FollowCommand(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
 
         k = request.user
+        print(k)
         try:
             follower = MyUser.objects.get(pk=k.pk)
+            print('random')
         except MyUser.DoesNotExist:
             return Response({'message':'Sign In/Up First'}, status=status.HTTP_401_UNAUTHORIZED)
 
         u = request.data.get('userpk')
         try:
             user = MyUser.objects.get(pk=u)
+            print('chalja')
         except MyUser.DoesNotExist:
             return Response({'message':'Page Not Found'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            alreadyfollowed = FollowSystem.objects.get(Q(followed_by=follower) & Q(followed_to=user))
+            userfoll = FollowSystem.objects.get(Q(followed_by=follower) & Q(followed_to=user))
+            print('where is the problem')
             # print(alreadyfollowed)
         except FollowSystem.DoesNotExist:
             # print('called')
-            alreadyfollowed = FollowSystem.objects.create(followed_by=follower, followed_to=user, active=False)
+            userfoll = FollowSystem.objects.create(followed_by=follower, followed_to=user, active=False)
         
         response_data = {}
 
-        if alreadyfollowed.active==True:
-            alreadyfollowed.active=False
+        if userfoll.active==True:
+            userfoll.active=False
             user.followers = F('followers') -1
             follower.following = F('following') -1
             response_data['message'] = 'Unfollowed.'
         else:
-            alreadyfollowed.active=True
+            userfoll.active=True
             user.followers = F('followers') +1
             follower.following = F('following') +1
             response_data['message'] = 'followed.'
         
-        alreadyfollowed.save()
+        userfoll.save()
+        print(userfoll.active)
         user.save()
         follower.save()
         return Response(response_data, status=status.HTTP_200_OK)
@@ -1240,23 +1271,30 @@ class Suggestion(APIView):
 
     def post(self, request, format=None):
         u = request.user
-        k = request.data.get('pk')
+        recipekk = request.data.get('recipepk')
+        k = request.data.get('ownerpk')
+        # try:
+        #     userpost = MyUser.objects.get(pk=k)
+        # except MyUser.DoesNotExist:
+        #     return Response({'message':'Bad Request.'}, status=status.HTTP_400_BAD_REQUEST)
+        
         try:
-            userpost = MyUser.objects.get(pk=k)
-        except MyUser.DoesNotExist:
-            return Response({'message':'Bad Request.'}, status=status.HTTP_400_BAD_REQUEST)
+            suggestionrecipe = Recipe.objects.get(pk=recipekk)
+        except Recipe.DoesNotExist:
+            return Response({'message':'Bad Request'}, status=status.HTTP_400_BAD_REQUEST)
         
 
-        # data = request.data.get('suggestion')
-        to_email = []
+        data = request.data.get('suggestion')
+        to_email = [suggestionrecipe.owner.email]
         email_from = settings.EMAIL_HOST_USER
         send_mail(
-            'Verify Email !',
-            'Your New 6 Digit Verification Pin: {} \nThank you for registering on Foodex.'.format(data),
+            'Got a Suggestion for you',
+            '{u.name} has some suggestion for you on your recipe {suggestionrecipe.title}.\nSuggestion :\n\t{data}.',
             email_from,
             to_email,
             fail_silently=False,
         )
+        return Response({'message':'Suggestion Sended.'}, status=status.HTTP_200_OK)
 
 
 
@@ -1270,25 +1308,14 @@ class FollowerList(APIView):
         except MyUser.DoesNotExist:
             return Response({'message':'Page Not Found'}, status=status.HTTP_400_BAD_REQUEST)
         
-        # try:
-        #     bookmark = BookmarkRecord.objects.filter(Q(bookmarked_by=userby) & Q(acitve=1))
-        # except:
-        #     bookmark = BookmarkRecord.objects.none()
 
         fffollowers = FollowSystem.objects.filter(Q(followed_to=userby) & Q(active=1))
-        # listid = bookmark.values_list('pk', flat=True)
-        # print(listid)
-        # print(' i equals to :')
         i = fffollowers.count()
-        # print(i)
         queryset = MyUser.objects.none()
         for i in range(0, i):
             userpl = fffollowers[i].followed_by.pk
-            # instance = Recipe.objects.filter(pk=recipepk)
             queryset |= MyUser.objects.filter(pk=userpl)
-        # print(queryset)
         serializer = MyUserSerializer(queryset, many=True, context={'request': request})
-        # print(serializer)
         return Response(serializer.data)
 
 
@@ -1301,24 +1328,13 @@ class FollowingList(APIView):
             userby = MyUser.objects.get(pk=k.pk)
         except MyUser.DoesNotExist:
             return Response({'message':'Page Not Found'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # try:
-        #     bookmark = BookmarkRecord.objects.filter(Q(bookmarked_by=userby) & Q(acitve=1))
-        # except:
-        #     bookmark = BookmarkRecord.objects.none()
+
 
         following = FollowSystem.objects.filter(Q(followed_by=userby) & Q(active=1))
-        # listid = bookmark.values_list('pk', flat=True)
-        # print(listid)
-        # print(' i equals to :')
         i = following.count()
-        # print(i)
         queryset = MyUser.objects.none()
         for i in range(0, i):
             userpk = following[i].followed_to.pk
-            # instance = Recipe.objects.filter(pk=recipepk)
             queryset |= MyUser.objects.filter(pk=userpk)
-        # print(queryset)
         serializer = MyUserSerializer(queryset, many=True, context={'request': request})
-        # print(serializer)
         return Response(serializer.data)
