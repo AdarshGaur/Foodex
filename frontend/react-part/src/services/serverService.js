@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://a0c943dc2eef.ngrok.io/";
+const BASE_URL = "https://cc1838682465.ngrok.io/";
 
 class ServerService {
 
@@ -37,7 +37,15 @@ class ServerService {
     }
 
     otheruser(data){
-      return axios.get(BASE_URL+ 'user/' +data+'/')
+      return axios.get(BASE_URL+ 'user/' +data+'/',
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+    }
+      )
     }
 
     userdetails(){
@@ -46,7 +54,7 @@ class ServerService {
          headers: {
              'Content-Type': 'application/json',
              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-         },
+         }
          
      }
       )

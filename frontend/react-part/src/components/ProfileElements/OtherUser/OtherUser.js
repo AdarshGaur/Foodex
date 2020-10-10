@@ -47,7 +47,7 @@ handlefollow=()=>{
         userpk: this.state.userdetails.id
     }
 
-    axios.post('https://a0c943dc2eef.ngrok.io/user/follow/',data,
+    axios.post('https://cc1838682465.ngrok.io/user/follow/',data,
     {
         headers: {
             'Content-Type': 'application/json',
