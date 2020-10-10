@@ -6,6 +6,7 @@ import {Card, Button} from 'react-bootstrap'
 import axios from 'axios'
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import ServerService from '../../../services/serverService';
+import LoadingOverlay from 'react-loading-overlay';
 
 class AddRecipe extends Component {
 
@@ -20,6 +21,7 @@ class AddRecipe extends Component {
     category:"starter",
     veg:true,
     cook_time: 60,
+    isLoading:false
     // owner:2
 
   }
@@ -44,6 +46,7 @@ class AddRecipe extends Component {
     };
 
     handlesubmit = (event) => {
+
         event.preventDefault();
 
 if(this.state.title.length - this.state.titleLimit>0 ||
@@ -55,6 +58,9 @@ if(this.state.title.length - this.state.titleLimit>0 ||
 }
 
 else{
+  
+  this.setState({isLoading: true});
+
       const data={
         title: this.state.title,
         category: this.state.category,
@@ -80,7 +86,8 @@ else{
           console.log(resp)
           if(resp.status===201){
             this.createSuccess("Recipe Posted!")
-            this.setState({ redirect: "/profile" });
+            this.setState({ isLoading:false, redirect: "/profile"});
+            // this.setState({ redirect: "/profile"});
           }
       
         })
@@ -97,7 +104,13 @@ else{
           }
 
         return (
-            <>
+
+          <LoadingOverlay
+          active={this.state.isLoading}
+          spinner
+          text='Loading...'
+          >
+            
                 <NavigationBar />
                 <div className= {classes.outerwrap}>
                 <div className={classes.addrecipe}>
@@ -164,7 +177,7 @@ else{
                 </Card>
                 </div>
                 </div>
-            </>
+            </LoadingOverlay>
         );
     }
 }

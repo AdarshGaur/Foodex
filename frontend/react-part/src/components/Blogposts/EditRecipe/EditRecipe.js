@@ -6,6 +6,7 @@ import {Card, Button} from 'react-bootstrap'
 import axios from 'axios'
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import serverService from '../../../services/serverService'
+import LoadingOverlay from 'react-loading-overlay';
 
 class EditRecipe extends Component {
 
@@ -33,7 +34,7 @@ class EditRecipe extends Component {
     console.log(response);
     this.setState({recipe: response.data})
     this.setState({title: response.data.title, ingredients: response.data.ingredients, content: response.data.content,
-        veg: response.data.veg, cook_time: response.data.cook_time, category: response.data.category
+    veg: response.data.veg, cook_time: response.data.cook_time, category: response.data.category, img: response.data.img
     })
 
   })
@@ -55,6 +56,9 @@ class EditRecipe extends Component {
     };
 
     handlesubmit = (event) => {
+
+    this.setState({isLoading:true });
+
         event.preventDefault();
 // console.log(this.state.veg)
 
@@ -82,7 +86,7 @@ class EditRecipe extends Component {
           console.log(resp)
           if(resp.status===202){
             this.createSuccess("Recipe Edited!")
-            this.setState({ redirect: "/profile" });
+            this.setState({ redirect: "/profile", isLoading:false });
           }
       
         })
@@ -99,7 +103,11 @@ class EditRecipe extends Component {
           }
 
         return (
-            <>
+          <LoadingOverlay
+          active={this.state.isLoading}
+          spinner
+          text='Loading...'
+          >
                 <NavigationBar />
                 <div className= {classes.outerwrap}>
                 <div className={classes.addrecipe}>
@@ -140,7 +148,7 @@ class EditRecipe extends Component {
 
             <label className={classes.labels}><h3>Upload Image:</h3></label>
             {/* <div className={classes.imgcontainer}> */}
-            <input onChange={this.handleimg} className={classes.hidden} id="postimage" type="file" name="file" />
+            <input onChange={this.handleimg} className={classes.hidden} id="postimage" type="file" name="file" accept="image/*" />
             <label className={classes.imgbtn} htmlFor="postimage"><i className="fa fa-upload" aria-hidden="true"></i>Add Image</label>
             {/* </div> */}
 
@@ -166,7 +174,7 @@ class EditRecipe extends Component {
                 </Card>
                 </div>
                 </div>
-            </>
+            </LoadingOverlay>
         );
     }
 }

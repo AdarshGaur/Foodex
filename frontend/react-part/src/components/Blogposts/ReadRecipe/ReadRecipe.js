@@ -7,9 +7,17 @@ import LikeButton from '../../UI/LikeButton/LikeButton';
 import BookmarkButton from '../../UI/BookmarkButton/BookmarkButton';
 import axios from 'axios';
 import serverService from '../../../services/serverService';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 import Loader from 'react-loader-spinner'
 
+
 class AddRecipe extends Component {
+
+  createSuccess = (info) => {
+    NotificationManager.success( info, 'Success');
+  };
+
+
     state = {
         isLoading: true,
         recipe: [],
@@ -40,6 +48,7 @@ class AddRecipe extends Component {
         .then(response=>{
           console.log(response);
           if(response.status===204){
+            this.createSuccess("Recipe Deleted")
           this.setState({redirect: '/profile'})
           }
         })
