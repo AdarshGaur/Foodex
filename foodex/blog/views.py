@@ -1283,10 +1283,42 @@ class FollowerList(APIView):
         # print(i)
         queryset = MyUser.objects.none()
         for i in range(0, i):
-            userpl = fffollowers[i].followed_to.pk
+            userpl = fffollowers[i].followed_by.pk
             # instance = Recipe.objects.filter(pk=recipepk)
             queryset |= MyUser.objects.filter(pk=userpl)
-        print(queryset)
-        serializer = RecipeCardSerializer(queryset, many=True, context={'request': request})
+        # print(queryset)
+        serializer = MyUserSerializer(queryset, many=True, context={'request': request})
+        # print(serializer)
+        return Response(serializer.data)
+
+
+class FollowingList(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        k =request.user
+        try:
+            userby = MyUser.objects.get(pk=k.pk)
+        except MyUser.DoesNotExist:
+            return Response({'message':'Page Not Found'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # try:
+        #     bookmark = BookmarkRecord.objects.filter(Q(bookmarked_by=userby) & Q(acitve=1))
+        # except:
+        #     bookmark = BookmarkRecord.objects.none()
+
+        following = FollowSystem.objects.filter(Q(followed_by=userby) & Q(active=1))
+        # listid = bookmark.values_list('pk', flat=True)
+        # print(listid)
+        # print(' i equals to :')
+        i = following.count()
+        # print(i)
+        queryset = MyUser.objects.none()
+        for i in range(0, i):
+            userpk = following[i].followed_to.pk
+            # instance = Recipe.objects.filter(pk=recipepk)
+            queryset |= MyUser.objects.filter(pk=userpk)
+        # print(queryset)
+        serializer = MyUserSerializer(queryset, many=True, context={'request': request})
         # print(serializer)
         return Response(serializer.data)

@@ -30,8 +30,8 @@ urlpatterns = [
 
 
 
-
-	# path('user/following-list/', views.Follow.as_view()),              #for following list
+	#
+	path('user/following-list/', views.FollowingList.as_view()),              #for following list
 	path('user/follower-list/', views.FollowerList.as_view()),               #for follower list
 	path('user/bookmark-list/', views.BookmarkList.as_view()),               #for bookmark list
 	path('user/recipe-list/', views.MyRecipeList.as_view()),               #for My Recipe list
@@ -59,13 +59,6 @@ urlpatterns = [
 	path('auth/forgot-password/otp/', views.ForgotPasswordOtp.as_view()),      #for checking otp after forgot password
 	path('auth/forgot-password/new-password/', views.NewPassword.as_view()),   #for forgot password
 
-
-	
-	#path('', views.Homepage.as_view()),
-	#path('', views.random.as_view()),
-	#path('', views.random.as_view()),
-	#path('', views.random.as_view()),
-	#path('', views.random.as_view()),
 ]
 
 
