@@ -28,7 +28,7 @@ urlpatterns = [
 	path('recipe/bookmark/', views.Bookmark.as_view()),                  #for bookmarking recipes
 	path('user/follow/', views.FollowCommand.as_view()),                        #to follow users
 	path('recipe/suggestion/', views.Suggestion.as_view()),                        #for sending suggestion
-	# path('user/change-profile/', views.ChangeProfile.as_view()),                        #for sending suggestion
+	path('user/change-profile/', views.ChangeProfile.as_view()),                        #for changing profile picture
 
 
 

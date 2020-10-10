@@ -1352,5 +1352,11 @@ class ChangeProfile(APIView):
 
     def put(self, request):
         recipeuser = request.user
-        
+        serializer = MyUserSerializer(recipeuser, data=request.data, partial=True, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status = status.HTTP_406_NOT_ACCEPTABLE)
+
+
 
