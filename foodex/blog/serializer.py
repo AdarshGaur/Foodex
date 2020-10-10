@@ -1,5 +1,6 @@
 from .models import Recipe, MyUser, OtpModel, LikeSystem
 from rest_framework import serializers
+import math
 
 
 #Serializer for registriation of New Users
@@ -64,15 +65,11 @@ class RegisterMyUser(serializers.ModelSerializer):
 
 # recipe creating/edit/get serializer
 class PostRecipeSerializer(serializers.ModelSerializer):
-	# owner = serializers.ReadOnlyField(source='owner.name')
-	# email = serializers.ReadOnlyField(source='owner.email')
-	# img_url = serializers.SerializerMethodField()
-	# pk = serializers.ReadOnlyField(source=id)
+	
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['title', 'category', 'ingredients', 'img', 'content', 'published_on', 'modified_on', 'cook_time', 'read_time', 'veg']
-
+		fields = ['title', 'category', 'ingredients', 'img', 'content', 'published_on', 'modified_on', 'cook_time', 'veg']
 
 	# def get_img_url(self, Recipe):
 	# 	request = self.context.get('request')
@@ -85,6 +82,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 	#owner_pk = serializers.IntegerField(source=owner.pk)
 	owner = serializers.ReadOnlyField(source='owner.name')
 	ownerkapk = serializers.IntegerField(source='owner.pk')
+	
 	# email = serializers.ReadOnlyField(source='owner.email')
 	# img_url = serializers.SerializerMethodField()
 	
@@ -92,29 +90,28 @@ class RecipeSerializer(serializers.ModelSerializer):
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
-		fields = ['pk', 'title', 'category', 'ingredients', 'img', 'content', 'owner', 'ownerkapk', 'ownit', 'published_on', 'modified_on', 'cook_time', 'veg', 'points', 'like_is', 'bookmark_is']
+		fields = ['pk', 'title', 'category', 'ingredients', 'img', 'content', 'owner', 'ownerkapk', 'ownit', 'published_on', 'modified_on', 'cook_time', 'read_time', 'veg', 'points', 'like_is', 'bookmark_is']
 	
 
-	# def get_img_url(self, Recipe):
-	# 	request = self.context.get('request')
-	# 	img_url = Recipe.img.url
-	# 	return request.build_absolute_uri(img_url)
 
-	# def get_owner_pk(self, Recipe):
-	# 	request = self.context.get('request')
-	# 	owner_pk = self.owner.pk
-	# 	return owner_pk
+
+
 
 #cards serializer
 class RecipeCardSerializer(serializers.ModelSerializer):
 	owner = serializers.ReadOnlyField(source='owner.name')
 	ownerkapk = serializers.IntegerField(source='owner.pk')
+	read_time = serializers.SerializerMethodField()
 	# img_url = serializers.SerializerMethodField()
 	# only for cards
 	class Meta:
 		model = Recipe
 		fields = ['pk', 'title', 'content', 'owner', 'ownerkapk', 'img', 'cook_time', 'read_time', 'points', 'veg']
 
+	def get_read_time(self, Recipe):
+		total_length = len(Recipe.content) + len(Recipe.ingredients)
+		minutes = math.ceil(total_length/300)
+		return minutes
 
 	# def get_img_url(self, Recipe):
 	# 	request = self.context.get('request')

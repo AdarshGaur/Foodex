@@ -172,11 +172,11 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = 'blog.MyUser'
 
 
-#Email confirmation
+#Email sending
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = "aarushjohri65@gmail.com"
-EMAIL_HOST_PASSWORD = "don't#gdjtuvxngwoirnz420"
+EMAIL_HOST_USER = "foodex.sc@gmail.com"
+EMAIL_HOST_PASSWORD = "Adarsh@5678"
 EMAIL_PORT = 587
 
 

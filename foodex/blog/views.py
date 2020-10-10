@@ -25,6 +25,7 @@ from django.db.models import Q, F
 
 
 
+
 class CreateRecipe(APIView):
     print('started')
     permission_classes = [permissions.IsAuthenticated]
@@ -38,7 +39,9 @@ class CreateRecipe(APIView):
         if serializer.is_valid():
             owner.post_count = F('post_count') + 1
             owner.save()
+
             serializer.save(owner=owner)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -113,7 +116,13 @@ class RecipeDetail(APIView):
         u = request.user
         self.check_object_permissions(request, recipe)
         recipe.ownerkapk = u.pk
-        serializer = PostRecipeSerializer(recipe, data=request.data, context={'request': request})
+        print(recipe.img)
+        image = request.data.get('img')
+        print(request.data)
+        print('#########')
+        print(image)
+        # recipe.img = 
+        serializer = PostRecipeSerializer(recipe, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
@@ -1265,7 +1274,7 @@ class UserPosts(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-#   work in progress
+
 class Suggestion(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -1273,10 +1282,6 @@ class Suggestion(APIView):
         u = request.user
         recipekk = request.data.get('recipepk')
         k = request.data.get('ownerpk')
-        # try:
-        #     userpost = MyUser.objects.get(pk=k)
-        # except MyUser.DoesNotExist:
-        #     return Response({'message':'Bad Request.'}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
             suggestionrecipe = Recipe.objects.get(pk=recipekk)
@@ -1289,7 +1294,7 @@ class Suggestion(APIView):
         email_from = settings.EMAIL_HOST_USER
         send_mail(
             'Got a Suggestion for you',
-            '{u.name} has some suggestion for you on your recipe {suggestionrecipe.title}.\nSuggestion :\n\t{data}.',
+            f"{u.name} has some suggestion for you on your recipe {suggestionrecipe.title}.\nSuggestion :\n\t{data}.",
             email_from,
             to_email,
             fail_silently=False,
@@ -1320,6 +1325,7 @@ class FollowerList(APIView):
 
 
 class FollowingList(APIView):
+
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -1338,3 +1344,13 @@ class FollowingList(APIView):
             queryset |= MyUser.objects.filter(pk=userpk)
         serializer = MyUserSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
+
+
+
+class ChangeProfile(APIView):
+    permission_classes=[permissions.IsAuthenticated]
+
+    def put(self, request):
+        recipeuser = request.user
+        
+
