@@ -135,6 +135,10 @@ class OtpModel(models.Model):
     email = models.EmailField(blank=False)
     at_time = models.IntegerField()
 
+    def __str__(self):
+        name = str(self.otp) + ' on ' + str(self.email)
+        return name
+
 
 
 
