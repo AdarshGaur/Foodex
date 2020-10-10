@@ -17,7 +17,7 @@ class EditRecipe extends Component {
     ingredientsLimit: 300,
     content:"",
     recipe:[],
-    img: "",
+    img: null,
     contentLimit:4000,
     category:"starters",
     veg:true,
@@ -76,23 +76,54 @@ class EditRecipe extends Component {
 
         
 else if(this.state.content.length<160){
-  this.createNotification("Instructions should be at least 250 characters long")
+  this.createNotification("Instructions should be at least 160 characters long")
 }
 
         else{
 
           this.setState({isLoading:true });
 
-      const data={
-        title: this.state.title,
-        category: this.state.category,
-        ingredients: this.state.ingredients,
-        content: this.state.content,
-        veg: this.state.veg,
-        cook_time: this.state.cook_time,
-        owner: this.state.owner,
-        img: this.state.img
-      }
+          let data=[]
+          if(this.state.img===null){
+            data={
+              title: this.state.title,
+              category: this.state.category,
+              ingredients: this.state.ingredients,
+              content: this.state.content,
+              veg: this.state.veg,
+              cook_time: this.state.cook_time,
+              owner: this.state.owner,
+             
+            }
+  
+          }
+
+          else{
+            data={
+              title: this.state.title,
+              category: this.state.category,
+              ingredients: this.state.ingredients,
+              content: this.state.content,
+              veg: this.state.veg,
+              cook_time: this.state.cook_time,
+              owner: this.state.owner,
+              img: this.state.img
+            }
+  
+          }
+
+          // const data={
+          //   title: this.state.title,
+          //   category: this.state.category,
+          //   ingredients: this.state.ingredients,
+          //   content: this.state.content,
+          //   veg: this.state.veg,
+          //   cook_time: this.state.cook_time,
+          //   owner: this.state.owner
+          //   img: this.state.img
+          // }
+
+      
         
       const formdata = new FormData();
       const recipeid= this.props.location.state.recipeid

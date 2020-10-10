@@ -59,7 +59,7 @@ if(this.state.title.length - this.state.titleLimit>0 ||
 }
 
 else if(this.state.content.length<160){
-  this.createNotification("Instructions should be at least 250 characters long")
+  this.createNotification("Instructions should be at least 160 characters long")
 }
 
 else{
