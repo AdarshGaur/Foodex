@@ -47,11 +47,26 @@ console.log(data)
     if (resp.status === 200) {
       // localStorage.setItem("token", "abcd");
       console.log(resp)
-      localStorage.setItem("refresh_token",resp.data.refresh)
-      localStorage.setItem("access_token",resp.data.access)
-      localStorage.setItem("mypk",resp.data.my_pk)
-      this.setState({isLoading: false});
-      this.setState({ redirect: "/" });
+      this.createSuccess("Account Created")
+     const logindata={
+      email: localStorage.getItem('email'),
+      password: localStorage.getItem('password'),
+      }
+      
+      ServerService.login(logindata)
+      .then((resp)=>{
+        console.log(resp)
+    
+        if (resp.status === 200) {
+          localStorage.setItem("refresh_token",resp.data.refresh)
+          localStorage.setItem("access_token",resp.data.access)
+          this.setState({isLoading: false});
+          this.setState({ redirect: "/" });
+        }
+      
+      })
+
+     
     }
   
   })

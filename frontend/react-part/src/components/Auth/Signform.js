@@ -172,6 +172,7 @@ ServerService.signup(data)
   if (resp.data.message === "otp_sent") {
     this.createSuccess("OTP sent to the mail")
     localStorage.setItem('email', this.state.email)
+    localStorage.setItem('password', this.state.password)
     this.setState({isLoading: false});
     this.setState({ redirect: "/otp" });
   }

@@ -87,7 +87,7 @@ handlesubmit = (event) => {
 
 const data={
   email: this.state.email,
-  password: this.state.password,
+  password: this.state.password
 
 }
   event.preventDefault();
