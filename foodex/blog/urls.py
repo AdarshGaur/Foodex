@@ -32,7 +32,7 @@ urlpatterns = [
 
 
 	# path('user/following-list/', views.Follow.as_view()),              #for following list
-	# path('user/follower-list/', views.Follow.as_view()),               #for follower list
+	path('user/follower-list/', views.FollowerList.as_view()),               #for follower list
 	path('user/bookmark-list/', views.BookmarkList.as_view()),               #for bookmark list
 	path('user/recipe-list/', views.MyRecipeList.as_view()),               #for My Recipe list
 
