@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import classes from './BookmarkButton.module.css';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../../services/serverService';
 
@@ -46,6 +47,19 @@ class BookmarkButton extends Component {
     };
 
     render() {
+
+        if(!localStorage.getItem('access_token')){
+            return (
+            
+               <Link to='/sign-in'><button className={classes.bookmarkbtn} > 
+               <i className="far fa-bookmark"></i>
+               </button>
+
+</Link> 
+            )
+        }
+
+
 
         if(this.state.isclicked){
             return (

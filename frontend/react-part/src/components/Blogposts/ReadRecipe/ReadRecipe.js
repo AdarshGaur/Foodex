@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import NavigationBar from '../../Navbar/Navbar';
 import classes from './ReadRecipe.module.css';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {Card, Button} from 'react-bootstrap';
 import LikeButton from '../../UI/LikeButton/LikeButton';
 import BookmarkButton from '../../UI/BookmarkButton/BookmarkButton';
@@ -14,9 +14,12 @@ class AddRecipe extends Component {
         isLoading: true,
         recipe: [],
         error: null,
+        redirect: null
         // text: '  or kadhai, heat a tablespoon of butter and a tablespoon of oil'
         
       }
+
+
     
       componentDidMount(){
           const data= this.props.location.state.recipeid;
@@ -30,10 +33,23 @@ class AddRecipe extends Component {
         })
       }
 
+      deletehandler=()=>{
+        const deletepk= this.state.recipe.pk
+
+        serverService.deletepost(deletepk)
+        .then(response=>{
+          console.log(response);
+          if(response.status===204){
+          this.setState({redirect: '/profile'})
+          }
+        })
+
+      }
+
+
     render(){
 
       
-
       if(this.state.isLoading){
         return  (
           <>
@@ -51,6 +67,10 @@ class AddRecipe extends Component {
 
       else{
 
+        if(this.state.redirect){
+          return <Redirect to={this.state.redirect} />
+        }
+
         let editing
         let deleting
         let authorprofile
@@ -62,7 +82,7 @@ class AddRecipe extends Component {
           }} 
           >Edit</Button>
 
-          deleting= <button className={classes.deletebtn}>delete</button>
+          deleting= <button onClick={this.deletehandler} className={classes.deletebtn}>delete</button>
 
           authorprofile= <Link className={classes.authorname}
                 to= 'profile'

@@ -76,11 +76,19 @@ class EditRecipe extends Component {
     //   console.log(formElement, data[formElement]);
     }
 
-        axios.post('https://a964c75a8aed.ngrok.io/recipe/post/', formdata)
+        axios.put('https://ef5c8991fb23.ngrok.io/recipe/'+this.props.location.state.recipeid+'/' , formdata,
+        {
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          },
+          
+      }
+        )
         .then((resp)=>{
           console.log(resp)
-          if(resp.status===201){
-            this.createSuccess("Recipe Posted!")
+          if(resp.status===202){
+            this.createSuccess("Recipe Edited!")
             this.setState({ redirect: "/profile" });
           }
       

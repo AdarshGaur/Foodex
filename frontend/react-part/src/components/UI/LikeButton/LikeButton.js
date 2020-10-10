@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import classes from './LikeButton.module.css';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../../services/serverService';
 
@@ -48,6 +49,18 @@ class LikeButton extends Component {
     };
 
     render() {
+
+        if(!localStorage.getItem('access_token')){
+            return (
+            
+               <Link to='/sign-in'><button onClick={this.addLike} className={classes.likebtn} > 
+               <i className="far fa-heart"></i> {this.state.likes}
+               </button>
+
+</Link> 
+            )
+        }
+
 
         if(this.state.isclicked){
             return (

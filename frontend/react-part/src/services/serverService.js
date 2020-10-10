@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://f301cd771e23.ngrok.io/";
+const BASE_URL = "https://ef5c8991fb23.ngrok.io/";
 
 class ServerService {
 
@@ -112,7 +112,19 @@ else{
   )
   }
 
+    deletepost(deletepk){
+      return axios.delete(BASE_URL +'recipe/'+ deletepk+'/',
 
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        
+    }
+      
+      )
+    }
 
 
     sort(sortdata){

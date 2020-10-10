@@ -112,7 +112,7 @@ width: 50%;
 }
 
 .editbtn, .deletebtn{
-    display: inline-block;
+    display: inline-block !important;
     height: 40px;
     padding: 0 30px;
     color: #555;
