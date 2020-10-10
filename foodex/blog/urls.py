@@ -42,7 +42,7 @@ urlpatterns = [
 	path('recipe/<int:pk>/', views.RecipeDetail.as_view()),                 #for recipes details
 	# path('users/', views.MyUserList.as_view()),                          #for users list 'no_use'
 	path('user/<int:pk>/', views.MyUserDetail.as_view()),                  #for users details
-	# path('user/<int:pk>/posts/', views.MyUserDetail.as_view()),           #for users details
+	path('user/<int:pk>/posts/', views.UserPosts.as_view()),           #for users details
 	path('my-account/', views.MyAccountDetail.as_view()),                  #for my-account details
 	#path('user/<int:pk>/bookmark-list/', views.Bookmarklist.as_view()),    #for listing bookmarked recipes
 

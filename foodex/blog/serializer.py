@@ -113,7 +113,7 @@ class RecipeCardSerializer(serializers.ModelSerializer):
 	# only for cards
 	class Meta:
 		model = Recipe
-		fields = ['title', 'content', 'owner', 'ownerkapk', 'img', 'cook_time', 'read_time', 'points', 'veg']
+		fields = ['pk', 'title', 'content', 'owner', 'ownerkapk', 'img', 'cook_time', 'read_time', 'points', 'veg']
 
 
 	# def get_img_url(self, Recipe):
@@ -129,7 +129,7 @@ class MyUserSerializer(serializers.ModelSerializer):
 	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
 	class Meta:
 		model = MyUser
-		fields = ['name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'post_count']
+		fields = ['id', 'name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'post_count']
 
 
 
@@ -142,4 +142,10 @@ class MyUserSerializer(serializers.ModelSerializer):
 
 
 
-
+class MyUserDetailSerializer(serializers.ModelSerializer):
+	recipes = RecipeCardSerializer(many=True, read_only=True)
+	# user_img_url = serializers.SerializerMethodField()
+	# recipes = serializers.PrimaryKeyRelatedField(many=True, queryset = Recipe.objects.all(),)
+	class Meta:
+		model = MyUser
+		fields = ['id', 'name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'post_count', 'recipes']

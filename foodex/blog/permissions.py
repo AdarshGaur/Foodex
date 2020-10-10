@@ -1,24 +1,18 @@
 from rest_framework import permissions
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
-	def has_permission(self, request, view):
-		print('permission_has called')
-		return True
-
-
 
 	def has_object_permission(self, request, view, obj):
-		print(obj)
-		print('2######2')
-		print(request.user)
+		# print(obj)
+		# print('2######2')
+		# print(request.user)
 		if request.method in permissions.SAFE_METHODS:
-			print('passed')
-			print(obj)
-			print(request.user)
+			# print('passed')
+			# print(obj)
+			# print(request.user)
 			return True
-		u = request.user
-		if obj.owner == u:
-			print('called')
+		if obj.owner == request.user:
+			#print('called')
 			return True
 
 

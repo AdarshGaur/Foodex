@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import Recipe, MyUser, OtpModel, LikeSystem, BookmarkRecord, FollowSystem
-from .serializer import RecipeSerializer, MyUserSerializer, RegisterMyUser, RecipeCardSerializer, PostRecipeSerializer
+from .serializer import RecipeSerializer, MyUserSerializer, RegisterMyUser, RecipeCardSerializer, PostRecipeSerializer, MyUserDetailSerializer
 from rest_framework import serializers
 
 from .permissions import IsOwnerOrReadOnly
@@ -47,7 +47,7 @@ class RecipeDetail(APIView):
     permission_classes = [IsOwnerOrReadOnly]
     
     #function to pick the object
-    def get_object(self, pk):
+    def get_recipeneeded(self, pk):
         try:
             return Recipe.objects.get(pk=pk)
         except Recipe.DoesNotExist:
@@ -55,7 +55,7 @@ class RecipeDetail(APIView):
 
     #to get the object
     def get(self, request, pk, format=None):
-        recipe = self.get_object(pk)
+        recipe = self.get_recipeneeded(pk)
 
         if request.user.is_anonymous:
             recipe.like_is=False
@@ -103,8 +103,9 @@ class RecipeDetail(APIView):
 
     #to update
     def put(self, request, pk, format=None):
-        recipe = self.get_object(pk)
+        recipe = self.get_recipeneeded(pk)
         u = request.user
+        self.check_object_permissions(request, recipe)
         serializer = RecipeSerializer(recipe, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
@@ -113,9 +114,13 @@ class RecipeDetail(APIView):
 
     #to delete
     def delete(self, request, pk, format=None):
-        recipe = self.get_object(pk)
+        recipe = self.get_recipeneeded(pk)
+        u = request.user
+        self.check_object_permissions(request, recipe)
         recipe.delete()
         # posts_count decrement
+        u.post_count = F('post_count') -1
+        u.save()
         message = {'message': 'deleted'}
         return Response(message, status = status.HTTP_204_NO_CONTENT)
 
@@ -145,10 +150,10 @@ class MyUserDetail(APIView):
     
     #get the details
     def get(self, request, pk, format=None):
-        # print('2----------')
+        print('2----------')
         # print(pk)
         solo_user = self.get_user(pk)
-        serializer = MyUserSerializer(solo_user, context={'request': request})
+        serializer = MyUserDetailSerializer(solo_user, context={'request': request})
         # print(serializer)
         return Response(serializer.data)
 
@@ -295,8 +300,14 @@ class ResendOtp(APIView):
 
     def post(self, request, format=None):
         email = request.data.get('email')
-        resend_email = OtpModel.objects.get(email=email)
-        resend_email.delete()
+        found = True
+        try:
+            resend_email = OtpModel.objects.get(email=email)
+        except OtpModel.DoesNotExist:
+            found = False
+        
+        if found:
+            resend_email.delete()
 
         def random_with_N_digits(n):
             range_start = 10**(n-1)
@@ -1143,10 +1154,7 @@ class MyRecipeList(APIView):
         except MyUser.DoesNotExist:
             return Response({'message':'Page Not Found'}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            posts = Recipe.objects.filter(owner=user)
-        except:
-            pass
+        posts = Recipe.objects.filter(owner=user)
         
         # i = posts.count()
         # print(i)
@@ -1170,13 +1178,13 @@ class Follow(APIView):
         try:
             user = MyUser.objects.get(pk=u)
         except MyUser.DoesNotExist:
-            return Response({'message':'User Not Found'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message':'Page Not Found'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             alreadyfollowed = FollowSystem.objects.get(Q(followed_by=follower) & Q(followed_to=user))
-            print(alreadyfollowed)
+            # print(alreadyfollowed)
         except FollowSystem.DoesNotExist:
-            print('called')
+            # print('called')
             alreadyfollowed = FollowSystem.objects.create(followed_by=follower, followed_to=user, active=False)
         
         response_data = {}
@@ -1198,11 +1206,47 @@ class Follow(APIView):
         return Response(response_data, status=status.HTTP_200_OK)
 
 
+class UserPosts(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get_user(self, pk):
+        try:
+            # print(pk)
+            return MyUser.objects.get(pk=pk)
+        except MyUser.DoesNotExist:
+            message = {'message': 'page not found'}
+            return Response(message, status=status.HTTP_404_NOT_FOUND)
+
+    def get(self, request, pk, format=None):
+        user = self.get_user(pk)
+        posts = Recipe.objects.filter(owner=user)
+        serializer = RecipeCardSerializer(posts, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 
+class Suggestion(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
+    def post(self, request, format=None):
+        u = request.user
+        k = request.data.get('pk')
+        try:
+            userpost = MyUser.objects.get(pk=k)
+        except MyUser.DoesNotExist:
+            return Response({'message':'Bad Request.'}, status=status.HTTP_400_BAD_REQUEST)
+        
 
+        # data = request.data.get('suggestion')
+        to_email = []
+        email_from = settings.EMAIL_HOST_USER
+        send_mail(
+            'Verify Email !',
+            'Your New 6 Digit Verification Pin: {} \nThank you for registering on Foodex.'.format(data),
+            email_from,
+            to_email,
+            fail_silently=False,
+        )
 
 
 
