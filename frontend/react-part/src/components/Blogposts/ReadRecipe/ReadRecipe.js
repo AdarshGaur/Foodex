@@ -22,9 +22,37 @@ class AddRecipe extends Component {
         isLoading: true,
         recipe: [],
         error: null,
-        redirect: null
+        redirect: null,
+        suggestion:""
         // text: '  or kadhai, heat a tablespoon of butter and a tablespoon of oil'
         
+      }
+
+      handlechangeall = (event) =>{
+        this.setState ( { [event.target.name] :event.target.value  } )
+       }
+
+      handlesuggestion=()=>{
+
+        this.setState({isLoading:true})
+
+        const data={
+          recipepk: this.state.recipe.pk,
+          suggestion:  this.state.suggestion
+        }
+
+        serverService.suggestions(data)
+      .then((resp)=>{
+        console.log(resp)
+        if (resp.status === 200) {
+        this.createSuccess("Suggestion Sent!")
+        this.setState({isLoading:false})
+        // this.setState({redirect:'/'})
+
+    }
+        }
+      
+      )
       }
 
 
@@ -194,7 +222,7 @@ class AddRecipe extends Component {
 </div>
 
                 <h2 className={classes.suggest}>Drop a Suggestion<i className="far fa-sticky-note"></i></h2>
-                <textarea rows="10" className={classes.area} name = 'instructions'  placeholder={this.state.instructions} onChange = {this.handlechangeall} />
+                <textarea rows="10" className={classes.area} name = 'suggestion' onChange = {this.handlechangeall} />
                 <input className={classes.suggestionbtn} type="submit" onClick={this.handlesuggestion} value="SUBMIT SUGGESTION" />
                 </div>
                 <div className={classes.tips}>
@@ -203,10 +231,10 @@ class AddRecipe extends Component {
                 <Card.Body className={classes.bulletpoints}>
                 <Card.Text>
                 <ul>
-                <li>Write a good, catchy title</li>
-                <li>Give clear details about your recipe preparation</li>
-                <li>Add a relevant topic to reach the right members</li>
-                <li>Check your spelling and grammar</li>
+                <li>Like a recipe to show your support</li>
+                <li>Bookmark a recipe for reading it later</li>
+                <li>Follow the author to keep in touch</li>
+                <li>Drop a suggestion (if any) for the author to improve in future</li>
                 <li>Become an active member to get recognized</li>
                 </ul>
                 </Card.Text>

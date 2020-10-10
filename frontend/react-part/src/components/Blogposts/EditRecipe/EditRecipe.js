@@ -22,9 +22,13 @@ class EditRecipe extends Component {
     category:"starters",
     veg:true,
     cook_time: "",
-    owner:2
+    isLoading:false
 
   }
+
+  createNotification = (info) => {
+    NotificationManager.error( info, 'Error');
+};
 
   componentDidMount(){
     const data= this.props.location.state.recipeid;
@@ -34,7 +38,7 @@ class EditRecipe extends Component {
     console.log(response);
     this.setState({recipe: response.data})
     this.setState({title: response.data.title, ingredients: response.data.ingredients, content: response.data.content,
-    veg: response.data.veg, cook_time: response.data.cook_time, category: response.data.category, img: response.data.img
+    veg: response.data.veg, cook_time: response.data.cook_time, category: response.data.category
     })
 
   })
@@ -57,10 +61,27 @@ class EditRecipe extends Component {
 
     handlesubmit = (event) => {
 
-    this.setState({isLoading:true });
+ 
 
         event.preventDefault();
-// console.log(this.state.veg)
+
+        if(this.state.title.length - this.state.titleLimit>0 ||
+          this.state.content.length - this.state.contentLimit>0 ||
+          this.state.ingredients.length - this.state.ingredientsLimit>0 ||
+          this.state.title.length==0 || this.state.content.length==0 || this.state.ingredients.length==0
+          ){
+            this.createNotification("Please ensure you have filled all the fields within character limit")
+            this.createNotification("Instructions should be at least 250 characters long")
+        }
+
+        
+else if(this.state.content.length<160){
+  this.createNotification("Instructions should be at least 250 characters long")
+}
+
+        else{
+
+          this.setState({isLoading:true });
 
       const data={
         title: this.state.title,
@@ -78,7 +99,7 @@ class EditRecipe extends Component {
 
     for (let formElement in data) {
       formdata.append(formElement, data[formElement]);
-    //   console.log(formElement, data[formElement]);
+      // console.log(formElement, data[formElement]);
     }
 
         serverService.editrecipe(formdata, recipeid)
@@ -92,7 +113,7 @@ class EditRecipe extends Component {
         })
         .catch(err => {console.log(err.response)})
       
-    
+      }
       }
 
 

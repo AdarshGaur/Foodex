@@ -179,7 +179,7 @@ color:white;
 .tags{
     background-color: #808080;
     margin-right: 2%;
-    cursor: pointer;
+    cursor: context-menu;
     /* opacity: 0.84; */
     border-radius: 4%;
     font-size: small;

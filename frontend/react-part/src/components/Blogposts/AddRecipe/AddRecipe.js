@@ -55,6 +55,11 @@ if(this.state.title.length - this.state.titleLimit>0 ||
   this.state.title.length==0 || this.state.content.length==0 || this.state.ingredients.length==0
   ){
     this.createNotification("Please ensure you have filled all the fields within character limit")
+
+}
+
+else if(this.state.content.length<160){
+  this.createNotification("Instructions should be at least 250 characters long")
 }
 
 else{
@@ -76,7 +81,7 @@ else{
       const userpk= localStorage.getItem('mypk')
     for (let formElement in data) {
       formdata.append(formElement, data[formElement]);
-    //   console.log(formElement, data[formElement]);
+      // console.log(formElement, data[formElement]);
     }
 
         // axios.post('http://58eaa649e23e.ngrok.io/recipe/post/'+ userpk +'/', formdata)

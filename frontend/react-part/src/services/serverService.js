@@ -48,6 +48,17 @@ class ServerService {
       )
     }
 
+    suggestions(data){
+    return   axios.post('https://cc1838682465.ngrok.io/recipe/suggestion/',data,
+        {
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          }
+          
+      })
+    }
+
     userdetails(){
       return axios.get(BASE_URL+ 'my-account/',
       {
