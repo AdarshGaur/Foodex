@@ -163,7 +163,7 @@ else if(this.state.content.length<160){
                 <NavigationBar />
                 <div className= {classes.outerwrap}>
                 <div className={classes.addrecipe}>
-                <h1>Share Your Recipe</h1>
+                <h1>Edit Your Recipe</h1>
                 
                 
 

@@ -16,7 +16,7 @@ class AddRecipe extends Component {
     ingredients:"",
     ingredientsLimit: 300,
     content:"",
-    img: "",
+    img: null,
     contentLimit:4000,
     category:"starter",
     veg:true,
@@ -51,7 +51,7 @@ class AddRecipe extends Component {
 
 if(this.state.title.length - this.state.titleLimit>0 ||
   this.state.content.length - this.state.contentLimit>0 ||
-  this.state.ingredients.length - this.state.ingredientsLimit>0 ||
+  this.state.ingredients.length - this.state.ingredientsLimit>0 || this.state.img===null ||
   this.state.title.length==0 || this.state.content.length==0 || this.state.ingredients.length==0
   ){
     this.createNotification("Please ensure you have filled all the fields within character limit")
@@ -78,7 +78,6 @@ else{
       }
         
       const formdata = new FormData();
-      const userpk= localStorage.getItem('mypk')
     for (let formElement in data) {
       formdata.append(formElement, data[formElement]);
       // console.log(formElement, data[formElement]);

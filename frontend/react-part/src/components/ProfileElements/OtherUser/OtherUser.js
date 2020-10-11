@@ -47,15 +47,7 @@ handlefollow=()=>{
         userpk: this.state.userdetails.id
     }
 
-    axios.post('https://cc1838682465.ngrok.io/user/follow/',data,
-    {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        },
-        
-    }
-    )
+    serverService.followtoggle(data)
     .then((resp)=>{
         console.log(resp)          
       })
@@ -82,7 +74,7 @@ render(){
 <div className={classes.cover}>
 <div className={classes.wrapper}>
 <div className={classes.dp}>
-<img src="https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-260nw-1048185397.jpg"/>
+<img src={this.state.userdetails.image_user}/>
 {/* <input className={classes.avatar} id="uploadpic" type="file" className={classes.avatar} onChange={(e)=>this.upload(e)} name="img" accept="image/*" /> */}
 
 <label onClick={this.handlefollow} className={classes.change}>{this.state.isfollow}</label>

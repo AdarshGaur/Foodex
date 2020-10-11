@@ -10,22 +10,42 @@ class Details extends Component {
 
 
     state={
-        userdetails:[]
+        userdetails:[],
+        profileimg:""
     }
 
-    upload(e){
-        console.warn(e.target.files)
-        const files= e.target.files
-        const formData= new FormData();
-        fetch('http://apiUrl',{
-            method:"POST",
-            body:formData
-        }).then((resp)=>{
-            resp.json().then((result)=>{
-                console.warn("result",result)
-            })
-        })
+
+    handleimg=(e)=>{
+
+
+        // this.setState({profileimg:})
+
+        // const data={
+        // img: this.state.profileimg
+        // }
+
+        const file=e.target.files[0];
+        
+        const formdata = new FormData();
+
+        formdata.append('image_user', file);
+
+        axios.put('https://78c80ca055b6.ngrok.io/user/change-profile/',formdata,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            },
+            
+        }
+        )
+        .then((resp)=>{
+            console.log(resp)
+       
+          })
+
     }
+
 
     componentDidMount(){
 
@@ -34,7 +54,6 @@ class Details extends Component {
                 console.log(resp.data)    
                 this.setState({userdetails: resp.data})
               })
-
     }
 
 
@@ -49,12 +68,11 @@ render(){
 <div className={classes.cover}>
 <div className={classes.wrapper}>
 <div className={classes.dp}>
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR-fzwMTk8dQytNQnl1vC97OHhsrGaEa2RFAg&usqp=CAU"/>
-<input className={classes.avatar} id="uploadpic" type="file" className={classes.avatar} onChange={(e)=>this.upload(e)} name="img" accept="image/*" />
+<img src={this.state.userdetails.image_user}/>
+<input className={classes.avatar} id="uploadpic" type="file" className={classes.avatar} onChange={this.handleimg} name="file" accept="image/*" />
 <label className={classes.change} htmlFor="uploadpic">Change Picture</label>
 </div>
 <h3> 
-    {/* Rakshit */}
     {this.state.userdetails.name}
 </h3>
 </div>

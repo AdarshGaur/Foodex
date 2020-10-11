@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://cc1838682465.ngrok.io/";
+const BASE_URL = "https://78c80ca055b6.ngrok.io/";
 
 class ServerService {
 
@@ -28,6 +28,18 @@ class ServerService {
       return axios.post(BASE_URL + 'auth/forgot-password/new-password/',data)
    }
 
+   followtoggle(data){
+   return  axios.post(BASE_URL + 'user/follow/',data,
+    {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        
+    }
+    )
+   }
+
    resendotp(resenddata){
     return axios.post(BASE_URL + 'auth/register/otp/resend/',resenddata)
    }
@@ -49,7 +61,7 @@ class ServerService {
     }
 
     suggestions(data){
-    return   axios.post('https://cc1838682465.ngrok.io/recipe/suggestion/',data,
+    return axios.post('https://cc1838682465.ngrok.io/recipe/suggestion/',data,
         {
           headers: {
               'Content-Type': 'application/json',
