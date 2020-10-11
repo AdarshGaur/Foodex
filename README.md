@@ -1,2 +1,3 @@
 # Foodex
-This is a Recipe Blogsite
+Revive Your Hunger with Foodex,
+A Recipe Blog for everyone.
