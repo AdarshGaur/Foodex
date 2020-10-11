@@ -1,49 +1,181 @@
 import React, {Component} from 'react';
 import NavigationBar from '../../Navbar/Navbar';
 import classes from './ReadRecipe.module.css';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {Card, Button} from 'react-bootstrap';
 import LikeButton from '../../UI/LikeButton/LikeButton';
 import BookmarkButton from '../../UI/BookmarkButton/BookmarkButton';
 import axios from 'axios';
 import serverService from '../../../services/serverService';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import Loader from 'react-loader-spinner'
+
 
 class AddRecipe extends Component {
+
+  createSuccess = (info) => {
+    NotificationManager.success( info, 'Success');
+  };
+
+
     state = {
         isLoading: true,
         recipe: [],
         error: null,
+        redirect: null,
+        suggestion:""
         // text: '  or kadhai, heat a tablespoon of butter and a tablespoon of oil'
         
       }
+
+      handlechangeall = (event) =>{
+        this.setState ( { [event.target.name] :event.target.value  } )
+       }
+
+      handlesuggestion=()=>{
+
+        this.setState({isLoading:true})
+
+        const data={
+          recipepk: this.state.recipe.pk,
+          suggestion:  this.state.suggestion
+        }
+
+        serverService.suggestions(data)
+      .then((resp)=>{
+        console.log(resp)
+        if (resp.status === 200) {
+        this.createSuccess("Suggestion Sent!")
+        this.setState({isLoading:false})
+        // this.setState({redirect:'/'})
+
+    }
+        }
+      
+      )
+      }
+
+
     
       componentDidMount(){
           const data= this.props.location.state.recipeid;
-        // axios.get('http://af3c2d386213.ngrok.io/recipe/'+this.props.location.state.recipeid+'/')
+
+        // console.log(localStorage.getItem('access_token'))
+
         serverService.readrecipe(data)
         .then(response=>{
-          console.log(response);
-          this.setState({recipe: response.data})
+          // console.log(response);
+          this.setState({recipe: response.data, isLoading:false})
         })
       }
 
+      deletehandler=()=>{
+        const deletepk= this.state.recipe.pk
+
+        serverService.deletepost(deletepk)
+        .then(response=>{
+          console.log(response);
+          if(response.status===204){
+            this.createSuccess("Recipe Deleted")
+          this.setState({redirect: '/profile'})
+          }
+        })
+
+      }
+
+
     render(){
+
+      
+      if(this.state.isLoading){
+        return  (
+          <>
+        <NavigationBar />     
+        <Loader
+        type="TailSpin"
+        color="#ff1742"
+        height={100}
+        width={100}
+        className={classes.spinner}
+     />
+     </>
+     );
+      }
+
+      else{
+
+        if(this.state.redirect){
+          return <Redirect to={this.state.redirect} />
+        }
+
+        let editing
+        let deleting
+        let authorprofile
+      if(this.state.recipe.ownit){
+        editing= <Button className={classes.editbtn} as={Link} 
+           to= {{
+            pathname:'/edit-recipe',
+            state:{recipeid: this.props.location.state.recipeid}
+          }} 
+          >Edit</Button>
+
+          deleting= <button onClick={this.deletehandler} className={classes.deletebtn}>delete</button>
+
+          authorprofile= <Link className={classes.authorname}
+                to= 'profile'
+                >{this.state.recipe.owner}
+                </Link>
+      }
+      else{
+        editing= <Button className={classes.btnhide} as={Link} 
+        to= {{
+         pathname:'/edit-recipe',
+         state:{recipeid: this.props.location.state.recipeid}
+       }} 
+       >Edit</Button>
+
+       deleting= <button className={classes.btnhide}>delete</button>
+
+       authorprofile= <Link className={classes.authorname}
+                to= {{
+                    pathname:'/user-profile',
+                    state:{ownerpk: this.state.recipe.ownerkapk}
+                  }} 
+                >{this.state.recipe.owner}
+                </Link>
+
+      }
+
         return (
             <>
                 <NavigationBar />
                 <div className= {classes.outerwrap}>
                 <div className={classes.readrecipe}>
-                    <span className={classes.tags}>Drinks and Smoothies</span>
-                    <span className={classes.tags}>Vegetarian</span>
+                  {(this.state.recipe.category==='main_course')?<span className={classes.tags}>Main Course</span>: null}
+                  {(this.state.recipe.category==='starter')?<span className={classes.tags}>Starters</span>: null}
+                  {(this.state.recipe.category==='drink')?<span className={classes.tags}>Drinks and Smoothies</span>: null}
+                  {(this.state.recipe.category==='others')?<span className={classes.tags}>Others</span>: null}
+                  {(this.state.recipe.category==='desserts')?<span className={classes.tags}>Desserts</span>: null}
+
+                    {this.state.recipe.veg? <span className={classes.tags}>Vegetarian</span>:<span className={classes.tags}>Non-Vegetarian</span>}
+                    {/* <span className={classes.tags}>Vegetarian</span> */}
                 <h1 className={classes.titlerecipe}>{this.state.recipe.title}</h1>
                 {/* <h1>Butter Paneer</h1> */}
                 <div className={classes.options}>
-                <p className={classes.extras}>by {this.state.recipe.owner}</p>
+                <span className={classes.by}> by
+                {/* <Link className={classes.authorname}
+                to= {{
+                    pathname:'/user-profile',
+                    state:{ownerpk: this.state.recipe.ownerkapk}
+                  }} 
+                >{this.state.recipe.owner}
+                </Link> */} {authorprofile}
+                </span>
         <p className={classes.extras}>Cooking Time: {this.state.recipe.cook_time} mins</p>
                 </div>
                 <div className={classes.imgwrap}>
                 <img  className={classes.foodimg} 
-                src={this.state.recipe.img_url}
+                src={this.state.recipe.img}
                 // src="https://www.cookwithmanali.com/wp-content/uploads/2019/05/Paneer-Butter-Masala-500x500.jpg" 
                 
                 />
@@ -63,32 +195,61 @@ class AddRecipe extends Component {
                 {this.state.recipe.content}
                 </h5>
 
-                <LikeButton pk={this.props.location.state.recipeid} />
-                <BookmarkButton pk={this.props.location.state.recipeid} />
+<div className={classes.btnwrap}>
+                <div className={classes.btndivfirst}>
+                <LikeButton 
+                pk={this.props.location.state.recipeid} 
+                likeis= {this.state.recipe.like_is} 
+                points= {this.state.recipe.points} 
+                />
+                <BookmarkButton 
+                pk={this.props.location.state.recipeid} 
+                />
 
-                <h2>Drop a Suggestion<i className="far fa-sticky-note"></i></h2>
-                <textarea rows="10" className={classes.area} name = 'instructions'  placeholder={this.state.instructions} onChange = {this.handlechangeall} />
+                </div>
+                <div className={classes.btndivsecond}>     
+                           
+                    {/* <Button className={classes.editbtn} as={Link} 
+           to= {{
+            pathname:'/edit-recipe',
+            state:{recipeid: this.props.location.state.recipeid}
+          }} 
+          >Edit</Button> */}  {editing}
 
+                {/* <button className={classes.deletebtn}>delete</button> */} {deleting}
+                </div>
+
+</div>
+
+                <h2 className={classes.suggest}>Drop a Suggestion<i className="far fa-sticky-note"></i></h2>
+                <textarea rows="10" className={classes.area} name = 'suggestion' onChange = {this.handlechangeall} />
+                {(localStorage.getItem('access_token'))? <input className={classes.suggestionbtn} type="submit" 
+                onClick={this.handlesuggestion} value="SUBMIT SUGGESTION" /> : 
+                <Link to='/sign-in'><input className={classes.suggestionbtn} type="submit" 
+                value="SUBMIT SUGGESTION" /></Link>
+                }
+                
                 </div>
                 <div className={classes.tips}>
                 <Card style={{ width: '18rem' }} className={classes.tipscard}>
-                <Card.Header>Quick Tips</Card.Header>
+                <Card.Header className={classes.tiphead}><i className="fa fa-bullhorn"> </i> Q U I C K - T I P S</Card.Header>
                 <Card.Body className={classes.bulletpoints}>
-                <Card.Text>
+                {/* <Card.Text> */}
                 <ul>
-                <li>Write a good, catchy title</li>
-                <li>Give clear details about your recipe preparation</li>
-                <li>Add a relevant topic to reach the right members</li>
-                <li>Check your spelling and grammar</li>
+                <li>Like a recipe to show your support</li>
+                <li>Bookmark a recipe for reading it later</li>
+                <li>Follow the author to keep in touch</li>
+                <li>Drop a suggestion (if any) for the author to improve in future</li>
                 <li>Become an active member to get recognized</li>
                 </ul>
-                </Card.Text>
+                {/* </Card.Text> */}
                 </Card.Body>
                 </Card>
                 </div>
                 </div>
             </>
         );
+      }
     }
 }
 

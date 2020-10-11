@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import classes from './BookmarkButton.module.css';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../../services/serverService';
 
@@ -10,6 +11,15 @@ class BookmarkButton extends Component {
         isclicked: false
     };
 
+    componentDidMount(){
+        const data= this.props.pk;
+
+      ServerService.readrecipe(data)
+      .then(response=>{
+        // console.log(response);
+        this.setState({isclicked: response.data.bookmark_is,})
+      })
+    }
 
     handlechange = () => {
           this.setState({
@@ -19,7 +29,7 @@ class BookmarkButton extends Component {
         const data={
             pk: this.props.pk
         }
-        console.log(data)
+        // console.log(data)
 
         // axios.post('https://776d58591d10.ngrok.io/recipe/bookmark/', data,
         // {
@@ -38,6 +48,19 @@ class BookmarkButton extends Component {
 
     render() {
 
+        if(!localStorage.getItem('access_token')){
+            return (
+            
+               <Link to='/sign-in'><button className={classes.bookmarkbtn} > 
+               <i className="far fa-bookmark"></i>
+               </button>
+
+</Link> 
+            )
+        }
+
+
+
         if(this.state.isclicked){
             return (
             
@@ -51,7 +74,7 @@ class BookmarkButton extends Component {
             return (
             
                 <button onClick={this.handlechange} className={classes.bookmarkbtn} > 
-                <i class="far fa-bookmark"></i>
+                <i className="far fa-bookmark"></i>
                 </button>
             )
         }

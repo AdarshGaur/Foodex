@@ -15,15 +15,15 @@ const Footer = () => {
     <p className={classes.footerlinks}>
         {/* <a href="#" className={classes.link1}>Home</a> */}
         
-        <a href="#">Starters</a>
+        <Link to="/starters" className={classes.categoryroutes}>Starters</Link>
     
-        <a href="#">Main Course</a>
+        <Link to="/main-course" className={classes.categoryroutes}>Main Course</Link>
     
-        <a href="#">Desserts</a>
+        <Link to="/desserts" className={classes.categoryroutes}>Desserts</Link>
         
-        <a href="#">Drinks</a>
+        <Link to="/drinks-smoothies" className={classes.categoryroutes}>Drinks</Link>
         
-        <a href="#"  className={classes.link1}>Others</a>
+        <Link to="/others" className={classes.link1}>Others</Link>
     </p>
 
     <p className={classes.footercompanyname}>Foodex © 2020</p>
@@ -39,7 +39,7 @@ const Footer = () => {
 
     <div>
         <i className="fa fa-envelope"></i>
-        <p><a href="mailto:support@company.com">support@foodex.com</a></p>
+        <p><span>support@foodex.com</span></p>
     </div>
 
 </div>

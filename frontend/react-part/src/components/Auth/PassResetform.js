@@ -69,6 +69,16 @@ confirmclean=()=>{
 
 handlesubmit = (event) => {
 
+   if(
+    this.state.passwordError!=='fine' ||
+    this.state.confirmError!=='fine' 
+  ){
+    event.preventDefault();
+    this.createNotification("Please Check your entered information")
+  }
+
+  else{
+
   this.setState({isLoading: true});
 
     const data={
@@ -105,6 +115,7 @@ handlesubmit = (event) => {
 
   })
 
+}
 
 }
  

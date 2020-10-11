@@ -1,13 +1,15 @@
 
 .brand{
  font-size: 40px;
- color: #343a40;
+ color: #e60e3c;
  text-decoration: none;
+ font-family: 'Pacifico';
 }
 
 .sbar{
   width: 40vw !important;
   height: 35px !important;
+
   /* margin: 0.5vw; */
   /* border-radius: 5px !important; */
 }
@@ -76,7 +78,9 @@
   border-radius: 4px;
 }
 
-
+.navshadow{
+  box-shadow: 0 5px 5px -5.5px black;
+}
 
 
 .dditems:hover{
@@ -114,4 +118,11 @@ font-family: Lato !important;
     color: #e60e3c !important;
     font-weight: 200 !important;
   }
+}
+
+@media(max-width:1090px){
+  .brand{
+    font-size: 25px;
+
+   }
 }

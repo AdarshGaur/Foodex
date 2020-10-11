@@ -26,12 +26,46 @@ video{
 .overlayText {
     display: flex;
     position:absolute;
-     top:50%;
-     left:20%;
+     top:40%;
+     left:30%;
      z-index:1;
      flex-wrap: wrap;
+     user-select: none;
    }
 
    .herotext{
-       font-size: 100px;
+       /* font-size: 200px; */
+       font-size:15vw;
+       font-family: "Bubblegum Sans";
+       line-height: 40%;
+   }
+
+   .subtext{
+       font-size:3.3vw;
+       padding: 15%;
+       font-family: Lato;
+   }
+
+   @media(max-width:750px){
+    .overlayText {
+        display: flex;
+        position:absolute;
+         top:50%;
+         left:20%;
+         z-index:1;
+         flex-wrap: wrap;
+       }       
+
+    .herotext{
+        /* font-size: 200px; */
+        font-size:20vw;
+        font-family: "Bubblegum Sans";
+        line-height: 40%;
+    }
+ 
+    .subtext{
+        font-size:4vw;
+        padding-left: 20%;
+        font-family: Lato;
+    }
    }

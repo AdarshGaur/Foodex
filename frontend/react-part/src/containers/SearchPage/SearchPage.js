@@ -5,6 +5,10 @@ import RecipeCard from '../../components/UI/Card/RecipeCard'
 import SearchNavbar from '../../components/Navbar/SearchNavbar';
 import axios from 'axios';
 import ServerService from '../../services/serverService'
+import {Form} from 'react-bootstrap'
+
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown'
 
 
 class SearchPage extends Component {
@@ -14,7 +18,9 @@ class SearchPage extends Component {
     error: null,
     newsearch:this.props.location.state.searchterm,
     data:"points-high-to-low",
-    veg:"true"
+    datatitle:"Points- high to low",
+    veg:"true",
+    vegtitle:"Vegetarian"
   }
 
 submitsort=(event)=>{
@@ -43,6 +49,41 @@ console.log(sortdata)
 
 handlechangeall = (event) =>{
   this.setState ( { [event.target.name] :event.target.value  } )
+ }
+
+ handleSelect=(e)=>{
+  console.log(e);
+  this.setState({veg: e})
+
+  if(e==="true"){
+    this.setState({vegtitle: "Vegetarian"})
+  }
+  else if(e==="false"){
+    this.setState({vegtitle: "Non-Vegetarian"})
+  }
+  else{
+    this.setState({vegtitle: "Both"})
+  }
+
+ }
+
+ handleDataSelect=(e)=>{
+  console.log(e);
+  this.setState({data: e})
+
+  if(e==="points-high-to-low"){
+    this.setState({datatitle: "Points- high to low"})
+  }
+  else if(e==="points-low-to-high"){
+    this.setState({datatitle: "Points- low to high"})
+  }
+  else if(e==="new"){
+    this.setState({datatitle: "Newest"})
+  }
+  else{
+    this.setState({datatitle: "Oldest"})
+  }
+
  }
 
 handlesubmit = (event) => {
@@ -92,26 +133,54 @@ handlesubmit = (event) => {
   render() {
 
     const recipecards= this.state.recipecards.map(recipecard=>{
-    return <RecipeCard title={recipecard.title} img={recipecard.img_url} pk={recipecard.pk} content={recipecard.content} />
+    return <RecipeCard title={recipecard.title} img={recipecard.img} pk={recipecard.pk} content={recipecard.content} />
     })
 
     return(
     <>
       {/* <NavigationBar />    */}
       <SearchNavbar />
-      <select name='data' className={classes.ddlist} onChange={this.handlechangeall}>
-            <option value="points-high-to-low">Points- high to low</option>
-            <option value="points-low-to-high">Points- low to high</option>
-            <option value="new">Newest</option>
-            <option value="old">Oldest</option>
-      </select>
 
-      <select name='veg' className={classes.ddlist} onChange={this.handlechangeall}>
-            <option value="true">Vegetarian</option>
-            <option value="false">Non-Vegetarian</option>
-            <option value="all">Both</option>
-      </select>
-      <button onClick={this.submitsort} className={classes.sortbtn}>Sort</button>
+
+      <div className={classes.sortwrap}>
+      <DropdownButton
+      RightAlign
+      variant="Secondary"
+      title={this.state.datatitle}
+      className={classes.dropbtns}
+      id="dropdown-menu-align-right"
+      onSelect={this.handleDataSelect}
+      >
+              <Dropdown.Item className={classes.droplistopt} eventKey="points-high-to-low">Points- high to low</Dropdown.Item>
+              <Dropdown.Item className={classes.droplistopt} eventKey="points-low-to-high">Points- low to high</Dropdown.Item>
+              <Dropdown.Item className={classes.droplistopt} eventKey="new">Newest</Dropdown.Item>
+              <Dropdown.Item className={classes.droplistopt} eventKey="old">Oldest</Dropdown.Item>
+
+      </DropdownButton>
+
+      <DropdownButton
+      variant="Secondary"
+      title={this.state.vegtitle}
+      className={classes.dropsbtns}
+      id="dropdown-menu-align-right"
+      onSelect={this.handleSelect}
+      >
+              <Dropdown.Item
+               className={classes.droplistopt} 
+              eventKey="true">Vegetarian</Dropdown.Item>
+              <Dropdown.Item
+               className={classes.droplistopt} 
+              eventKey="false">Non-Vegetarian</Dropdown.Item>
+              <Dropdown.Item
+               className={classes.droplistopt} 
+              eventKey="all">Both</Dropdown.Item>
+
+      </DropdownButton>
+
+
+      {/* <button onClick={this.submitsort} className={classes.sortbtn}>Sort</button> */}
+      <input onClick={this.submitsort} class="btn btn-primary sortingbtn" type="button" value="Sort"></input>
+      </div>
 
 <div className={classes.searchpagebar}>
        <input  type="text" name="newsearch" className={classes.sbar}

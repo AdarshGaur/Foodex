@@ -74,11 +74,20 @@ passwordclean=()=>{
 
 handlesubmit = (event) => {
 
+  if(
+    this.state.emailError!=='fine' ||
+    this.state.passwordError!=='fine'
+  ){
+    event.preventDefault();
+    this.createNotification("Please Check your entered information")
+  }
+
+  else{
   this.setState({ isLoading: true });
 
 const data={
   email: this.state.email,
-  password: this.state.password,
+  password: this.state.password
 
 }
   event.preventDefault();
@@ -89,6 +98,7 @@ const data={
     if (resp.status === 200) {
       localStorage.setItem("refresh_token",resp.data.refresh)
       localStorage.setItem("access_token",resp.data.access)
+      localStorage.setItem("mypk",resp.data.my_pk)
       this.setState({isLoading: false});
       this.setState({ redirect: "/" });
     }
@@ -103,7 +113,7 @@ const data={
   })
 
 
-// }
+}
 }
 
 render(){

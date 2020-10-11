@@ -31,6 +31,7 @@ createNotification = (info) => {
 
 handlesubmit = (event) => {
 
+ 
   this.setState({isLoading: true});
 
   // console.log( JSON.stringify(this.state));
@@ -55,13 +56,14 @@ ServerService.forgototp(data)
   .catch(error => {
     console.log(error.response)
     this.setState({isLoading: false});
-    if(error.response.data.message==="wrong_otp"){
+    if(error.response.data.message){
       this.createNotification(error.response.data.message)
     }
 
   })
 
 }
+
 
 resend = (event) => {
   

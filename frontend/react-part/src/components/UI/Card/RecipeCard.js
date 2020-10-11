@@ -10,7 +10,7 @@ const RecipeCard = (props) => {
         <Card.Img variant="top" height="250px" src="holder.js/100px180" src= {props.img} />
         <Card.Body>
           <Card.Title className={classes.blogtitle}>{props.title}</Card.Title>
-          <p className={classes.readtime}>3 min read</p>
+          <p className={classes.readtime}>{props.readtime} min read</p>
           <Card.Text>{props.content.substring(0, 151)}...</Card.Text>
           <Button className={classes.pinkbtn} as={Link} 
            to= {{

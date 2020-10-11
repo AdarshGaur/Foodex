@@ -46,6 +46,7 @@ handlechangeall = (event) =>{
  this.setState ( { [event.target.name] :event.target.value  } )
 }
 
+
 createNotification = (info) => {
   NotificationManager.error( info, 'Error');
 };
@@ -118,6 +119,7 @@ emailclean=()=>{
   this.setState({emailError:"fine"})
 }
 
+
 passwordclean=()=>{
   this.setState({passwordError:"fine"})
 }
@@ -136,8 +138,18 @@ confirmclean=()=>{
 
 handlesubmit = (event) => {
 
-  
-  // if(!this.state.disabled){
+if(
+  this.state.emailError!=='fine' ||
+  this.state.nameError!=='fine' ||
+  this.state.passwordError!=='fine' ||
+  this.state.confirmError!=='fine' 
+){
+  event.preventDefault();
+  this.createNotification("Please Check your entered information")
+}
+
+else{
+
     this.setState({ isLoading: true });
 
     const data={
@@ -160,6 +172,7 @@ ServerService.signup(data)
   if (resp.data.message === "otp_sent") {
     this.createSuccess("OTP sent to the mail")
     localStorage.setItem('email', this.state.email)
+    localStorage.setItem('password', this.state.password)
     this.setState({isLoading: false});
     this.setState({ redirect: "/otp" });
   }
@@ -168,12 +181,12 @@ ServerService.signup(data)
 .catch(err => {
   console.log(err.response)
   this.setState({isLoading: false})
-  if(err.response.data.email){
-  this.createNotification(err.response.data.email)
+  if(err.response.data.message){
+  this.createNotification(err.response.data.message)
   }
 })
 
-// }
+}
  }
 
 

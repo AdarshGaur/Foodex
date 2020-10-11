@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://d5a4466f9886.ngrok.io/";
+const BASE_URL = "https://78c80ca055b6.ngrok.io/";
 
 class ServerService {
 
@@ -9,9 +9,7 @@ class ServerService {
     }
 
     signup(data){
-      return axios.post(BASE_URL + 'auth/register/', data)
-
-      
+      return axios.post(BASE_URL + 'auth/register/', data) 
    }
 
     otp(data){
@@ -30,6 +28,18 @@ class ServerService {
       return axios.post(BASE_URL + 'auth/forgot-password/new-password/',data)
    }
 
+   followtoggle(data){
+   return  axios.post(BASE_URL + 'user/follow/',data,
+    {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        
+    }
+    )
+   }
+
    resendotp(resenddata){
     return axios.post(BASE_URL + 'auth/register/otp/resend/',resenddata)
    }
@@ -38,17 +48,181 @@ class ServerService {
       return axios.get(BASE_URL)
     }
 
+    profilepicture(formdata){
+    return  axios.put('https://78c80ca055b6.ngrok.io/user/change-profile/',formdata,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            },
+            
+        }
+        )
+    }
+
+    otheruser(data){
+      return axios.get(BASE_URL+ 'user/' +data+'/',
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+        
+    }
+      )
+    }
+
+    suggestions(data){
+    return axios.post( BASE_URL+'recipe/suggestion/',data,
+        {
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          }
+          
+      })
+    }
+
+    userdetails(){
+      return axios.get(BASE_URL+ 'my-account/',
+      {
+         headers: {
+             'Content-Type': 'application/json',
+             'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+         }
+         
+     }
+      )
+    }
+
     searchpage(data){
       return axios.post(BASE_URL + 'search/',data)
     }
 
     readrecipe(data){
-      return axios.get(BASE_URL + 'recipe/'+ data+'/')
+
+if(localStorage.getItem('access_token')){
+  return axios.get(BASE_URL + 'recipe/'+ data+'/',
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    },
+    
+}
+  )
+
+}
+
+else{
+  return axios.get(BASE_URL + 'recipe/'+ data+'/',
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': ``
+    },
+    
+}
+  )
+}
+
+}
+
+
+  addrecipe(formdata){
+
+  return axios.post(BASE_URL + 'recipe/post/', formdata,
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }   
+}
+  )
+  }
+
+  editrecipe(formdata,recipeid){
+  return axios.put(BASE_URL+ 'recipe/'+recipeid+'/' , formdata,
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      },
+      
+  }
+    )
+  }
+
+
+  myrecipes(){
+
+  return axios.get(BASE_URL + 'user/recipe-list/',
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }   
+}
+  )
+  }
+
+    deletepost(deletepk){
+      return axios.delete(BASE_URL +'recipe/'+ deletepk+'/',
+
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        
     }
+      
+      )
+    }
+
 
     sort(sortdata){
       return axios.post(BASE_URL + 'search/sort/',sortdata)
     }
+
+
+
+    following(){
+    return axios.get( BASE_URL +'user/following-list/',
+    {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      },
+      
+  }
+    )
+}
+
+followers(){
+ return axios.get(BASE_URL + 'user/follower-list/',
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    },
+    
+}
+  )
+}
+
+
+bookmarklist(){
+  return axios.get(BASE_URL + 'user/bookmark-list',
+  {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    },
+    
+}
+  )
+}
 
     starters(){
       return axios.get(BASE_URL +'starters/')
