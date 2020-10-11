@@ -9,7 +9,7 @@ const PersonCard = (props) => {
 <Card className={classes.personbox} style={{ width: '39rem' }}>
   <Card.Body>
     <img className={classes.personimg}
-  src="https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-260nw-1048185397.jpg"/>
+  src={props.usrimg}/>
     <span img className={classes.usrname}>{props.name} 
     <Link  to= {{
                     pathname:'/user-profile',

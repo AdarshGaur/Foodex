@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import classes from './Details.module.css';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 import ServerService from '../../../services/serverService';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+
 
 
 
@@ -11,9 +13,13 @@ class Details extends Component {
 
     state={
         userdetails:[],
-        profileimg:""
+        profileimg:"",
+        redirect: null
     }
 
+    createSuccess = (info) => {
+        NotificationManager.success( info, 'Success');
+    };
 
     handleimg=(e)=>{
 
@@ -30,17 +36,13 @@ class Details extends Component {
 
         formdata.append('image_user', file);
 
-        axios.put('https://78c80ca055b6.ngrok.io/user/change-profile/',formdata,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-            },
-            
-        }
-        )
+        ServerService.profilepicture(formdata)
         .then((resp)=>{
             console.log(resp)
+            if(resp.status===202){
+                this.createSuccess("Profile Picture changed successfully")
+                this.setState({redirect:'/'})
+            }
        
           })
 
@@ -58,6 +60,11 @@ class Details extends Component {
 
 
 render(){    
+
+    if(this.state.redirect){
+        return <Redirect to={this.state.redirect} />
+    }
+
     return (
       <>
 <div className={classes.totalwrap}>

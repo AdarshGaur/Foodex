@@ -48,6 +48,18 @@ class ServerService {
       return axios.get(BASE_URL)
     }
 
+    profilepicture(formdata){
+    return  axios.put('https://78c80ca055b6.ngrok.io/user/change-profile/',formdata,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            },
+            
+        }
+        )
+    }
+
     otheruser(data){
       return axios.get(BASE_URL+ 'user/' +data+'/',
       {
