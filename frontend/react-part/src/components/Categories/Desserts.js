@@ -17,7 +17,7 @@ class Desserts extends Component {
     // axios.get('http://af3c2d386213.ngrok.io/desserts/')
     ServerService.desserts()
     .then(response=>{
-      console.log(response.data);
+      // console.log(response.data);
       this.setState({recipecards: response.data, isLoading:false})
     })
   }
@@ -45,7 +45,7 @@ class Desserts extends Component {
 
     else{
     const recipecards= this.state.recipecards.map(recipecard=>{
-    return <RecipeCard title={recipecard.title} img={recipecard.img} readtime={recipecard.read_time} pk={recipecard.pk} content={recipecard.content} />
+    return <RecipeCard title={recipecard.title} img={recipecard.img} key={recipecard.pk} readtime={recipecard.read_time} pk={recipecard.pk} content={recipecard.content} />
     })
 
     return(

@@ -10,7 +10,7 @@ const PersonCard = (props) => {
   <Card.Body>
     <img className={classes.personimg}
   src={props.usrimg}/>
-    <span img className={classes.usrname}>{props.name} 
+    <span className={classes.usrname}>{props.name} 
     <Link  to= {{
                     pathname:'/user-profile',
                     state:{ownerpk: props.ownerkapk}

@@ -25,9 +25,8 @@ class NavigationBar extends Component{
     }
     event.preventDefault();
     this.setState({ redirect: "/search-page" });
-   
 
-  
+ 
   
   }
   

@@ -73,7 +73,7 @@ class ServerService {
     }
 
     suggestions(data){
-    return axios.post('https://cc1838682465.ngrok.io/recipe/suggestion/',data,
+    return axios.post( BASE_URL+'recipe/suggestion/',data,
         {
           headers: {
               'Content-Type': 'application/json',

@@ -17,7 +17,7 @@ class Starters extends Component {
     // axios.get('http://af3c2d386213.ngrok.io/starters/')
     ServerService.starters()
     .then(response=>{
-      console.log(response.data);
+      // console.log(response.data);
       this.setState({recipecards: response.data, isLoading:false})
     })
   }
@@ -45,7 +45,7 @@ class Starters extends Component {
     else{
 
     const recipecards= this.state.recipecards.map(recipecard=>{
-    return <RecipeCard title={recipecard.title} img={recipecard.img} pk={recipecard.pk} readtime={recipecard.read_time} content={recipecard.content} />
+    return <RecipeCard title={recipecard.title} img={recipecard.img} key={recipecard.pk} pk={recipecard.pk} readtime={recipecard.read_time} content={recipecard.content} />
     })
 
     return(

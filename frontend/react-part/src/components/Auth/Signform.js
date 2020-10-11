@@ -181,8 +181,8 @@ ServerService.signup(data)
 .catch(err => {
   console.log(err.response)
   this.setState({isLoading: false})
-  if(err.response.data.email){
-  this.createNotification(err.response.data.email)
+  if(err.response.data.message){
+  this.createNotification(err.response.data.message)
   }
 })
 

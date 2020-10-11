@@ -56,7 +56,7 @@ ServerService.forgototp(data)
   .catch(error => {
     console.log(error.response)
     this.setState({isLoading: false});
-    if(error.response.data.message==="wrong_otp"){
+    if(error.response.data.message){
       this.createNotification(error.response.data.message)
     }
 

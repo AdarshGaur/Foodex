@@ -35,7 +35,7 @@ class EditRecipe extends Component {
   // axios.get('http://af3c2d386213.ngrok.io/recipe/'+this.props.location.state.recipeid+'/')
   serverService.readrecipe(data)
   .then(response=>{
-    console.log(response);
+    // console.log(response);
     this.setState({recipe: response.data})
     this.setState({title: response.data.title, ingredients: response.data.ingredients, content: response.data.content,
     veg: response.data.veg, cook_time: response.data.cook_time, category: response.data.category
@@ -135,7 +135,7 @@ else if(this.state.content.length<160){
 
         serverService.editrecipe(formdata, recipeid)
         .then((resp)=>{
-          console.log(resp)
+          // console.log(resp)
           if(resp.status===202){
             this.createSuccess("Recipe Edited!")
             this.setState({ redirect: "/profile", isLoading:false });
@@ -213,7 +213,6 @@ else if(this.state.content.length<160){
                 <Card style={{ width: '18rem' }} className={classes.tipscard}>
                 <Card.Header className={classes.tiphead}><i className="fa fa-bullhorn"> </i> Q U I C K - T I P S</Card.Header>
                 <Card.Body className={classes.bulletpoints}>
-                <Card.Text>
                 <ul>
                 <li>Write a good, catchy title</li>
                 <li>Give clear details about your recipe preparation</li>
@@ -221,7 +220,6 @@ else if(this.state.content.length<160){
                 <li>Check your spelling and grammar</li>
                 <li>Become an active member to get recognized</li>
                 </ul>
-                </Card.Text>
                 </Card.Body>
                 </Card>
                 </div>

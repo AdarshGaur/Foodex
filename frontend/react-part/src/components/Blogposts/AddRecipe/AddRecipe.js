@@ -168,7 +168,6 @@ else{
                 <Card style={{ width: '18rem' }} className={classes.tipscard}>
                 <Card.Header className={classes.tiphead}><i className="fa fa-bullhorn"> </i> Q U I C K - T I P S</Card.Header>
                 <Card.Body className={classes.bulletpoints}>
-                <Card.Text>
                 <ul>
                 <li>Write a good, catchy title</li>
                 <li>Give clear details about your recipe preparation</li>
@@ -176,7 +175,6 @@ else{
                 <li>Check your spelling and grammar</li>
                 <li>Become an active member to get recognized</li>
                 </ul>
-                </Card.Text>
                 </Card.Body>
                 </Card>
                 </div>

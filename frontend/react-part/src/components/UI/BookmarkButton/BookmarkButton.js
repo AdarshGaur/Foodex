@@ -16,7 +16,7 @@ class BookmarkButton extends Component {
 
       ServerService.readrecipe(data)
       .then(response=>{
-        console.log(response);
+        // console.log(response);
         this.setState({isclicked: response.data.bookmark_is,})
       })
     }
@@ -29,7 +29,7 @@ class BookmarkButton extends Component {
         const data={
             pk: this.props.pk
         }
-        console.log(data)
+        // console.log(data)
 
         // axios.post('https://776d58591d10.ngrok.io/recipe/bookmark/', data,
         // {

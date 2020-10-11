@@ -53,7 +53,7 @@ class Details extends Component {
 
         ServerService.userdetails()
         .then((resp)=>{
-                console.log(resp.data)    
+                // console.log(resp.data)    
                 this.setState({userdetails: resp.data})
               })
     }

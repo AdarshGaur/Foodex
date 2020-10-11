@@ -1,7 +1,6 @@
 .personbox{
     /* margin-top: 0.5rem; */
     margin-bottom: 1rem;
-
 }
 
 .personimg{
@@ -52,8 +51,6 @@
     font-size: 20px;
 }
 
-
-
 }
 
 @media(max-width:405px){
@@ -101,3 +98,8 @@
 
 }
 
+@media(max-width:1260px){
+    .checkprofilebtn{
+    margin-right: 10px !important;
+    }
+}

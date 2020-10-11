@@ -13,7 +13,9 @@ class OtherUser extends Component {
     state={
         userdetails:[],
         recipecards:[],
-        isfollow:"Follow"
+        isfollow:"Follow",
+        followers:null,
+        following: null
     }
     
     
@@ -25,7 +27,7 @@ class OtherUser extends Component {
         serverService.otheruser(data)
           .then((resp)=>{
             console.log(resp.data)    
-            this.setState({userdetails: resp.data, recipecards: resp.data.recipes})
+            this.setState({userdetails: resp.data, recipecards: resp.data.recipes, followers: resp.data.followers})
             if(resp.data.alreadyfollowed){
                 this.setState({isfollow:"Unfollow"}) 
             }
@@ -37,10 +39,10 @@ class OtherUser extends Component {
 
 handlefollow=()=>{
     if(this.state.isfollow==="Follow"){
-        this.setState({isfollow:"Unfollow"})
+        this.setState({isfollow:"Unfollow", followers: this.state.followers+1})
     }
     else{
-        this.setState({isfollow:"Follow"})
+        this.setState({isfollow:"Follow", followers: this.state.followers-1})
     }
 
     const data={
@@ -96,7 +98,7 @@ render(){
     
    <div className={classes.profilenums}>
         <h5 className={classes.headingnums}>Followers</h5>
-        <p className={classes.nums}>{this.state.userdetails.followers}</p>     
+        <p className={classes.nums}>{this.state.followers}</p>     
     </div>
    
 <div className={classes.profilenums}>

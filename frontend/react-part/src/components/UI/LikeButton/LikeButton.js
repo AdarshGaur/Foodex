@@ -18,7 +18,7 @@ class LikeButton extends Component {
 
       ServerService.readrecipe(data)
       .then(response=>{
-        console.log(response);
+        // console.log(response);
         this.setState({isclicked: response.data.like_is, likes: response.data.points})
       })
     }
@@ -39,7 +39,7 @@ class LikeButton extends Component {
         const data={
             pk: this.props.pk
         }
-        console.log(data)
+        // console.log(data)
 
         ServerService.like(data)
         .then((resp)=>{

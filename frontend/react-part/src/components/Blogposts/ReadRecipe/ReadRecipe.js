@@ -60,11 +60,11 @@ class AddRecipe extends Component {
       componentDidMount(){
           const data= this.props.location.state.recipeid;
 
-        console.log(localStorage.getItem('access_token'))
+        // console.log(localStorage.getItem('access_token'))
 
         serverService.readrecipe(data)
         .then(response=>{
-          console.log(response);
+          // console.log(response);
           this.setState({recipe: response.data, isLoading:false})
         })
       }
@@ -234,7 +234,7 @@ class AddRecipe extends Component {
                 <Card style={{ width: '18rem' }} className={classes.tipscard}>
                 <Card.Header className={classes.tiphead}><i className="fa fa-bullhorn"> </i> Q U I C K - T I P S</Card.Header>
                 <Card.Body className={classes.bulletpoints}>
-                <Card.Text>
+                {/* <Card.Text> */}
                 <ul>
                 <li>Like a recipe to show your support</li>
                 <li>Bookmark a recipe for reading it later</li>
@@ -242,7 +242,7 @@ class AddRecipe extends Component {
                 <li>Drop a suggestion (if any) for the author to improve in future</li>
                 <li>Become an active member to get recognized</li>
                 </ul>
-                </Card.Text>
+                {/* </Card.Text> */}
                 </Card.Body>
                 </Card>
                 </div>

@@ -19,7 +19,7 @@ class Home extends Component {
     // axios.get('https://60bb5774f441.ngrok.io/')
     ServerService.homecards()
     .then(response=>{
-      console.log(response);
+      // console.log(response);
       this.setState({recipecards: response.data, isLoading:false})
     })
   }

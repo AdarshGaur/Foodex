@@ -47,7 +47,7 @@ class FollowersList extends Component {
       else{
 
       const personcards= this.state.personcards.map(personcard=>{
-        return <PersonCard name={personcard.name} usrimg={personcard.image_user} ownerkapk={personcard.id}/>
+        return <PersonCard name={personcard.name} usrimg={personcard.image_user} key={personcard.id} ownerkapk={personcard.id}/>
         })
 
   return (
