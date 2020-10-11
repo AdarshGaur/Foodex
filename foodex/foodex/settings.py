@@ -27,7 +27,7 @@ SECRET_KEY = 'zwx^cvzjf3qob&0i(uiij*3s79$!fm661%1q%^p4-sfsa27fme'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'cc1838682465.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '78c80ca055b6.ngrok.io']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     #customs
     'rest_framework',
     'corsheaders',
-    # 'blog.apps.BlogConfig',
     'blog'
 ]
 
@@ -151,11 +150,10 @@ REST_FRAMEWORK = {
     'AUTHENTICATION_BACKENDS' : ( 
     'django.contrib.auth.backends.ModelBackend', 
     ),
+
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
-    # 'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
 
     'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.AllowAny',
     ),
 
@@ -188,7 +186,7 @@ EMAIL_PORT = 587
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=3600),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=180),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -209,11 +207,7 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=3600),
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=180),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=7),
 }
 
-
-
-# "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYwMjQ5NzM2MCwianRpIjoiMTlhNjMwYWU3ZGZiNDNkYmI2YmJkZjgxMjEwYTBkNmUiLCJ1c2VyX2lkIjozfQ.KIHGSjjt8QgIT2Yc5N1MamTQMl2WXJsUHPalYTAVuh4",
-# "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjAxODk2MTYwLCJqdGkiOiJjMzEyNjczMjUzMTc0NzFmOWFmMzk5ODIyMDUyZDNiZCIsInVzZXJfaWQiOjN9.OvqQbBum3JGZORoL67u68ny9SntdWjIAGxpeF6kiYqE"

@@ -1,4 +1,3 @@
-import uuid
 import re
 
 from django.db import models
@@ -21,16 +20,14 @@ categories_choices = [
 def upload_path(instance, filename):
     # do a test for instace.title
     return '/'.join(['image', instance.title, filename])
-    '''can include more specific path later'''
+    
 
 
 def user_upload_path(instance, filename):
-    #
     return '/'.join(['users_image', instance.email, filename])
 
 
 class Recipe(models.Model):
-    #recipe_id = models.AutoField(primary_key=True)
     title  = models.CharField(max_length=50)
     ingredients = models.TextField(blank=False, null=False)
     content = models.TextField(blank=False)
@@ -112,11 +109,8 @@ class MyUser(AbstractUser):
     image_user = models.ImageField(upload_to=user_upload_path, default='default-avatar.png')
     age = models.IntegerField(default=22, blank=False, validators=[MaxValueValidator(110), MinValueValidator(5)])
     
-    # email = models.EmailField(blank=False, unique=True, validators=[email_regex])
-    # is_active = models.BooleanField(default=False)
-    
-    # password = models.CharField(blank=False, max_length=21, validators=[password_regex])
 
+    # password = models.CharField(blank=False, max_length=21, validators=[password_regex])
     bookmark_count = models.PositiveIntegerField(default=0)
     post_count = models.PositiveIntegerField(default=0)
     alreadyfollowed = models.BooleanField(default=False)

@@ -27,21 +27,15 @@ from django.db.models import Q, F
 
 
 class CreateRecipe(APIView):
-    print('started')
     permission_classes = [permissions.IsAuthenticated]
-    print('check1')
-
+    
     def post(self, request,format=None):
-        print('check2')
         owner= request.user
         serializer = PostRecipeSerializer(data=request.data)
-        print('check3')
         if serializer.is_valid():
             owner.post_count = F('post_count') + 1
             owner.save()
-
             serializer.save(owner=owner)
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -115,13 +109,6 @@ class RecipeDetail(APIView):
         recipe = self.get_recipeneeded(pk)
         u = request.user
         self.check_object_permissions(request, recipe)
-        recipe.ownerkapk = u.pk
-        print(recipe.img)
-        image = request.data.get('img')
-        print(request.data)
-        print('#########')
-        print(image)
-        # recipe.img = 
         serializer = PostRecipeSerializer(recipe, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
@@ -142,16 +129,6 @@ class RecipeDetail(APIView):
 
 
 
-class MyUserList(APIView):
-    permission_classes=[permissions.AllowAny]
-    
-    def get(self, request, format=None):
-        user = MyUser.objects.all()
-        serializer = MyUserSerializer(user, many=True)
-        return Response(serializer.data)
-
-
-
 class UserDetail(APIView):
     permission_classes = [IsOwnerOrReadOnly]
     
@@ -166,8 +143,6 @@ class UserDetail(APIView):
     
     #get the details
     def get(self, request, pk, format=None):
-        print(request.user)
-        # print(pk)
         solo_user = self.get_user(pk)
 
         if request.user.is_anonymous:
@@ -191,19 +166,10 @@ class UserDetail(APIView):
                 solo_user.alreadyfollowed=False
         else:
             solo_user.alreadyfollowed=False
-        print(solo_user.alreadyfollowed)
         solo_user.save()
         serializer = MyUserDetailSerializer(solo_user, context={'request': request})
         return Response(serializer.data)
 
-    #to update user details
-    # def put(self, request, pk, format=None):
-    #     solo_user = self.get_user(pk)
-    #     serializer = MyUserSerializer(solo_user, data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status = status.HTTP_406_NOT_ACCEPTABLE)
 
 
 
@@ -232,6 +198,11 @@ class MyAccountDetail(APIView):
 
 
 
+def random_with_N_digits(n):
+    range_start = 10**(n-1)
+    range_end = (10**n)-1
+    return random.randint(range_start, range_end)
+
 
 
 class CreateUser(APIView):
@@ -240,43 +211,34 @@ class CreateUser(APIView):
     #post
     def post(self, request, format=None):
 
-        # email_for_otp = request.data.get("email")
-        # try:
-        #     user = MyUser.objects.get(email=email_for_otp)
-        # except
-        
-        def random_with_N_digits(n):
-            range_start = 10**(n-1)
-            range_end = (10**n)-1
-            return random.randint(range_start, range_end)
-        
-
         email_for_otp = request.data.get("email")
 
         present = True
 
         try:
-            user_exists = MyUser.objects.get(email=email_for_otp)
+            user_exists = MyUser.objects.get(email__iexact=email_for_otp)
         except MyUser.DoesNotExist:
             present = False
              
         if present:
             if user_exists.is_active==False:
                 user_exists.delete()
-                user_otp = OtpModel.objects.get(email=email_for_otp)
+                user_otp = OtpModel.objects.get(email__iexact=email_for_otp)
                 user_otp.delete()
+            else:
+                return Response({'message':'User already exists.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
 
         serializer = RegisterMyUser(data=request.data)
         if serializer.is_valid():
             serializer.save()
 
             #creating otp and saving it in otp model
-            print('checkotp')
             otp = random_with_N_digits(6)
             print(otp)
             present_time = int(time.time())
-            print(present_time)
             OtpModel.objects.create(otp=otp, email=email_for_otp, at_time=present_time)
+            
             #now sending verification email now
             to_email = [email_for_otp]
             email_from = settings.EMAIL_HOST_USER
@@ -304,8 +266,7 @@ class VerifyOTP(APIView):
         except OtpModel.DoesNotExist:
             message = {'message': 'register_first'}
             return Response(message ,status= status.HTTP_401_UNAUTHORIZED)
-        print(email_to_verify.otp)
-        print(client_otp)
+        
         verifying_time = int(time.time())
 
         if (verifying_time - email_to_verify.at_time)>300:
@@ -324,7 +285,7 @@ class VerifyOTP(APIView):
 
         #getting token
         # print(request.user)
-        # r_token = TokenObtainPairSerializer().get_token(request.user)
+        # r_token = TokenObtainPairSerializer().get_token(request.user)     
         # a_token = AccessToken().for_user(request.user)
         # tokens = {
         #     'refresh': str(r_token),
@@ -341,23 +302,19 @@ class ResendOtp(APIView):
         email = request.data.get('email')
         found = True
         try:
-            resend_email = OtpModel.objects.get(email=email)
+            resend_email = OtpModel.objects.get(email__iexact=email)
         except OtpModel.DoesNotExist:
             found = False
         
         if found:
             resend_email.delete()
 
-        def random_with_N_digits(n):
-            range_start = 10**(n-1)
-            range_end = (10**n)-1
-            return random.randint(range_start, range_end)
-
         otp = random_with_N_digits(6)
         print(otp)
         present_time = int(time.time())
         OtpModel.objects.create(otp=otp, email=email, at_time=present_time)
-        #now sending verification email now
+
+        # sending verification email now
         to_email = [email]
         email_from = settings.EMAIL_HOST_USER
         send_mail(
@@ -367,7 +324,7 @@ class ResendOtp(APIView):
             to_email,
             fail_silently=False,
         )
-        print('checkemail')
+        #print('checkemail')
         message = {'message': 'otp_sent_again'}
         return Response(message, status=status.HTTP_200_OK)
 
@@ -388,7 +345,7 @@ class ForgotPassword(APIView):
         try:
             change_pass_email = MyUser.objects.get(email=email)
         except MyUser.DoesNotExist:
-            message = {"message": "register_first"}
+            message = {"message": "Register First."}
             return Response(message, status=status.HTTP_401_UNAUTHORIZED)
 
         # check if user completed registration process
@@ -412,7 +369,7 @@ class ForgotPassword(APIView):
             message = {'message': 'email_ok'}
             return Response(message, status=status.HTTP_200_OK)
 
-        message = {"message": "complete_registration_first"}
+        message = {"message": "Complete Registration First."}
         return Response(message, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
@@ -437,24 +394,24 @@ class ForgotPasswordOtp(APIView):
         verifying_time = int(time.time())
 
         # check otp expiration here
-        if (verifying_time - email_to_verify.at_time)>5000:
-            error_detail = {'message': "otp_expired"}
+        if (verifying_time - email_to_verify.at_time)>300:
+            error_detail = {'message': "OTP Expired"}
             email_to_verify.delete()
             return Response(error_detail, status.HTTP_403_FORBIDDEN)
 
         # check otp here
         if email_to_verify.otp != int(client_otp):
-            message = {'message': 'wrong_otp'}              # delete opt models when resend otp either by resending or re-registering
+            message = {'message': 'Wrong OTP.'}
             return Response(message ,status = status.HTTP_401_UNAUTHORIZED)
         
-        user_to_allow = MyUser.objects.get(email=email)
+        user_to_allow = MyUser.objects.get(email__iexact=email)
         user_to_allow.is_active=True
         user_to_allow.save()
         #print(user_to_allow.is_active)
         email_to_verify.delete()
 
         #getting token
-        # r_token = TokenObtainPairSerializer().get_token(request.user)
+        # r_token = TokenObtainPairSerializer().get_token(request.user) #request.user -> user_to_allow
         # a_token = AccessToken().for_user(request.user)
         # tokens = {
         #     'refresh': str(r_token),
@@ -468,10 +425,6 @@ class NewPassword(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, format=None):
-        
-        """
-        include validations here later
-        """
         email = request.data.get('email')
         new_password = request.data.get('password')
         confirm_password = request.data.get('confirm_password')
@@ -485,8 +438,8 @@ class NewPassword(APIView):
         user.save()
 
         #getting token
-        r_token = TokenObtainPairSerializer().get_token(request.user)
-        a_token = AccessToken().for_user(request.user)
+        r_token = TokenObtainPairSerializer().get_token(user)
+        a_token = AccessToken().for_user(user)
         tokens = {
             'refresh': str(r_token),
             'access': str(a_token)
@@ -516,7 +469,7 @@ class RecipeCardsList(APIView):
 
     #homepage default cards
     def get(self, request, format=None):
-        recipe = Recipe.objects.all()[:16]
+        recipe = Recipe.objects.all()
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -529,11 +482,11 @@ class RecipeCardsList(APIView):
         #################################
         if display_order == 'points-high-to-low':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.all().order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.all().order_by('-points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(veg=True).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=True).order_by('-points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(veg=False).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=False).order_by('-points', 'title')
             else:
                 message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
@@ -541,11 +494,11 @@ class RecipeCardsList(APIView):
 
         elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.all().order_by('points', 'title')[:16]
+                recipe = Recipe.objects.all().order_by('points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(veg=True).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=True).order_by('points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(veg=False).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=False).order_by('points', 'title')
             else:
                 message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
@@ -553,11 +506,11 @@ class RecipeCardsList(APIView):
 
         elif display_order == 'new':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.all().order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.all().order_by('-published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(veg=True).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=True).order_by('-published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(veg=False).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=False).order_by('-published_on', 'title')
             else:
                 message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
@@ -565,11 +518,11 @@ class RecipeCardsList(APIView):
 
         elif display_order == 'old':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.all().order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.all().order_by('published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(veg=True).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=True).order_by('published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(veg=False).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(veg=False).order_by('published_on', 'title')
             else:
                 message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
@@ -589,7 +542,7 @@ class StartersCardsList(APIView):
     # for default starter category
     def get(self, request):
         display_category = 'starter'
-        recipe = Recipe.objects.filter(category=display_category)[:16]
+        recipe = Recipe.objects.filter(category=display_category)
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -604,49 +557,49 @@ class StartersCardsList(APIView):
         #################################
         if display_order == 'points-high-to-low':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('-points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'new':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'old':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
         else:
@@ -664,7 +617,7 @@ class MainCourseCardsList(APIView):
     # for default starter category
     def get(self, request):
         display_category = 'main_course'
-        recipe = Recipe.objects.filter(category=display_category)[:16]
+        recipe = Recipe.objects.filter(category=display_category)
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -679,49 +632,49 @@ class MainCourseCardsList(APIView):
         #################################
         if display_order == 'points-high-to-low':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('-points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'new':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'old':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -741,7 +694,7 @@ class DessertsCardsList(APIView):
     # for default starter category
     def get(self, request):
         display_category = 'desserts'
-        recipe = Recipe.objects.filter(category=display_category)[:16]
+        recipe = Recipe.objects.filter(category=display_category)
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -756,49 +709,49 @@ class DessertsCardsList(APIView):
         #################################
         if display_order == 'points-high-to-low':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('-points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
         elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'new':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
 
         elif display_order == 'old':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -818,7 +771,7 @@ class DrinksCardsList(APIView):
     # for default starter category
     def get(self, request):
         display_category = 'drinks'
-        recipe = Recipe.objects.filter(category=display_category)[:16]
+        recipe = Recipe.objects.filter(category=display_category)
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -833,49 +786,49 @@ class DrinksCardsList(APIView):
         #################################
         if display_order == 'points-high-to-low':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('-points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'new':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('-published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('-published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('-published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'old':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category=display_category).order_by('published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=True)).order_by('published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category=display_category) & Q(veg=False)).order_by('published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -894,7 +847,7 @@ class OthersCardsList(APIView):
     # for default starter category
     def get(self, request):
         display_category = 'others'
-        recipe = Recipe.objects.filter(category = display_category)[:16]
+        recipe = Recipe.objects.filter(category = display_category)
         serializer = RecipeSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -909,50 +862,50 @@ class OthersCardsList(APIView):
         #################################
         if display_order == 'points-high-to-low':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category = display_category).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.get(category = display_category).order_by('-points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('-points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('-points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category = display_category).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.get(category = display_category).order_by('points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'new':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category = display_category).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category = display_category).order_by('-published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('-published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('-published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
 
         elif display_order == 'old':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.get(category = display_category).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.get(category = display_category).order_by('published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=True)).order_by('published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(category = display_category) & Q(veg=False)).order_by('published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
         else:
@@ -969,7 +922,7 @@ class SearchCardsList(APIView):
     def post(self, request, format=None):
         
         search_title = request.data.get('search')
-        recipe = Recipe.objects.filter(title__icontains=search_title).order_by('?')[:16]
+        recipe = Recipe.objects.filter(title__icontains=search_title).order_by('-points')
         serializer = RecipeCardSerializer(recipe, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -989,49 +942,48 @@ class SortCardsList(APIView):
         #################################
         if display_order == 'points-high-to-low':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('-points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('-points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('-points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('-points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'points-low-to-high':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('points', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('points', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('points', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('points', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
-
 
         elif display_order == 'new':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('-published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('-published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('-published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('-published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
         elif display_order == 'old':
             if veg_non_veg == 'all':
-                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(title__icontains=search_title).order_by('published_on', 'title')
             elif veg_non_veg == 'true':
-                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=True)).order_by('published_on', 'title')
             elif veg_non_veg == 'false':
-                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('published_on', 'title')[:16]
+                recipe = Recipe.objects.filter(Q(title__icontains=search_title) & Q(veg=False)).order_by('published_on', 'title')
             else:
-                message = {'message': 'Invalid Tag'}
+                message = {'message': 'Page Not Found'}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
         else:
@@ -1217,23 +1169,18 @@ class FollowCommand(APIView):
         print(k)
         try:
             follower = MyUser.objects.get(pk=k.pk)
-            print('random')
         except MyUser.DoesNotExist:
             return Response({'message':'Sign In/Up First'}, status=status.HTTP_401_UNAUTHORIZED)
 
         u = request.data.get('userpk')
         try:
             user = MyUser.objects.get(pk=u)
-            print('chalja')
         except MyUser.DoesNotExist:
             return Response({'message':'Page Not Found'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             userfoll = FollowSystem.objects.get(Q(followed_by=follower) & Q(followed_to=user))
-            print('where is the problem')
-            # print(alreadyfollowed)
         except FollowSystem.DoesNotExist:
-            # print('called')
             userfoll = FollowSystem.objects.create(followed_by=follower, followed_to=user, active=False)
         
         response_data = {}
@@ -1250,7 +1197,6 @@ class FollowCommand(APIView):
             response_data['message'] = 'followed.'
         
         userfoll.save()
-        print(userfoll.active)
         user.save()
         follower.save()
         return Response(response_data, status=status.HTTP_200_OK)
@@ -1272,6 +1218,14 @@ class UserPosts(APIView):
         posts = Recipe.objects.filter(owner=user)
         serializer = RecipeCardSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
+
 
 
 
@@ -1300,7 +1254,6 @@ class Suggestion(APIView):
             fail_silently=False,
         )
         return Response({'message':'Suggestion Sended.'}, status=status.HTTP_200_OK)
-
 
 
 class FollowerList(APIView):
@@ -1344,7 +1297,6 @@ class FollowingList(APIView):
             queryset |= MyUser.objects.filter(pk=userpk)
         serializer = MyUserSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
-
 
 
 class ChangeProfile(APIView):

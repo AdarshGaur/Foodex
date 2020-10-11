@@ -3,23 +3,19 @@ from rest_framework import serializers
 import math
 
 
-#Serializer for registriation of New Users
+
 class RegisterMyUser(serializers.ModelSerializer):
 
 	confirm_password = serializers.CharField(style={'input_type': "password"}, write_only=True,)
-	#maybe need validation here too!
-
 	class Meta:
 		model = MyUser
 		fields = ['name', 'age', 'email', 'password', 'confirm_password']
-
 		extra_kwargs = {"password": {"write_only": True}}
 
 
 
 	def create(self, validated_data):
 		#check if inactive user already exist in the db
-		print('check1')
 		user_already_exists = True
 		otp_already_exists = True
 		try:
@@ -32,9 +28,6 @@ class RegisterMyUser(serializers.ModelSerializer):
 		except OtpModel.DoesNotExist:
 			otp_already_exists = False
 		
-		print(otp_already_exists)
-		print('user already exists: ')
-		print(user_already_exists)
 		if user_already_exists and otp_already_exists:
 			existing_user.delete()
 			email_in_otp.delete()
@@ -44,7 +37,6 @@ class RegisterMyUser(serializers.ModelSerializer):
 
 		password = validated_data['password']
 		confirm_password = validated_data['confirm_password']
-		print('check2')
 		if password != confirm_password:
 			raise serializers.ValidationError({'password_error': 'Both Passwords must match.'})
 
@@ -63,7 +55,6 @@ class RegisterMyUser(serializers.ModelSerializer):
 		return user
 
 
-# recipe creating/edit/get serializer
 class PostRecipeSerializer(serializers.ModelSerializer):
 	
 	#this serializer include both create and update recipe
@@ -71,39 +62,33 @@ class PostRecipeSerializer(serializers.ModelSerializer):
 		model = Recipe
 		fields = ['title', 'category', 'ingredients', 'img', 'content', 'published_on', 'modified_on', 'cook_time', 'veg']
 
-	# def get_img_url(self, Recipe):
-	# 	request = self.context.get('request')
-	# 	img_url = Recipe.img.url
-	# 	return request.build_absolute_uri(img_url)
 
 
-# recipe creating/edit/get serializer
+
 class RecipeSerializer(serializers.ModelSerializer):
-	#owner_pk = serializers.IntegerField(source=owner.pk)
 	owner = serializers.ReadOnlyField(source='owner.name')
 	ownerkapk = serializers.IntegerField(source='owner.pk')
-	
-	# email = serializers.ReadOnlyField(source='owner.email')
-	# img_url = serializers.SerializerMethodField()
-	
-	# pk = serializers.ReadOnlyField(source=id)
+	read_time = serializers.SerializerMethodField()
+
 	#this serializer include both create and update recipe
 	class Meta:
 		model = Recipe
 		fields = ['pk', 'title', 'category', 'ingredients', 'img', 'content', 'owner', 'ownerkapk', 'ownit', 'published_on', 'modified_on', 'cook_time', 'read_time', 'veg', 'points', 'like_is', 'bookmark_is']
 	
 
+	def get_read_time(self, Recipe):
+		total_length = len(Recipe.content) + len(Recipe.ingredients)
+		minutes = math.ceil(total_length/300)
+		return minutes
 
 
 
 
-#cards serializer
 class RecipeCardSerializer(serializers.ModelSerializer):
 	owner = serializers.ReadOnlyField(source='owner.name')
 	ownerkapk = serializers.IntegerField(source='owner.pk')
 	read_time = serializers.SerializerMethodField()
-	# img_url = serializers.SerializerMethodField()
-	# only for cards
+
 	class Meta:
 		model = Recipe
 		fields = ['pk', 'title', 'content', 'owner', 'ownerkapk', 'img', 'cook_time', 'read_time', 'points', 'veg']
@@ -113,15 +98,11 @@ class RecipeCardSerializer(serializers.ModelSerializer):
 		minutes = math.ceil(total_length/300)
 		return minutes
 
-	# def get_img_url(self, Recipe):
-	# 	request = self.context.get('request')
-	# 	img_url = Recipe.img.url
-	# 	return request.build_absolute_uri(img_url)
 
 
-#serializer for user details
+
+#serializer for users details
 class MyUserSerializer(serializers.ModelSerializer):
-
 	class Meta:
 		model = MyUser
 		fields = ['id', 'name', 'email', 'image_user', 'age', 'followers', 'following', 'bookmark_count', 'post_count']
@@ -130,10 +111,13 @@ class MyUserSerializer(serializers.ModelSerializer):
 
 
 
-
+# serializer for other users profile
 class MyUserDetailSerializer(serializers.ModelSerializer):
 	recipes = RecipeCardSerializer(many=True, read_only=True)
 
 	class Meta:
 		model = MyUser
-		fields = ['id', 'name', 'email', 'age', 'followers', 'following', 'bookmark_count', 'post_count' , 'alreadyfollowed', 'recipes']
+		fields = ['id', 'name', 'email', 'image_user', 'age', 'followers', 'following', 'bookmark_count', 'post_count' , 'alreadyfollowed', 'recipes']
+
+
+
